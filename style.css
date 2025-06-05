@@ -1,0 +1,133 @@
+/* Importa a fonte 'Inter' do Google Fonts para ser usada no cartão.
+   Esta fonte é moderna, limpa e fácil de ler. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+/* Estilos globais para o corpo da página (tudo que não é o cartão). */
+body {
+    font-family: 'Inter', sans-serif; /* Aplica a fonte Inter a todo o texto na página. */
+    background-color: #f0f8ff; /* Define um azul muito claro como cor de fundo do corpo, transmitindo sensação de limpeza. */
+    display: flex; /* Transforma o corpo em um container flexível. */
+    justify-content: center; /* Centraliza o conteúdo do body (o cartão) horizontalmente. */
+    align-items: center; /* Centraliza o conteúdo do body (o cartão) verticalmente. */
+    min-height: 100vh; /* Garante que o corpo ocupe pelo menos 100% da altura da tela (viewport height), para centralizar o cartão. */
+    padding: 20px; /* Adiciona um espaçamento (padding) ao redor do corpo para que o cartão não fique colado nas bordas da janela. */
+    box-sizing: border-box; /* Garante que o padding e a borda sejam incluídos na largura e altura total de um elemento. */
+}
+
+/* Estilos para o contêiner principal do cartão de visitas. */
+.card-container {
+    width: 100%; /* Ocupa 100% da largura disponível (até o max-width). */
+    max-width: 380px; /* Define uma largura máxima para o cartão em telas maiores (desktop). */
+    aspect-ratio: 1.75 / 1; /* Mantém a proporção de um cartão de visitas padrão (aproximadamente 3.5 polegadas de largura por 2 de altura). */
+    background-color: #ffffff; /* Fundo branco puro para o cartão, que evoca limpeza e profissionalismo. */
+    border-radius: 16px; /* Aplica cantos arredondados ao cartão, dando um toque moderno. */
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25); /* Adiciona uma sombra forte e suave para dar profundidade, fazendo o cartão "saltar" da tela. */
+    display: flex; /* Transforma o cartão em um container flexível. */
+    flex-direction: column; /* Organiza os itens internos do cartão em uma coluna (um embaixo do outro). */
+    justify-content: center; /* Centraliza o conteúdo verticalmente dentro do cartão. */
+    align-items: center; /* Centraliza o conteúdo horizontalmente dentro do cartão. */
+    padding: 24px; /* Espaçamento interno (padding) dentro do cartão. */
+    text-align: center; /* Centraliza o texto dentro do cartão. */
+    position: relative; /* Define a posição relativa para que os pseudo-elementos (formas onduladas) possam ser posicionados absolutamente dentro dele. */
+    overflow: hidden; /* Esconde qualquer conteúdo ou elemento que transborde as bordas arredondadas do cartão. */
+    border: 1px solid rgba(0, 0, 0, 0.08); /* Adiciona uma borda sutil e quase invisível para definir o contorno do cartão. */
+}
+
+/* Pseudo-elementos (::before e ::after) para criar as formas decorativas onduladas no fundo do cartão. */
+.card-container::before,
+.card-container::after {
+    content: ''; /* Propriedade essencial para que pseudo-elementos sejam renderizados. */
+    position: absolute; /* Posiciona as formas de forma absoluta em relação ao .card-container (que tem position: relative). */
+    z-index: 0; /* Coloca as formas atrás do conteúdo principal do cartão (que tem z-index: 10). */
+}
+
+/* Estilos para a forma ondulada superior esquerda (criada com ::before). */
+.card-container::before {
+    width: 280px; /* Largura da forma. */
+    height: 280px; /* Altura da forma. */
+    background: linear-gradient(135deg, #a7e9f7 0%, #d0f4f7 100%); /* Aplica um gradiente de azul claro para ciano, cores associadas à água e limpeza. */
+    top: -120px; /* Desloca a forma para cima, parcialmente fora da área visível do cartão. */
+    left: -120px; /* Desloca a forma para a esquerda, parcialmente fora da área visível do cartão. */
+    /* border-radius com múltiplos valores cria uma forma orgânica e "ondulada". */
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    transform: rotate(20deg); /* Gira a forma para dar um visual mais dinâmico. */
+    opacity: 0.7; /* Define a transparência da forma para que ela seja um detalhe sutil. */
+}
+
+/* Estilos para a forma ondulada inferior direita (criada com ::after). */
+.card-container::after {
+    width: 220px; /* Largura da forma. */
+    height: 220px; /* Altura da forma. */
+    background: linear-gradient(135deg, #ccfbf1 0%, #e0fbf7 100%); /* Aplica um gradiente de verde claro para um tom de menta, cores frescas. */
+    bottom: -90px; /* Desloca a forma para baixo. */
+    right: -90px; /* Desloca a forma para a direita. */
+    /* border-radius com múltiplos valores para um efeito orgânico diferente. */
+    border-radius: 60% 40% 30% 70% / 60% 50% 40% 50%;
+    transform: rotate(-30deg); /* Gira a forma na direção oposta para dinamismo. */
+    opacity: 0.6; /* Transparência da forma. */
+}
+
+/* Estilos para o ícone do WhatsApp. */
+.whatsapp-icon {
+    width: 28px; /* Largura do ícone. */
+    height: 28px; /* Altura do ícone (garante que seja quadrado). */
+    margin-right: 8px; /* Adiciona um espaço à direita do ícone, separando-o do número de telefone. */
+    vertical-align: middle; /* Alinha o ícone verticalmente com o texto ao seu lado. */
+}
+
+/* Estilos para a div que envolve o conteúdo principal do cartão (nome, profissão, contato, frase). */
+.card-content-wrapper {
+    gap-y: 8px; /* No CSS nativo, você usaria gap para espaçamento em flexbox/grid. Tailwind já traduz isso. */
+    /* Estas classes garantem espaçamento vertical entre os elementos e padding dentro do wrapper. */
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+
+
+/* Media Queries: Ajustes responsivos para telas menores (smartphones e tablets).
+   As regras dentro deste bloco serão aplicadas quando a largura da tela for de 600px ou menos. */
+@media (max-width: 600px) {
+    .card-container {
+        padding: 16px; /* Reduz o padding interno do cartão para que o conteúdo tenha mais espaço em telas pequenas. */
+        height: auto; /* Permite que a altura do cartão se ajuste automaticamente ao conteúdo interno, evitando cortes. */
+        aspect-ratio: 1.75 / 1; /* Mantém a proporção visual do cartão, mas a altura final será ditada pelo conteúdo. */
+    }
+    /* Redução dos tamanhos de fonte para otimizar a leitura e evitar que o texto transborde em telas pequenas. */
+    .text-3xl {
+        font-size: 1.5rem; /* Tamanho da fonte para o nome completo. */
+    }
+    .text-xl {
+        font-size: 0.9rem; /* Tamanho da fonte para a profissão. */
+    }
+    .text-lg {
+        font-size: 0.8rem; /* Tamanho da fonte para a frase de destaque. */
+    }
+    /* Redução do tamanho do ícone do WhatsApp para telas menores. */
+    .whatsapp-icon {
+        width: 22px;
+        height: 22px;
+    }
+    /* Redução do tamanho da fonte do número de telefone para telas menores. */
+    .text-2xl {
+        font-size: 1.5rem;
+    }
+    /* Ajusta o tamanho e a posição das formas onduladas para que se encaixem melhor em telas menores. */
+    .card-container::before {
+        width: 180px;
+        height: 180px;
+        top: -70px;
+        left: -70px;
+    }
+    .card-container::after {
+        width: 140px;
+        height: 140px;
+        bottom: -50px;
+        right: -50px;
+    }
+    /* Reduz o espaçamento vertical entre os elementos dentro do wrapper de conteúdo para otimizar o espaço. */
+    .card-content-wrapper {
+        gap-y: 8px;
+        padding-top: 16px;
+        padding-bottom: 16px;
+    }
+}
