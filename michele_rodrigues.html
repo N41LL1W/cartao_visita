@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"> <!-- Define a codificação de caracteres para o documento, importante para acentuação. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Configura a viewport para que o cartão seja responsivo em diferentes dispositivos (celulares, tablets, desktops). -->
+    <title>Cartão de Apresentação - Michele Roberta Rodrigues</title> <!-- Título da página, que aparece na aba do navegador. -->
+
+    <!-- Link para o arquivo CSS externo. É CRUCIAL que o arquivo 'style.css' esteja na MESMA PASTA do 'index.html'. -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Tailwind CSS CDN (Content Delivery Network):
+         Esta linha importa a biblioteca Tailwind CSS, que fornece classes utilitárias para estilização rápida.
+         Não se preocupe com este script; ele apenas adiciona as classes que usamos no HTML. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <!-- Container principal do cartão de visitas.
+         Este div é responsável por centralizar o cartão na tela e aplicar estilos de fundo e sombra. -->
+    <div class="card-container">
+
+        <!-- Elementos decorativos de fundo: Ícones de brilho e gotas d'água.
+             Eles são SVGs (Scalable Vector Graphics), o que significa que mantêm a qualidade em qualquer tamanho.
+             São posicionados de forma absoluta e com baixa opacidade para serem sutis e não desviar a atenção do conteúdo principal. -->
+
+        <!-- Ícone de Brilho 1: Localizado no canto superior esquerdo do cartão. -->
+        <svg class="absolute text-blue-200 opacity-40" style="top: 10%; left: 5%; width: 20px; height: 20px;" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L9.19 8.19L2 9.19L8.19 12L2 14.81L9.19 15.81L12 22L14.81 15.81L22 14.81L15.81 12L22 9.19L14.81 8.19L12 2Z"/>
+        </svg>
+
+        <!-- Ícone de Gota d'água 1: Localizado no canto inferior direito do cartão. -->
+        <svg class="absolute text-green-200 opacity-40" style="bottom: 15%; right: 10%; width: 25px; height: 25px;" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C7.52 2 4 5.52 4 10c0 4.5 8 12 8 12s8-7.5 8-12c0-4.48-3.52-8-8-8zm0 15.5c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+        </svg>
+
+        <!-- Ícone de Brilho 2: Outro ícone de brilho, em uma posição diferente (superior direito). -->
+        <svg class="absolute text-blue-200 opacity-30" style="top: 20%; right: 8%; width: 18px; height: 18px;" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L9.19 8.19L2 9.19L8.19 12L2 14.81L9.19 15.81L12 22L14.81 15.81L22 14.81L15.81 12L22 9.19L14.81 8.19L12 2Z"/>
+        </svg>
+
+        <!-- Ícone de Gota d'água 2: Outra gota d'água, em uma posição diferente (inferior esquerdo). -->
+        <svg class="absolute text-green-200 opacity-30" style="bottom: 8%; left: 12%; width: 22px; height: 22px;" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C7.52 2 4 5.52 4 10c0 4.5 8 12 8 12s8-7.5 8-12c0-4.48-3.52-8-8-8zm0 15.5c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+        </svg>
+
+        <!-- Div que agrupa todo o conteúdo visível do cartão (nome, profissão, contato e frase).
+             Ele é configurado para ser um flexbox, centralizando seus itens vertical e horizontalmente. -->
+        <div class="relative z-10 flex flex-col items-center justify-center h-full w-full card-content-wrapper">
+            <!-- Seu nome completo. Classes Tailwind para tamanho de fonte (3xl para desktop, 3xl para mobile), negrito e cor. -->
+            <h1 class="text-3xl sm:text-3xl font-extrabold text-gray-800">
+                Michele Roberta Rodrigues
+            </h1>
+            <!-- Sua profissão. Classes Tailwind para tamanho de fonte, peso (semibold) e cor azul.
+                 "mt-1" adiciona uma pequena margem superior. -->
+            <p class="text-xl sm:text-xl font-semibold text-blue-700 mt-1">
+                Faxineira Doméstica
+            </p>
+            <!-- Contêiner para o ícone do WhatsApp e o número de telefone.
+                 "flex items-center justify-center" garante que o ícone e o número fiquem na mesma linha e centralizados.
+                 "mt-3" adiciona uma margem superior. -->
+            <div class="flex items-center justify-center mt-3">
+                <!-- Ícone do WhatsApp (SVG). A classe "whatsapp-icon" define seu tamanho e cor no CSS. -->
+                <svg class="whatsapp-icon text-green-600" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12.04 2C7.34 2 3.58 5.76 3.58 10.46c0 1.5.4 2.93 1.16 4.2l-1.24 4.53 4.64-1.22c1.23.67 2.65 1.03 4.08 1.03 4.7 0 8.46-3.76 8.46-8.46S16.74 2 12.04 2zm3.39 12.88c-.16.27-.99.63-1.37.69-.38.07-.76.04-1.15-.12-.39-.16-1.3-.58-2.5-1.54-1.19-.95-1.99-2.3-2.19-2.65-.2-.35-.02-.54.14-.7.14-.14.35-.35.52-.52.17-.17.23-.35.35-.58.12-.23.06-.43-.03-.6-.09-.17-.8-1.92-1.1-2.6-.29-.66-.59-.57-.8-.58-.2-.01-.43-.01-.66-.01-.23 0-.6.09-.91.44-.31.35-1.18 1.15-1.18 2.8 0 1.65 1.21 3.22 1.38 3.46.17.24 2.37 3.63 5.72 5.04 3.35 1.41 3.35.94 3.96.88.6-.06 1.9-.78 2.16-1.54.26-.76.26-1.4.18-1.54-.08-.14-.3-.22-.63-.38z"/>
+                </svg>
+                <!-- Seu número de WhatsApp. -->
+                <span class="text-2xl sm:text-2xl font-bold text-gray-700">
+                    16 99232-4771
+                </span>
+            </div>
+            <!-- Frase de destaque do seu serviço, agora com ícones de brilho.
+                 "flex items-center justify-center" garante que o texto e os ícones fiquem na mesma linha e centralizados. -->
+            <p class="text-md sm:text-lg text-gray-500 mt-3 flex items-center justify-center">
+                <!-- Ícone de Brilho (esquerda da frase) -->
+                <svg class="w-4 h-4 text-blue-400 opacity-70 mr-1" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L9.19 8.19L2 9.19L8.19 12L2 14.81L9.19 15.81L12 22L14.81 15.81L22 14.81L15.81 12L22 9.19L14.81 8.19L12 2Z"/>
+                </svg>
+                Sua casa impecável e organizada!
+                <!-- Ícone de Brilho (direita da frase) -->
+                <svg class="w-4 h-4 text-green-400 opacity-70 ml-1" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L9.19 8.19L2 9.19L8.19 12L2 14.81L9.19 15.81L12 22L14.81 15.81L22 14.81L15.81 12L22 9.19L14.81 8.19L12 2Z"/>
+                </svg>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
