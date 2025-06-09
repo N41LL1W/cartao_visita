@@ -1,103 +1,64 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8"> <!-- Define a codificação de caracteres para o documento. -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Configura a viewport para responsividade em diferentes dispositivos. -->
-    <title>Serviço de Cartões de Visita Online</title> <!-- Título da página exibido na aba do navegador. -->
-    <!-- Tailwind CSS CDN: Importa a biblioteca Tailwind CSS para estilização rápida. -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Importa a fonte 'Inter' do Google Fonts para um visual limpo e moderno. */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-        body {
-            font-family: 'Inter', sans-serif; /* Aplica a fonte Inter a todo o texto. */
-            background-color: #f0f8ff; /* Define um azul muito claro como cor de fundo. */
-            display: flex; /* Transforma o corpo em um container flexível. */
-            flex-direction: column; /* Organiza os itens (o contêiner principal) em coluna. */
-            justify-content: flex-start; /* Alinha o conteúdo ao topo da página. */
-            align-items: center; /* Centraliza o conteúdo horizontalmente. */
-            min-height: 100vh; /* Garante que o corpo ocupe pelo menos 100% da altura da tela. */
-            padding: 20px; /* Adiciona espaçamento ao redor do corpo. */
-            box-sizing: border-box; /* Garante que padding e borda sejam incluídos na largura/altura. */
-        }
-        /* Estilos para o contêiner principal do serviço de cartões. */
-        .container {
-            max-width: 900px; /* Define uma largura máxima para o conteúdo principal. */
-            width: 100%; /* Ocupa 100% da largura disponível até o max-width. */
-            background-color: #ffffff; /* Fundo branco. */
-            border-radius: 16px; /* Cantos arredondados. */
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Sombra suave. */
-            padding: 30px; /* Espaçamento interno. */
-            text-align: center; /* Centraliza o texto. */
-            margin-top: 30px; /* Margem superior para separar do topo da página. */
-        }
-        /* Área onde os cartões de visita serão exibidos. */
-        .card-display-area {
-            display: flex; /* Usa flexbox para organizar os cartões. */
-            flex-wrap: wrap; /* Permite que os cartões quebrem a linha se não houver espaço suficiente. */
-            justify-content: center; /* Centraliza os cartões horizontalmente. */
-            gap: 20px; /* Adiciona espaçamento entre os cartões. */
-            margin-top: 20px; /* Margem superior. */
-        }
-        /* Estilos para o iframe que incorpora cada cartão de visita. */
-        .card-iframe {
-            width: 380px; /* Define a largura padrão do iframe para corresponder ao cartão. */
-            height: 220px; /* Define a altura padrão do iframe. */
-            border: none; /* Remove a borda padrão do iframe. */
-            border-radius: 16px; /* Cantos arredondados. */
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Sombra para o iframe. */
-            /* Garante que o iframe e seu conteúdo sejam tratados como um elemento visual. */
-            display: block;
-            margin: 0 auto;
-        }
-        /* Media Queries: Ajustes responsivos para telas menores (celulares). */
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px; /* Reduz o padding em telas menores. */
-                margin-top: 15px; /* Reduz a margem superior. */
-            }
-            .card-iframe {
-                width: 100%; /* Ocupa toda a largura disponível em telas pequenas. */
-                max-width: 340px; /* Garante que não fique muito grande mesmo em 100% se a tela for muito larga. */
-                height: 195px; /* Altura proporcional à largura em telas menores. */
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1 class="text-4xl font-extrabold text-gray-800 mb-4">
-            Serviço de Cartões de Visita Online
-        </h1>
-        <p class="text-lg text-gray-600 mb-6">
-            Aqui você pode gerenciar e visualizar seus cartões de visita digitais.
-            Seu primeiro cartão já está disponível abaixo!
-        </p>
+  <html>
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" type="text/css" href="style.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+      <title>Cartão de Visitas</title>
+    </head>
+    
+    <body>
 
-        <h2 class="text-2xl font-bold text-blue-700 mb-4">
-            Seus Cartões
-        </h2>
+      <div class="portaCartao">
+        <div class="cartao">
 
-        <div class="card-display-area">
-            <!-- Seção para o Cartão de Visitas de Michele Roberta Rodrigues -->
-            <div class="card-item">
-                <h3 class="text-xl font-semibold text-gray-700 mb-2">Cartão de Michele Roberta Rodrigues</h3>
-                <!-- O iframe carrega o arquivo HTML do cartão da Michele.
-                     Certifique-se de que 'michele-roberta-card.html' esteja na mesma pasta que este 'index.html'. -->
-                <iframe class="card-iframe" src="michele-roberta-card.html"></iframe>
+          <!-- LADO DA FRENTE -->
+          <div class="lado frente">
+            <h1 class="info">Michele Roberta Rodrigues</h1>
+            <p class="info">Faxineira Doméstica</p>
+            
+            <div class="contato-frente info">
+              <i class="fab fa-whatsapp"></i>
+              <span>(16) 99232-4771</span>
             </div>
 
-            <!-- Você pode adicionar mais cartões aqui no futuro.
-                 Basta copiar o bloco <div> com a classe "card-item" e alterar o título e o 'src' do iframe. -->
-            <!-- Exemplo de placeholder para futuros cartões:
-            <div class="card-item">
-                <h3 class="text-xl font-semibold text-gray-700 mb-2">Novo Cartão (Em Breve)</h3>
-                <div class="card-iframe flex items-center justify-center bg-gray-100 text-gray-400 text-center">
-                    <p>Crie seu próximo cartão aqui!</p>
-                </div>
+            <img src="img/qrcode-whatsup.jpg" alt="QR Code para WhatsApp" class="qrcode-img">
+            
+            <svg viewBox="0 0 500 150" preserveAspectRatio="none" class="viewBox">
+              <path d="M0.00,49.98 C254.51,72.06 306.43,22.41 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" class="path1"></path>
+            </svg>
+
+            <svg viewBox="0 0 500 150" preserveAspectRatio="none" class="viewBox2">
+              <path d="M0.00,49.98 C254.51,72.06 306.43,22.41 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" class="path2"></path>
+            </svg>
+          </div>
+
+          <!-- LADO DO VERSO (COM A CLASSE "lado" CORRIGIDA) -->
+          <div class="lado verso">  <!-- <<< GARANTA QUE ESTA LINHA ESTEJA ASSIM -->
+            <div class="conteudo-verso">
+              <h3>Michele Roberta Rodrigues</h3>
+              <p class="tagline">
+                Sua casa merece o melhor!<br>
+                Limpeza impecável com carinho e dedicação.
+              </p>
+              
+              <div class="servicos">
+                <h4>Serviços Oferecidos</h4>
+                <ul>
+                  <li>Faxina Domiciliar</li>
+                  <li>Faxina Comercial</li>
+                </ul>
+              </div>
+
+              <div class="contato">
+                <p><i class="fas fa-phone-alt"></i> (16) 99232-4771</p>
+              </div>
             </div>
-            -->
+          </div>
+          
         </div>
-    </div>
-</body>
-</html>
+      </div>
+
+    </body>
+  </html>
