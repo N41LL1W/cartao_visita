@@ -175,15 +175,18 @@ p.info { font-size: 1.5em; font-style: italic; color: #faeeee; margin: 0 0 0 0 ;
 
   .frente p.info {
     font-size: 1.2em;
+    color: rgb(71, 65, 65);
+    font-weight: 700;
   }
   
   .contato-frente {
     font-size: 1.2em;
     margin-top: 0;
+    color: rgb(71, 65, 65);
   }
   
   .contato-frente .fa-whatsapp {
-    font-size: 1.4em;
+    font-size: 1.4em;;
   }
 
   /* Reposiciona o QR Code: agora ele fica no fluxo, acima da onda */
