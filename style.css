@@ -130,3 +130,92 @@ p.info { font-size: 1.5em; font-style: italic; color: #faeeee; margin: 0 0 0 0 ;
 .verso .contato { font-size: 1.15em; font-weight: bold; background-color: rgba(255, 255, 255, 0.15); padding: 12px; border-radius: 8px; }
 .verso .contato p { margin: 0; display: flex; align-items: center; justify-content: center; }
 .verso .contato i { margin-right: 10px; }
+
+/* =================================================================== */
+/*                     DESIGN RESPONSIVO                               */
+/* =================================================================== */
+
+/* --- Estilos para TABLETS (Telas até 1024px) --- */
+@media (max-width: 1024px) {
+  /* Apenas diminuímos um pouco o cartão, mantendo o formato */
+  .portaCartao {
+    width: 60%;
+    transform: scale(0.9); /* Reduz um pouco o tamanho geral */
+  }
+}
+
+
+/* --- Estilos para SMARTPHONES (Telas até 768px) --- */
+@media (max-width: 768px) {
+
+  /* ---- A GRANDE TRANSFORMAÇÃO ---- */
+  .portaCartao {
+    /* Ocupa quase a tela inteira */
+    width: 90vw;  /* 90% da largura da tela */
+    height: 80vh; /* 80% da altura da tela */
+    
+    /* Adicionamos uma altura máxima para não ficar gigante em celulares altos */
+    max-height: 600px;
+    
+    /* Remove a escala do tablet para não conflitar */
+    transform: none; 
+  }
+
+  /* ---- AJUSTES PARA O LADO DA FRENTE (VERTICAL) ---- */
+  .frente {
+    /* Espalha o conteúdo na nova altura disponível */
+    justify-content: space-around;
+    padding: 30px 0;
+  }
+  
+  /* Aumenta as fontes para melhor legibilidade na tela cheia */
+  .frente h1.info {
+    font-size: 2em;
+  }
+
+  .frente p.info {
+    font-size: 1.2em;
+  }
+  
+  .contato-frente {
+    font-size: 1.2em;
+    margin-top: 0;
+  }
+  
+  .contato-frente .fa-whatsapp {
+    font-size: 1.4em;
+  }
+
+  /* Reposiciona o QR Code: agora ele fica no fluxo, acima da onda */
+  .qrcode-img {
+    position: relative; /* Tira do posicionamento absoluto */
+    bottom: auto;
+    right: auto;
+    width: 100px; /* Um pouco maior para facilitar a leitura */
+    height: 100px;
+    margin-top: 10px;
+  }
+
+  /* O SVG agora ocupa toda a base do cartão vertical */
+  .viewBox {
+    height: 150px; /* Damos uma altura mais definida */
+  }
+
+  /* ---- AJUSTES PARA O LADO DO VERSO (VERTICAL) ---- */
+  .verso {
+    padding: 25px;
+  }
+  
+  .conteudo-verso {
+    /* Espalha o conteúdo uniformemente no espaço vertical */
+    justify-content: space-evenly; 
+    gap: 0; /* Remove o gap para o space-evenly funcionar melhor */
+  }
+  
+  /* Aumenta todas as fontes do verso também */
+  .verso h3 { font-size: 1.5em; }
+  .verso .tagline { font-size: 1.1em; }
+  .verso .servicos h4 { font-size: 1em; }
+  .verso .servicos li { font-size: 1em; }
+  .verso .contato { font-size: 1.2em; padding: 15px; }
+}
