@@ -1,31 +1,43 @@
-/* --- CSS FINAL E MAIS ESTÁVEL --- */
-body {
+/* =================================================================== */
+/*                     ESTILOS GERAIS DO PROJETO                       */
+/* =================================================================== */
+
+/* Zerando margens e definindo o box-sizing padrão */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Corpo da página do cartão */
+body.cartao-body { /* Usamos uma classe específica para a página do cartão */
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #f0f2f5;
-  margin: 0;
+  background-color: #eef2f7;
 }
+
 .portaCartao {
   width: 500px;
   height: 300px;
   perspective: 1500px;
 }
+
 .cartao {
   width: 100%;
   height: 100%;
-  position: relative; 
-  transition: transform 0.8s;
+  position: relative;
+  transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
   transform-style: preserve-3d;
   cursor: pointer;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  border-radius: 15px;
 }
+
 .portaCartao:hover .cartao {
   transform: rotateY(180deg);
 }
+
 .lado {
   position: absolute;
   top: 0;
@@ -35,190 +47,184 @@ body {
   backface-visibility: hidden;
   border-radius: 15px;
   overflow: hidden;
-  box-sizing: border-box;
-}
-.frente {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   background-color: #ffffff;
   color: #333;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-}
-.info {
-  z-index: 2;
-  text-align: center;
-}
-h1.info { font-size: 2.6em; color: #2e4f6e; margin: 0 0 0 0; }
-p.info { font-size: 1.5em; font-style: italic; color: #faeeee; margin: 0 0 0 0 ; }
-
-.contato-frente {
-  display: flex;
-  align-items: center;
-  margin-top: 20px;
-  font-weight: 500;
-  color: #b9c8d8;
-  font-size: 1.3em;
-  z-index: 2;
-}
-.contato-frente .fa-whatsapp { color: #00ff5e; font-size: 1.5em; margin-right: 10px; }
-.viewBox {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100px;
-  z-index: 1;
-}
-.viewBox2 {
-  position: absolute;
-  bottom: 50px;
-  left: 0;
-  width: 100%;
-  height: 150px;
-  z-index: 0;
-}
-.path1, .path2 {
-  stroke: none; /* Garante que não haja contorno */
 }
 
-/* ONDA DE TRÁS (MAIOR)
-   Ela terá as duas cores mais escuras do seu gradiente.
-   Usaremos a cor do seu 'path' como base. */
-.path1 {
-  fill: #3d3bbe; /* Cor base, mais escura */
-}
+/* =================================================================== */
+/*                          LADO DO VERSO                              */
+/* =================================================================== */
 
-/* ONDA DA FRENTE (MENOR)
-   Ela terá as duas cores mais claras do seu gradiente e será translúcida.
-   Usaremos a cor do seu 'path2' como a cor visível. */
-.path2 {
-  fill: #6a89cc;  /* Cor visível, mais clara */
-  opacity: 0.75;  /* O segredo está aqui! Transparência para misturar as cores. */
-}
-.qrcode-img {
-  position: absolute;
-  bottom: 15px;
-  right: 15px;
-  width: 80px;
-  height: 80px;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  z-index: 2;
-}
 .verso {
-  background: linear-gradient(135deg, #6a89cc, #3d3bbe); 
-  color: white;
   transform: rotateY(180deg);
-  display: flex;
+  background: linear-gradient(135deg, #6a89cc, #3d3bbe); /* Cor padrão */
+  color: white;
   padding: 25px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
 .conteudo-verso {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   height: 100%;
   width: 100%;
+  text-align: center;
 }
-.verso h3 { margin: 0; font-size: 1.4em; font-weight: 600; }
-.verso .tagline { font-style: italic; font-size: 1em; line-height: 1.5; opacity: 0.9; margin: 0; }
-.verso .servicos h4 { margin: 0 0 8px 0; font-size: 1em; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid rgba(255, 255, 255, 0.3); padding-bottom: 8px; }
-.verso .servicos ul { list-style: none; padding: 0; margin: 0; font-size: 0.95em; }
-.verso .servicos li { margin-bottom: 5px; }
-.verso .contato { font-size: 1.15em; font-weight: bold; background-color: rgba(255, 255, 255, 0.15); padding: 12px; border-radius: 8px; }
-.verso .contato p { margin: 0; display: flex; align-items: center; justify-content: center; }
+
+.verso h3 { font-size: 1.6em; font-weight: 600; }
+.verso .tagline { font-style: italic; font-size: 1.1em; line-height: 1.5; opacity: 0.9; }
+.verso .servicos h4 { margin-bottom: 8px; font-size: 1em; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid rgba(255, 255, 255, 0.3); padding-bottom: 8px; }
+.verso .servicos ul { list-style: none; }
+.verso .servicos li { margin-bottom: 5px; font-size: 0.95em; }
+.verso .contato { font-size: 1.2em; font-weight: bold; background-color: rgba(255, 255, 255, 0.15); padding: 12px; border-radius: 8px; margin-top: 10px; }
+.verso .contato p { display: flex; align-items: center; justify-content: center; }
 .verso .contato i { margin-right: 10px; }
 
+
 /* =================================================================== */
-/*                     DESIGN RESPONSIVO                               */
+/*               BASE E ELEMENTOS COMUNS DO LADO DA FRENTE             */
 /* =================================================================== */
 
-/* --- Estilos para TABLETS (Telas até 1024px) --- */
-@media (max-width: 1024px) {
-  /* Apenas diminuímos um pouco o cartão, mantendo o formato */
-  .portaCartao {
-    width: 60%;
-    transform: scale(0.9); /* Reduz um pouco o tamanho geral */
-  }
+.frente {
+  display: flex; /* Flexbox é a base para o alinhamento */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 20px;
+}
+
+/* Container para os textos principais, para melhor controle */
+.frente .container-texto {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    z-index: 2; /* Garante que o texto fique na frente dos elementos de design */
+}
+
+.frente h1.info { font-size: 2.2em; color: #2e4f6e; margin: 0; }
+.frente p.info { font-size: 1.3em; font-style: italic; color: #555; margin: 0; }
+.frente .contato-frente {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  font-size: 1.2em;
+  gap: 8px;
+  z-index: 2;
+}
+.frente .contato-frente .fa-whatsapp { color: #25D366; font-size: 1.4em; }
+
+.frente .qrcode-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  z-index: 5; /* Z-index mais alto para ficar sempre visível */
 }
 
 
-/* --- Estilos para SMARTPHONES (Telas até 768px) --- */
+/* =================================================================== */
+/*                    TEMPLATES PARA O LADO DA FRENTE                  */
+/* =================================================================== */
+/* Variáveis de cor que serão injetadas pelo JavaScript */
+:root {
+  --cor-frente-1: #3d3bbe; /* Cor padrão escura */
+  --cor-frente-2: #6a89cc; /* Cor padrão clara */
+}
+
+/* Esconde elementos de design por padrão. Cada template ativa o que precisa. */
+.frente .viewBox, .frente .viewBox2,
+.frente::before, .frente::after {
+  display: none;
+  pointer-events: none; /* Impede que os elementos de design capturem o mouse */
+  z-index: 1;
+}
+
+
+/* --- Template 01: Ondas Clássicas (CORRIGIDO) --- */
+.frente.template-frente-01 { justify-content: space-between; padding-bottom: 50px; } /* Dá espaço para as ondas */
+.frente.template-frente-01 .viewBox, .frente.template-frente-01 .viewBox2 { display: block; position: absolute; left: 0; width: 100%; }
+.frente.template-frente-01 .viewBox { height: 100px; bottom: 0; z-index: 1;}
+.frente.template-frente-01 .viewBox2 { height: 150px; bottom: 50px; z-index: 0; }
+.frente.template-frente-01 .path1 { fill: var(--cor-frente-1); }
+.frente.template-frente-01 .path2 { fill: var(--cor-frente-2); opacity: 0.75; }
+.frente.template-frente-01 .container-texto { padding-top: 20px; } /* Ajusta o texto para não ficar colado no topo */
+
+
+/* --- Template 02: Faixa Diagonal --- */
+.frente.template-frente-02::before {
+  display: block; content: ''; position: absolute; bottom: 0; left: -20%;
+  width: 140%; height: 50%; background: var(--cor-frente-1);
+  transform: rotate(-15deg);
+}
+.frente.template-frente-02 p.info, 
+.frente.template-frente-02 .contato-frente { color: #555; }
+
+
+/* --- Template 03: Círculos Sobrepostos --- */
+.frente.template-frente-03 { background-color: #f4f4f4; }
+.frente.template-frente-03::before, .frente.template-frente-03::after {
+  display: block; content: ''; position: absolute; border-radius: 50%; z-index: 0;
+}
+.frente.template-frente-03::before { width: 250px; height: 250px; background: linear-gradient(45deg, var(--cor-frente-2), transparent); opacity: 0.5; bottom: -120px; right: -80px; }
+.frente.template-frente-03::after { width: 200px; height: 200px; background: var(--cor-frente-1); bottom: -100px; right: -20px; }
+
+
+/* --- Template 04: Barra Vertical --- */
+.frente.template-frente-04 {
+  padding: 0;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.frente.template-frente-04::before {
+  display: block; content: ''; position: relative;
+  width: 40%; height: 100%;
+  background: linear-gradient(160deg, var(--cor-frente-2), var(--cor-frente-1));
+}
+.frente.template-frente-04 .container-texto {
+  flex: 1; /* Ocupa o espaço restante */
+  padding: 20px;
+}
+/* No template 4, o QR code não deve ser absoluto para não sobrepor tudo */
+.frente.template-frente-04 .qrcode-img {
+    position: static; /* Volta ao fluxo normal do documento */
+    margin-top: 15px;
+    align-self: center; /* Centraliza-se dentro do container de texto */
+}
+
+
+/* --- Template 05: Linha Inferior Minimalista --- */
+.frente.template-frente-05::after {
+  display: block; content: ''; position: absolute; bottom: 0; left: 0;
+  width: 100%; height: 10px;
+  background: linear-gradient(90deg, var(--cor-frente-1), var(--cor-frente-2));
+}
+
+
+/* =================================================================== */
+/*                       RESPONSIVIDADE (MOBILE)                       */
+/* =================================================================== */
 @media (max-width: 768px) {
-
-  /* ---- A GRANDE TRANSFORMAÇÃO ---- */
   .portaCartao {
-    /* Ocupa quase a tela inteira */
-    width: 90vw;  /* 90% da largura da tela */
-    height: 80vh; /* 80% da altura da tela */
-    
-    /* Adicionamos uma altura máxima para não ficar gigante em celulares altos */
-    max-height: 600px;
-    
-    /* Remove a escala do tablet para não conflitar */
-    transform: none; 
-  }
-
-  /* ---- AJUSTES PARA O LADO DA FRENTE (VERTICAL) ---- */
-  .frente {
-    /* Espalha o conteúdo na nova altura disponível */
-    justify-content: space-around;
-    padding: 30px 0;
+    width: 90vw;
+    height: 75vh;
+    max-height: 550px;
   }
   
-  /* Aumenta as fontes para melhor legibilidade na tela cheia */
-  .frente h1.info {
-    font-size: 2em;
-  }
-
-  .frente p.info {
-    font-size: 1.2em;
-    color: rgb(71, 65, 65);
-    font-weight: 700;
-  }
+  .frente h1.info { font-size: 1.8em; }
+  .frente p.info { font-size: 1.1em; }
+  .frente .contato-frente { font-size: 1em; }
+  .frente .qrcode-img { width: 70px; height: 70px; }
   
-  .contato-frente {
-    font-size: 1.2em;
-    margin-top: 0;
-    color: rgb(71, 65, 65);
-  }
-  
-  .contato-frente .fa-whatsapp {
-    font-size: 1.4em;;
-  }
-
-  /* Reposiciona o QR Code: agora ele fica no fluxo, acima da onda */
-  .qrcode-img {
-    position: relative; /* Tira do posicionamento absoluto */
-    bottom: auto;
-    right: auto;
-    width: 100px; /* Um pouco maior para facilitar a leitura */
-    height: 100px;
-    margin-top: 10px;
-  }
-
-  /* O SVG agora ocupa toda a base do cartão vertical */
-  .viewBox {
-    height: 150px; /* Damos uma altura mais definida */
-  }
-
-  /* ---- AJUSTES PARA O LADO DO VERSO (VERTICAL) ---- */
-  .verso {
-    padding: 25px;
-  }
-  
-  .conteudo-verso {
-    /* Espalha o conteúdo uniformemente no espaço vertical */
-    justify-content: space-evenly; 
-    gap: 0; /* Remove o gap para o space-evenly funcionar melhor */
-  }
-  
-  /* Aumenta todas as fontes do verso também */
-  .verso h3 { font-size: 1.5em; }
-  .verso .tagline { font-size: 1.1em; }
-  .verso .servicos h4 { font-size: 1em; }
-  .verso .servicos li { font-size: 1em; }
-  .verso .contato { font-size: 1.2em; padding: 15px; }
+  .verso h3 { font-size: 1.4em; }
+  .verso .tagline { font-size: 1em; }
+  .verso .contato { font-size: 1em; }
 }

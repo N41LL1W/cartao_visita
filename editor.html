@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Criador de Cartão Digital</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css"> <!-- Link para o CSS externo -->
+    <style>
+        /* Estilos específicos do editor */
+        body { font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; background-color: #f0f2f5; }
+        form { display: flex; flex-direction: column; gap: 15px; }
+        input[type="text"], input[type="file"], select, textarea { padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px; width: 100%; box-sizing: border-box;}
+        button { padding: 12px; color: white; border: none; cursor: pointer; font-size: 16px; border-radius: 5px; }
+        .botoes-acao { display: flex; gap: 10px; margin-top: 20px;}
+        #btn-gerar { background-color: #3d3bbe; }
+        #btn-salvar { background-color: #007bff; }
+        h1, h2, h3, h4 { color: #333; margin-top: 0; }
+        hr { border: 0; border-top: 1px solid #ddd; margin: 25px 0; }
+        
+        .secao-design { border: 1px solid #ccc; padding: 20px; border-radius: 8px; background-color: #fff; margin-top: 20px; }
+        .design-container { display: flex; gap: 20px; align-items: flex-start; }
+        .controles-cor { flex: 3; display: flex; flex-direction: column; gap: 15px; }
+        .previa-container { flex: 1; }
+
+        .grupo-cor { display: none; flex-direction: column; gap: 10px; }
+        .grupo-cor.ativo { display: flex; }
+
+        .input-cor-container { display: flex; align-items: center; gap: 10px; }
+        .input-cor-container label { min-width: 40px; font-size: 0.9em; }
+        .input-cor-container input[type="color"] { padding: 0; height: 40px; width: 50px; border: none; background: none; cursor: pointer; }
+        .input-cor-container input[type="text"] { flex: 1; }
+        .input-cor-container input[type="checkbox"] { width: auto; }
+
+        .previa-box {
+            width: 100%;
+            height: 120px;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+            font-size: 1.1em;
+            font-weight: bold;
+            box-sizing: border-box;
+            padding: 10px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            background-color: #fff;
+        }
+        .previa-box#previa-verso {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .galeria-templates { margin-top: 20px; }
+        .templates-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+        .template-thumb { cursor: pointer; border: 3px solid transparent; border-radius: 5px; transition: all 0.2s ease-in-out; }
+        .template-thumb:hover { border-color: #007bff; }
+        .template-thumb.ativo { border-color: #3d3bbe; box-shadow: 0 0 10px rgba(61, 59, 190, 0.5); }
+        .template-thumb img { display: block; width: 100px; height: 60px; border-radius: 3px; background-color: #e9e9e9; }
+    </style>
+</head>
+<body>
+    <h1>Criador de Cartão Digital</h1>
+    <label for="carregar-config">Carregar configuração (.json):</label>
+    <input type="file" id="carregar-config" accept=".json">
+    <hr>
+    
+    <form id="form-cartao">
+        <!-- SEÇÃO DE DADOS GERAIS -->
+        <h3>1. Dados do Cartão</h3>
+        <input type="text" id="nome" placeholder="Nome Completo" required>
+        <input type="text" id="profissao" placeholder="Sua Profissão ou Cargo" required>
+        <input type="text" id="whatsapp" placeholder="Telefone com DDD (ex: 11987654321)" required>
+        <input type="text" id="qrcode" placeholder="URL da imagem do QR Code" value="">
+        <input type="text" id="tagline" placeholder="Sua frase de efeito (verso)">
+        <textarea id="servicos" placeholder="Liste seus serviços, um por linha" rows="4"></textarea>
+
+        <!-- SEÇÃO DE DESIGN DO VERSO -->
+        <div class="secao-design">
+            <h3>2. Design do Verso (Fundo)</h3>
+            <div class="design-container">
+                <div class="controles-cor">
+                    <select id="tipo-cor-verso">
+                        <option value="solida">Cor Sólida</option>
+                        <option value="gradiente" selected>Gradiente</option>
+                    </select>
+                    <div id="grupo-cor-solida-verso" class="grupo-cor">
+                        <div class="input-cor-container"><input type="color" id="verso-cor-solida" value="#3d3bbe"><input type="text" id="verso-cor-solida-hex" value="#3d3bbe"></div>
+                    </div>
+                    <div id="grupo-gradiente-verso" class="grupo-cor ativo">
+                        <label>Ângulo: <span id="valor-angulo-verso">135</span>°</label>
+                        <input type="range" id="verso-gradiente-angulo" min="0" max="360" value="135">
+                        <div class="input-cor-container"><label>Cor 1:</label><input type="color" id="verso-gradiente-cor1" value="#6a89cc"><input type="text" id="verso-gradiente-cor1-hex" value="#6a89cc"></div>
+                        <div class="input-cor-container"><label>Cor 2:</label><input type="color" id="verso-gradiente-cor2" value="#3d3bbe"><input type="text" id="verso-gradiente-cor2-hex" value="#3d3bbe"></div>
+                        <div class="input-cor-container"><input type="checkbox" id="verso-usar-cor3"><label for="verso-usar-cor3">Usar Cor 3?</label><input type="color" id="verso-gradiente-cor3" value="#2e4f6e" disabled><input type="text" id="verso-gradiente-cor3-hex" value="#2e4f6e" disabled></div>
+                    </div>
+                </div>
+                <div class="previa-container">
+                    <label>Prévia do Verso:</label>
+                    <div id="previa-verso" class="previa-box">Verso</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEÇÃO DE DESIGN DA FRENTE -->
+        <div class="secao-design">
+            <h3>3. Design da Frente</h3>
+            <div class="design-container">
+                <div class="controles-cor">
+                    <p>Personalize as cores principais do template escolhido abaixo.</p>
+                     <div class="input-cor-container"><label>Cor 1:</label><input type="color" id="frente-cor1" value="#3d3bbe"><input type="text" id="frente-cor1-hex" value="#3d3bbe"></div>
+                     <div class="input-cor-container"><label>Cor 2:</label><input type="color" id="frente-cor2" value="#6a89cc"><input type="text" id="frente-cor2-hex" value="#6a89cc"></div>
+                </div>
+                <div class="previa-container">
+                    <label>Prévia da Frente:</label>
+                    <div id="previa-frente" class="previa-box lado frente">
+                        <!-- Conteúdo de exemplo para a prévia -->
+                        <h1 class="info" style="font-size: 1.1em; margin: 0; color:#333; z-index: 2;">Seu Nome</h1>
+                        <p class="info" style="font-size: 0.7em; margin: 0; color:#555; z-index: 2;">Sua Profissão</p>
+                    </div>
+                </div>
+            </div>
+            <div class="galeria-templates">
+                <h4>Escolha um template:</h4>
+                <div class="templates-grid">
+                    <div class="template-thumb" data-template-id="template-frente-01" title="Ondas Clássicas"><img src="https://via.placeholder.com/100x60/ccc/fff?text=T1" alt="Template 1"></div>
+                    <div class="template-thumb" data-template-id="template-frente-02" title="Faixa Diagonal"><img src="https://via.placeholder.com/100x60/ccc/fff?text=T2" alt="Template 2"></div>
+                    <div class="template-thumb" data-template-id="template-frente-03" title="Círculos"><img src="https://via.placeholder.com/100x60/ccc/fff?text=T3" alt="Template 3"></div>
+                    <div class="template-thumb" data-template-id="template-frente-04" title="Barra Vertical"><img src="https://via.placeholder.com/100x60/ccc/fff?text=T4" alt="Template 4"></div>
+                    <div class="template-thumb" data-template-id="template-frente-05" title="Linha Inferior"><img src="https://via.placeholder.com/100x60/ccc/fff?text=T5" alt="Template 5"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="botoes-acao">
+            <button type="submit" id="btn-gerar">Gerar Cartão</button>
+            <button type="button" id="btn-salvar">Salvar Configuração</button>
+        </div>
+    </form>
+
+    <script src="gerador.js"></script>
+</body>
+</html>

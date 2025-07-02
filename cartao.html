@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Links para CSS e Ícones -->
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Cartão de Visitas Digital</title>
+</head>
+
+<!-- Adicionamos a classe 'cartao-body' para isolar os estilos do corpo da página -->
+<body class="cartao-body">
+
+    <div class="portaCartao">
+        <div class="cartao">
+
+            <!-- LADO DA FRENTE -->
+            <!-- A classe do template (ex: 'template-frente-01') será adicionada aqui via JS -->
+            <div class="lado frente">
+                
+                <!-- Container para os textos, para melhor controle de alinhamento -->
+                <div class="container-texto">
+                    <h1 class="info" id="frente-nome"></h1>
+                    <p class="info" id="frente-profissao"></p>
+                    <div class="contato-frente info">
+                        <i class="fab fa-whatsapp"></i>
+                        <span id="frente-whatsapp"></span>
+                    </div>
+                </div>
+
+                <!-- QR Code (posicionado de forma absoluta pelo CSS) -->
+                <img src="" alt="QR Code" class="qrcode-img" id="frente-qrcode">
+                
+                <!-- Elementos de design para templates específicos (controlados via CSS) -->
+                <!-- Estes SVGs são usados apenas pelo Template 01 (Ondas) -->
+                <svg viewBox="0 0 500 150" preserveAspectRatio="none" class="viewBox">
+                    <path d="M0.00,49.98 C254.51,72.06 306.43,22.41 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" class="path1"></path>
+                </svg>
+                <svg viewBox="0 0 500 150" preserveAspectRatio="none" class="viewBox2">
+                    <path d="M0.00,49.98 C254.51,72.06 306.43,22.41 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" class="path2"></path>
+                </svg>
+                
+            </div>
+
+            <!-- LADO DO VERSO -->
+            <div class="lado verso">
+                <div class="conteudo-verso">
+                    <h3 id="verso-nome"></h3>
+                    <p class="tagline" id="verso-tagline"></p>
+                    
+                    <div class="servicos">
+                        <h4>Serviços Oferecidos</h4>
+                        <ul id="verso-servicos">
+                            <!-- Itens da lista serão inseridos aqui via JS -->
+                        </ul>
+                    </div>
+
+                    <div class="contato">
+                        <p><i class="fas fa-phone-alt"></i> <span id="verso-contato"></span></p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Script que lê os dados da URL e preenche o cartão -->
+    <script src="script-cartao.js"></script>
+</body>
+</html>
