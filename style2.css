@@ -1,102 +1,107 @@
-/* --- CSS FINAL E MAIS ESTÁVEL --- */
+/* =================================================================== */
+/*                     ESTILOS GERAIS (BASE)                           */
+/* =================================================================== */
+/* Estas regras se aplicam a TODAS as páginas e cartões,
+   a menos que sejam sobrescritas por regras mais específicas. */
+
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: #f0f2f5;
-  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Define a fonte padrão. */
+  display: flex; /* Usa Flexbox para centralizar o conteúdo da página. */
+  justify-content: center; /* Alinha o conteúdo no centro horizontal. */
+  align-items: center; /* Alinha o conteúdo no centro vertical. */
+  min-height: 100vh; /* Garante que a página ocupe pelo menos 100% da altura da tela. */
+  background-color: #f0f2f5; /* Cor de fundo cinza claro para a página. */
+  margin: 0; /* Remove a margem padrão do navegador. */
 }
+
+/* O container que segura o cartão e define a perspectiva 3D. */
 .portaCartao {
-  width: 500px;
-  height: 300px;
-  perspective: 1500px;
+  width: 500px; /* Largura do cartão no desktop. */
+  height: 300px; /* Altura do cartão no desktop. */
+  perspective: 1500px; /* Define a profundidade da cena 3D, afetando a intensidade da animação de virar. */
 }
+
+/* O cartão em si, que contém a frente e o verso. */
 .cartao {
-  width: 100%;
-  height: 100%;
-  position: relative; 
-  transition: transform 0.8s;
-  transform-style: preserve-3d;
-  cursor: pointer;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  border-radius: 15px;
+  width: 100%; /* Ocupa 100% da largura do .portaCartao. */
+  height: 100%; /* Ocupa 100% da altura do .portaCartao. */
+  position: relative; /* Necessário para que os .lado (frente/verso) possam ser posicionados absolutamente dentro dele. */
+  transition: transform 0.8s; /* Define a duração e suavidade da animação de virar. */
+  transform-style: preserve-3d; /* Garante que os filhos (frente/verso) mantenham sua posição 3D. */
+  cursor: pointer; /* Muda o cursor para uma "mãozinha" ao passar por cima. */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* Sombra suave para dar profundidade. */
+  border-radius: 15px; /* Bordas arredondadas. */
 }
+
+/* Ativa a animação de virar quando o mouse passa por cima do .portaCartao. */
 .portaCartao:hover .cartao {
-  transform: rotateY(180deg);
+  transform: rotateY(180deg); /* Gira o cartão 180 graus no eixo Y. */
 }
+
+/* Regra base para a frente e o verso do cartão. */
 .lado {
-  position: absolute;
+  position: absolute; /* Posiciona a frente e o verso um sobre o outro no mesmo lugar. */
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  backface-visibility: hidden;
-  border-radius: 15px;
-  overflow: hidden;
-  box-sizing: border-box;
+  backface-visibility: hidden; /* Esconde o "lado de trás" do elemento quando ele está virado. Essencial para a animação. */
+  border-radius: 15px; /* Garante que os lados tenham as mesmas bordas arredondadas do cartão. */
+  overflow: hidden; /* Esconde qualquer conteúdo que "vaze" para fora das bordas arredondadas. */
+  box-sizing: border-box; /* Garante que o padding não aumente o tamanho total do elemento. */
 }
-.frente {
-  background-color: #ffffff;
-  color: #333;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-}
-.info {
-  z-index: 2;
-  text-align: center;
-}
-h1.info { font-size: 2.6em; color: #2e4f6e; margin: 0 0 0 0; }
-p.info { font-size: 1.5em; font-style: italic; color: #faeeee; margin: 0 0 0 0 ; }
 
+/* =================================================================== */
+/*                  ESTILOS DO CARTÃO ORIGINAL (MICHELE)               */
+/* =================================================================== */
+/* Estas regras se aplicam a qualquer cartão que NÃO tenha uma classe 
+   específica como .cartao-evania ou .cartao-camila. */
+
+/* Estilo padrão para a frente do cartão. */
+.frente {
+  background-color: #ffffff; /* Fundo branco. */
+  color: #333; /* Cor do texto escura. */
+  display: flex; /* Usa Flexbox para o layout. */
+  flex-direction: column; /* Empilha os itens verticalmente. */
+  justify-content: space-between; /* Distribui o espaço verticalmente entre os itens. */
+  align-items: center; /* Centraliza os itens horizontalmente. */
+  padding: 20px; /* Espaçamento interno. */
+}
+
+/* Classe geral para os textos principais. */
+.info {
+  z-index: 2; /* Garante que o texto fique na frente de elementos de fundo. */
+  text-align: center; /* Centraliza o texto. */
+}
+h1.info { font-size: 2.6em; color: #2e4f6e; margin: 0; }
+p.info { font-size: 1.5em; font-style: italic; color: #555; margin: 0; }
+
+/* Estilo para o contato na frente do cartão. */
 .contato-frente {
   display: flex;
   align-items: center;
   margin-top: 20px;
   font-weight: 500;
-  color: #b9c8d8;
+  color: #333;
   font-size: 1.3em;
   z-index: 2;
 }
-.contato-frente .fa-whatsapp { color: #00ff5e; font-size: 1.5em; margin-right: 10px; }
+.contato-frente .fa-whatsapp { color: #25D366; font-size: 1.5em; margin-right: 10px; }
+
+/* SVGs para o efeito de ondas do cartão original. */
 .viewBox {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100px;
-  z-index: 1;
+  position: absolute; bottom: 0; left: 0;
+  width: 100%; height: 100px; z-index: 1;
 }
 .viewBox2 {
-  position: absolute;
-  bottom: 50px;
-  left: 0;
-  width: 100%;
-  height: 150px;
-  z-index: 0;
+  position: absolute; bottom: 50px; left: 0;
+  width: 100%; height: 150px; z-index: 0;
 }
-.path1, .path2 {
-  stroke: none; /* Garante que não haja contorno */
-}
+.path1, .path2 { stroke: none; } /* Remove qualquer contorno das ondas. */
+.path1 { fill: #3d3bbe; } /* Cor da onda de trás. */
+.path2 { fill: #6a89cc; opacity: 0.75; } /* Cor e transparência da onda da frente. */
 
-/* ONDA DE TRÁS (MAIOR)
-   Ela terá as duas cores mais escuras do seu gradiente.
-   Usaremos a cor do seu 'path' como base. */
-.path1 {
-  fill: #3d3bbe; /* Cor base, mais escura */
-}
-
-/* ONDA DA FRENTE (MENOR)
-   Ela terá as duas cores mais claras do seu gradiente e será translúcida.
-   Usaremos a cor do seu 'path2' como a cor visível. */
-.path2 {
-  fill: #6a89cc;  /* Cor visível, mais clara */
-  opacity: 0.75;  /* O segredo está aqui! Transparência para misturar as cores. */
-}
+/* QR Code padrão, posicionado no canto inferior direito. */
 .qrcode-img {
   position: absolute;
   bottom: 15px;
@@ -107,10 +112,12 @@ p.info { font-size: 1.5em; font-style: italic; color: #faeeee; margin: 0 0 0 0 ;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   z-index: 2;
 }
+
+/* Verso padrão. */
 .verso {
-  background: linear-gradient(135deg, #6a89cc, #3d3bbe); 
-  color: white;
-  transform: rotateY(180deg);
+  background: linear-gradient(135deg, #6a89cc, #3d3bbe); /* Fundo em gradiente. */
+  color: white; /* Cor do texto branca. */
+  transform: rotateY(180deg); /* Garante que o verso comece "virado". */
   display: flex;
   padding: 25px;
   text-align: center;
@@ -118,107 +125,235 @@ p.info { font-size: 1.5em; font-style: italic; color: #faeeee; margin: 0 0 0 0 ;
 .conteudo-verso {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-around; /* Distribui o conteúdo verticalmente. */
   height: 100%;
   width: 100%;
 }
 .verso h3 { margin: 0; font-size: 1.4em; font-weight: 600; }
 .verso .tagline { font-style: italic; font-size: 1em; line-height: 1.5; opacity: 0.9; margin: 0; }
-.verso .servicos h4 { margin: 0 0 8px 0; font-size: 1em; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid rgba(255, 255, 255, 0.3); padding-bottom: 8px; }
+.verso .servicos h4 { margin: 0 0 8px 0; font-size: 1em; text-transform: uppercase; border-bottom: 1px solid rgba(255, 255, 255, 0.3); padding-bottom: 8px; }
 .verso .servicos ul { list-style: none; padding: 0; margin: 0; font-size: 0.95em; }
 .verso .servicos li { margin-bottom: 5px; }
 .verso .contato { font-size: 1.15em; font-weight: bold; background-color: rgba(255, 255, 255, 0.15); padding: 12px; border-radius: 8px; }
 .verso .contato p { margin: 0; display: flex; align-items: center; justify-content: center; }
 .verso .contato i { margin-right: 10px; }
 
+
+/* =================================================================== */
+/*           ESTILOS DOS CARTÕES ESPECÍFICOS (EVANIA E CAMILA)         */
+/* =================================================================== */
+/* As regras aqui SOBRESCREVEM as regras base quando a classe correspondente (.cartao-evania ou .cartao-camila) está presente. */
+
+/* ------------------- CARTÃO EVANIA (DEPILADORA) -------------------- */
+.cartao-evania .frente {
+  position: relative; /* Define este como o container para o posicionamento absoluto dos filhos. */
+  background:
+    linear-gradient(135deg, rgba(171, 71, 188, 0.7), rgba(74, 20, 140, 0.8)), /* Camada de gradiente semi-transparente. */
+    url('img/fundoF_evania.jpg'); /* Camada de imagem de fundo. */
+  background-size: cover;
+  background-position: center;
+  display: block; /* O layout é manual (absoluto), então flexbox não é necessário. */
+  padding: 20px;
+  color: #ffffff; /* Cor do texto branca para contrastar com o fundo. */
+}
+.cartao-evania .logo-frente {
+  position: absolute; /* Posicionamento manual. */
+  top: 20px; left: 20px; /* Canto superior esquerdo. */
+  width: 80px; height: auto;
+  z-index: 3;
+  filter: brightness(1.2) drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.5)); /* Efeito de brilho. */
+}
+.cartao-evania .qrcode-img {
+  position: absolute;
+  bottom: 20px; right: 20px; /* Canto inferior direito. */
+  top: auto; /* Anula o 'top' do estilo base. */
+  width: 80px; height: 80px;
+  border: 3px solid white;
+  z-index: 5;
+}
+.cartao-evania .frente h1.info {
+  position: absolute; /* Posicionamento manual para o nome. */
+  width: 100%; text-align: center; /* Ocupa 100% da largura para poder centralizar o texto. */
+  top: 40px; /* Alinhado com a parte de cima. Ajuste para alinhar com o logo. */
+  z-index: 4;
+  font-size: 2.5em;
+  color: #ffffff;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5); /* Sombra para legibilidade. */
+}
+.cartao-evania .frente p.info {
+  position: absolute;
+  width: 100%; text-align: center;
+  top: 50%; left: 50%; /* Centraliza perfeitamente no meio do cartão. */
+  transform: translate(-50%, -50%); /* Ajuste fino para a centralização ser exata. */
+  z-index: 4;
+  font-size: 1.4em; font-style: normal; font-weight: 500;
+  color: #ffffff;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+}
+.cartao-evania .frente .contato-frente {
+  position: absolute;
+  width: 100%; text-align: center;
+  bottom: 35px; /* Alinhado com a parte de baixo. Ajuste para alinhar com o QR Code. */
+  z-index: 4;
+  font-weight: 600; font-size: 1.2em;
+  color: #ffffff;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+}
+.cartao-evania .frente .contato-frente .fa-whatsapp {
+  color: #25D366;
+}
+
+
+/* --- O VERSO E OUTROS ESTILOS (LAYOUT VERTICAL COM CONTROLE TOTAL) --- */
+
+/* Regra principal para o VERSO do cartão. */
+.cartao-evania .verso {
+  background:
+    linear-gradient(135deg, rgba(171, 71, 188, 0.7), rgba(74, 20, 140, 0.8)),
+    url('img/fundoT_evania.jpg');
+  background-size: cover;
+  background-position: center;
+  color: #ffffff;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+  
+  /* Controle o espaço geral nas bordas aqui, como explicado na Parte 1. */
+  padding: 0 0; 
+}
+
+/* O container do conteúdo do verso agora usa uma nova estratégia de layout. */
+.cartao-evania .verso .conteudo-verso {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    /* MUDANÇA IMPORTANTE: Alinhamos tudo ao topo para começar. */
+    justify-content: flex-start; 
+    
+    background: none;
+    padding: 0;
+}
+
+/* --- CONTROLE DE ESPAÇAMENTO INDIVIDUAL DOS BLOCOS --- */
+
+/* BLOCO 1: NOME E SLOGAN */
+/* Este bloco fica no topo por padrão por causa do 'flex-start'. */
+.cartao-evania .verso h3 {
+  font-size: 1.6em;
+  margin: 0;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.cartao-evania .verso .tagline {
+  font-size: 0.8em;
+  font-style: italic;
+  
+  /* AJUSTE AQUI: Este é o espaço entre o slogan e os serviços. */
+  margin-bottom: 20px; /* Aumente ou diminua para ajustar o espaço. */
+}
+
+
+/* BLOCO 2: SERVIÇOS */
+.cartao-evania .verso .servicos {
+  text-align: center;
+}
+.cartao-evania .verso .servicos h4 {
+  font-size: 0.9em;
+  margin-bottom: 10px;
+}
+.cartao-evania .verso .servicos ul {
+  list-style: none;
+  padding: 0;
+}
+.cartao-evania .verso .servicos li {
+  margin-bottom: 5px;
+}
+
+
+/* BLOCO 3: CONTATO */
+.cartao-evania .verso .contato {
+  /* ESTE É O TRUQUE MÁGICO! */
+  /* 'margin-top: auto' em um container flexível com direção de coluna
+     faz com que a margem superior "empurre" o elemento, consumindo
+     todo o espaço livre acima dele. Isso joga o bloco de contato para a base. */
+  margin-top: auto;
+  
+  font-size: 1.0em;
+  background: none;
+  padding: 15px;
+}
+
+
+/* Regra para esconder as ondas SVG, que não são usadas. */
+.cartao-evania .viewBox, .cartao-evania .viewBox2 {
+  display: none;
+}
+
+
+/* ------------------- CARTÃO CAMILA (CUIDADORA) ------------------- */
+.cartao-camila .qrcode-img {
+  display: block; /* Garante que o QR code do cartão base seja visível. */
+}
+.cartao-camila .frente h1.info { font-size: 2.5em; color: #0d47a1; }
+.cartao-camila .frente p.info { font-size: 1.5em; font-style: normal; font-weight: 400; color: #1565c0; display: flex; align-items: center; gap: 10px; }
+.cartao-camila .frente p.info .fa-heart { color: #e57373; font-size: 0.8em; }
+.cartao-camila .frente .contato-frente { color: #0d47a1; }
+
+/* Sobrescreve as cores das ondas do cartão base. */
+.cartao-camila .path1 { fill: #42a5f5; }
+.cartao-camila .path2 { fill: #90caf9; opacity: 0.75; }
+
+.cartao-camila .verso {
+  background: linear-gradient(135deg, #a5d6a7, #4caf50); /* Gradiente de tons de verde. */
+}
+.cartao-camila .verso .tagline { font-size: 1.1em; }
+.cartao-camila .verso .servicos ul { text-align: left; } /* Alinha a lista de serviços à esquerda. */
+.cartao-camila .verso .servicos li { padding-left: 1.5em; position: relative; margin-bottom: 8px; }
+
+/* Adiciona um ícone de "check" antes de cada item da lista de serviços. */
+.cartao-camila .verso .servicos li::before {
+  content: '\f00c'; /* Código do ícone no Font Awesome. */
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  left: 0;
+  color: #ffffff; /* Cor do ícone. */
+}
+
+
 /* =================================================================== */
 /*                     DESIGN RESPONSIVO                               */
 /* =================================================================== */
 
-/* --- Estilos para TABLETS (Telas até 1024px) --- */
-@media (max-width: 1024px) {
-  /* Apenas diminuímos um pouco o cartão, mantendo o formato */
-  .portaCartao {
-    width: 60%;
-    transform: scale(0.9); /* Reduz um pouco o tamanho geral */
-  }
-}
-
-
-/* --- Estilos para SMARTPHONES (Telas até 768px) --- */
 @media (max-width: 768px) {
-
-  /* ---- A GRANDE TRANSFORMAÇÃO ---- */
+  /* Regras para telas menores, como de celulares. */
   .portaCartao {
-    /* Ocupa quase a tela inteira */
-    width: 90vw;  /* 90% da largura da tela */
-    height: 80vh; /* 80% da altura da tela */
-    
-    /* Adicionamos uma altura máxima para não ficar gigante em celulares altos */
-    max-height: 600px;
-    
-    /* Remove a escala do tablet para não conflitar */
-    transform: none; 
+    width: 90vw; /* 90% da largura da tela. */
+    height: 75vh; /* 75% da altura da tela. */
+    max-height: 550px; /* Altura máxima para não ficar gigante em telas muito altas. */
+    transform: none; /* Desativa a perspectiva 3D, pois o hover não funciona em touch. */
   }
-
-  /* ---- AJUSTES PARA O LADO DA FRENTE (VERTICAL) ---- */
-  .frente {
-    /* Espalha o conteúdo na nova altura disponível */
+  
+  /* Ajustes responsivos para o cartão padrão/original. */
+  .portaCartao:not(.cartao-evania):not(.cartao-camila) .frente {
     justify-content: space-around;
     padding: 30px 0;
   }
-  
-  /* Aumenta as fontes para melhor legibilidade na tela cheia */
-  .frente h1.info {
-    font-size: 2em;
-  }
-
-  .frente p.info {
-    font-size: 1.2em;
-    color: rgb(71, 65, 65);
-    font-weight: 700;
-  }
-  
-  .contato-frente {
-    font-size: 1.2em;
-    margin-top: 0;
-    color: rgb(71, 65, 65);
-  }
-  
-  .contato-frente .fa-whatsapp {
-    font-size: 1.4em;;
-  }
-
-  /* Reposiciona o QR Code: agora ele fica no fluxo, acima da onda */
-  .qrcode-img {
-    position: relative; /* Tira do posicionamento absoluto */
-    bottom: auto;
-    right: auto;
-    width: 100px; /* Um pouco maior para facilitar a leitura */
-    height: 100px;
+  .portaCartao:not(.cartao-evania):not(.cartao-camila) .qrcode-img {
+    position: static; /* Tira o QR Code do posicionamento absoluto, colocando-o no fluxo normal. */
     margin-top: 10px;
-  }
-
-  /* O SVG agora ocupa toda a base do cartão vertical */
-  .viewBox {
-    height: 150px; /* Damos uma altura mais definida */
-  }
-
-  /* ---- AJUSTES PARA O LADO DO VERSO (VERTICAL) ---- */
-  .verso {
-    padding: 25px;
+    width: 100px;
+    height: 100px;
   }
   
-  .conteudo-verso {
-    /* Espalha o conteúdo uniformemente no espaço vertical */
-    justify-content: space-evenly; 
-    gap: 0; /* Remove o gap para o space-evenly funcionar melhor */
-  }
-  
-  /* Aumenta todas as fontes do verso também */
-  .verso h3 { font-size: 1.5em; }
-  .verso .tagline { font-size: 1.1em; }
-  .verso .servicos h4 { font-size: 1em; }
-  .verso .servicos li { font-size: 1em; }
-  .verso .contato { font-size: 1.2em; padding: 15px; }
+  /* Ajustes responsivos para o cartão da Evania, diminuindo fontes e elementos. */
+  .cartao-evania .frente h1.info { font-size: 2em; top: 25px; }
+  .cartao-evania .frente p.info { font-size: 1.2em; }
+  .cartao-evania .frente .contato-frente { font-size: 1em; bottom: 25px; }
+  .cartao-evania .logo-frente { width: 60px; top: 15px; left: 15px; }
+  .cartao-evania .qrcode-img { width: 70px; height: 70px; bottom: 15px; right: 15px; }
+
+  /* Ajuste responsivo geral para o verso, que se aplica a todos os cartões. */
+  .verso .conteudo-verso { justify-content: space-evenly; }
 }
