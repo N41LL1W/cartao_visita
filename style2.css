@@ -142,218 +142,136 @@ p.info { font-size: 1.5em; font-style: italic; color: #555; margin: 0; }
 /* =================================================================== */
 /*           ESTILOS DOS CARTÕES ESPECÍFICOS (EVANIA E CAMILA)         */
 /* =================================================================== */
-/* As regras aqui SOBRESCREVEM as regras base quando a classe correspondente (.cartao-evania ou .cartao-camila) está presente. */
 
-/* ------------------- CARTÃO EVANIA (DEPILADORA) -------------------- */
-.cartao-evania .frente {
-  position: relative; /* Define este como o container para o posicionamento absoluto dos filhos. */
-  background:
-    linear-gradient(135deg, rgba(171, 71, 188, 0.7), rgba(74, 20, 140, 0.8)), /* Camada de gradiente semi-transparente. */
-    url('img/fundoF_evania.jpg'); /* Camada de imagem de fundo. */
-  background-size: cover;
-  background-position: center;
-  display: block; /* O layout é manual (absoluto), então flexbox não é necessário. */
-  padding: 20px;
-  color: #ffffff; /* Cor do texto branca para contrastar com o fundo. */
-}
-.cartao-evania .logo-frente {
-  position: absolute; /* Posicionamento manual. */
-  top: 20px; left: 20px; /* Canto superior esquerdo. */
-  width: 80px; height: auto;
-  z-index: 3;
-  filter: brightness(1.2) drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.5)); /* Efeito de brilho. */
-}
-.cartao-evania .qrcode-img {
-  position: absolute;
-  bottom: 20px; right: 20px; /* Canto inferior direito. */
-  top: auto; /* Anula o 'top' do estilo base. */
-  width: 80px; height: 80px;
-  border: 3px solid white;
-  z-index: 5;
-}
-.cartao-evania .frente h1.info {
-  position: absolute; /* Posicionamento manual para o nome. */
-  width: 100%; text-align: center; /* Ocupa 100% da largura para poder centralizar o texto. */
-  top: 40px; /* Alinhado com a parte de cima. Ajuste para alinhar com o logo. */
-  z-index: 4;
-  font-size: 2.5em;
+/* ------------------- REGRAS COMUNS PARA OS VERSOS PADRONIZADOS ------------------- */
+.cartao-evania .verso,
+.cartao-camila .verso {
+  display: flex;
+  padding: 25px;
+  text-align: center;
   color: #ffffff;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5); /* Sombra para legibilidade. */
 }
-.cartao-evania .frente p.info {
-  position: absolute;
-  width: 100%; text-align: center;
-  top: 50%; left: 50%; /* Centraliza perfeitamente no meio do cartão. */
-  transform: translate(-50%, -50%); /* Ajuste fino para a centralização ser exata. */
-  z-index: 4;
-  font-size: 1.4em; font-style: normal; font-weight: 500;
-  color: #ffffff;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+.cartao-evania .verso .conteudo-verso,
+.cartao-camila .verso .conteudo-verso {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    justify-content: space-around; 
+    align-items: center;
+    background: none; padding: 0;
 }
-.cartao-evania .frente .contato-frente {
-  position: absolute;
-  width: 100%; text-align: center;
-  bottom: 35px; /* Alinhado com a parte de baixo. Ajuste para alinhar com o QR Code. */
-  z-index: 4;
-  font-weight: 600; font-size: 1.2em;
-  color: #ffffff;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
-}
-.cartao-evania .frente .contato-frente .fa-whatsapp {
-  color: #25D366;
-}
+.cartao-evania .verso h3, .cartao-camila .verso h3 { margin: 0; font-size: 1.4em; font-weight: 600; }
+.cartao-evania .verso .tagline, .cartao-camila .verso .tagline { font-style: italic; font-size: 1em; line-height: 1.5; opacity: 0.9; margin: 0; }
+.cartao-evania .verso .servicos h4, .cartao-camila .verso .servicos h4 { margin: 0 0 8px 0; font-size: 1em; text-transform: uppercase; border-bottom: 1px solid rgba(255, 255, 255, 0.3); padding-bottom: 8px; }
+.cartao-evania .verso .servicos ul, .cartao-camila .verso .servicos ul { list-style: none; padding: 0; margin: 0; font-size: 0.95em; }
+.cartao-evania .verso .servicos li, .cartao-camila .verso .servicos li { margin-bottom: 5px; padding-left: 0; position: static; }
+.cartao-camila .verso .servicos li::before { display: none; }
+.cartao-evania .verso .contato, .cartao-camila .verso .contato { font-size: 1.15em; font-weight: bold; background-color: rgba(255, 255, 255, 0.15); padding: 12px; border-radius: 8px; }
+.cartao-evania .verso .contato p, .cartao-camila .verso .contato p { margin: 0; display: flex; align-items: center; justify-content: center; }
+.cartao-evania .verso .contato i, .cartao-camila .verso .contato i { margin-right: 10px; }
 
 
-/* --- O VERSO E OUTROS ESTILOS (LAYOUT VERTICAL COM CONTROLE TOTAL) --- */
+/* ------------------- ESTILOS VISUAIS ÚNICOS DE CADA CARTÃO ------------------- */
 
-/* Regra principal para o VERSO do cartão. */
+/* --- Cartão Evania --- */
 .cartao-evania .verso {
   background:
-    linear-gradient(135deg, rgba(171, 71, 188, 0.7), rgba(74, 20, 140, 0.8)),
+    linear-gradient(135deg, rgba(171, 71, 188, 0.8), rgba(74, 20, 140, 0.85)),
     url('img/fundoT_evania.jpg');
-  background-size: cover;
-  background-position: center;
-  color: #ffffff;
+  background-size: cover; background-position: center;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
-  
-  /* Controle o espaço geral nas bordas aqui, como explicado na Parte 1. */
-  padding: 0 0; 
 }
-
-/* O container do conteúdo do verso agora usa uma nova estratégia de layout. */
-.cartao-evania .verso .conteudo-verso {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    
-    /* MUDANÇA IMPORTANTE: Alinhamos tudo ao topo para começar. */
-    justify-content: flex-start; 
-    
-    background: none;
-    padding: 0;
+.cartao-evania .frente {
+  position: relative;
+  background:
+    linear-gradient(135deg, rgba(171, 71, 188, 0.7), rgba(74, 20, 140, 0.8)),
+    url('img/fundoF_evania.jpg');
+  background-size: cover; background-position: center;
+  display: block; padding: 20px; color: #ffffff;
 }
-
-/* --- CONTROLE DE ESPAÇAMENTO INDIVIDUAL DOS BLOCOS --- */
-
-/* BLOCO 1: NOME E SLOGAN */
-/* Este bloco fica no topo por padrão por causa do 'flex-start'. */
-.cartao-evania .verso h3 {
-  font-size: 1.6em;
-  margin: 0;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-.cartao-evania .verso .tagline {
-  font-size: 0.8em;
-  font-style: italic;
-  
-  /* AJUSTE AQUI: Este é o espaço entre o slogan e os serviços. */
-  margin-bottom: 20px; /* Aumente ou diminua para ajustar o espaço. */
-}
+.cartao-evania .logo-frente { position: absolute; top: 20px; left: 20px; width: 80px; height: auto; z-index: 3; filter: brightness(1.2) drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.5)); }
+.cartao-evania .qrcode-img { position: absolute; bottom: 20px; right: 20px; top: auto; width: 80px; height: 80px; border: 3px solid white; z-index: 5; }
+.cartao-evania .frente h1.info { position: absolute; width: 100%; text-align: center; top: 40px; z-index: 4; font-size: 2.6em; color: #ffffff; text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5); }
+.cartao-evania .frente p.info { position: absolute; width: 100%; text-align: center; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 4; font-size: 1.5em; font-style: normal; font-weight: 500; color: #ffffff; text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5); }
+.cartao-evania .frente .contato-frente { position: absolute; width: 100%; text-align: center; bottom: 35px; z-index: 4; font-weight: 600; font-size: 1.3em; color: #ffffff; text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5); }
+.cartao-evania .frente .contato-frente .fa-whatsapp { color: #25D366; }
+.cartao-evania .viewBox, .cartao-evania .viewBox2, .cartao-evania .viewBox-cuidado { display: none; }
 
 
-/* BLOCO 2: SERVIÇOS */
-.cartao-evania .verso .servicos {
-  text-align: center;
+/* --- Cartão Camila --- */
+.cartao-camila .frente {
+  justify-content: space-between;
 }
-.cartao-evania .verso .servicos h4 {
-  font-size: 0.9em;
-  margin-bottom: 10px;
-}
-.cartao-evania .verso .servicos ul {
-  list-style: none;
-  padding: 0;
-}
-.cartao-evania .verso .servicos li {
-  margin-bottom: 5px;
-}
-
-
-/* BLOCO 3: CONTATO */
-.cartao-evania .verso .contato {
-  /* ESTE É O TRUQUE MÁGICO! */
-  /* 'margin-top: auto' em um container flexível com direção de coluna
-     faz com que a margem superior "empurre" o elemento, consumindo
-     todo o espaço livre acima dele. Isso joga o bloco de contato para a base. */
-  margin-top: auto;
-  
-  font-size: 1.0em;
-  background: none;
-  padding: 15px;
-}
-
-
-/* Regra para esconder as ondas SVG, que não são usadas. */
-.cartao-evania .viewBox, .cartao-evania .viewBox2 {
-  display: none;
-}
-
-
-/* ------------------- CARTÃO CAMILA (CUIDADORA) ------------------- */
-.cartao-camila .qrcode-img {
-  display: block; /* Garante que o QR code do cartão base seja visível. */
-}
-.cartao-camila .frente h1.info { font-size: 2.5em; color: #0d47a1; }
-.cartao-camila .frente p.info { font-size: 1.5em; font-style: normal; font-weight: 400; color: #1565c0; display: flex; align-items: center; gap: 10px; }
+.cartao-camila .qrcode-img { display: block; }
+.cartao-camila .frente h1.info { font-size: 2.6em; color: #0d47a1; }
+.cartao-camila .frente p.info { font-size: 1.5em; font-style: italic; font-weight: 400; color: #1565c0; display: flex; align-items: center; gap: 10px; }
 .cartao-camila .frente p.info .fa-heart { color: #e57373; font-size: 0.8em; }
 .cartao-camila .frente .contato-frente { color: #0d47a1; }
+.cartao-camila .verso { background: linear-gradient(135deg, #a5d6a7, #4caf50); }
 
-/* Sobrescreve as cores das ondas do cartão base. */
-.cartao-camila .path1 { fill: #42a5f5; }
-.cartao-camila .path2 { fill: #90caf9; opacity: 0.75; }
-
-.cartao-camila .verso {
-  background: linear-gradient(135deg, #a5d6a7, #4caf50); /* Gradiente de tons de verde. */
-}
-.cartao-camila .verso .tagline { font-size: 1.1em; }
-.cartao-camila .verso .servicos ul { text-align: left; } /* Alinha a lista de serviços à esquerda. */
-.cartao-camila .verso .servicos li { padding-left: 1.5em; position: relative; margin-bottom: 8px; }
-
-/* Adiciona um ícone de "check" antes de cada item da lista de serviços. */
-.cartao-camila .verso .servicos li::before {
-  content: '\f00c'; /* Código do ícone no Font Awesome. */
-  font-family: 'Font Awesome 6 Free';
-  font-weight: 900;
+/* Regras para o SÍMBOLO DE CUIDADO (Batimento Cardíaco) */
+.cartao-camila .viewBox-cuidado {
   position: absolute;
+  bottom: -20px;
   left: 0;
-  color: #ffffff; /* Cor do ícone. */
+  width: 100%;
+  height: 120px;
+  z-index: 1;
+}
+.cartao-camila .heartbeat-path {
+  fill: none;
+  stroke: #42a5f5;
+  stroke-width: 4;
+  stroke-linejoin: round;
+  stroke-linecap: round;
 }
 
 
 /* =================================================================== */
-/*                     DESIGN RESPONSIVO                               */
+/*                     DESIGN RESPONSIVO (REFINADO)                    */
 /* =================================================================== */
 
 @media (max-width: 768px) {
-  /* Regras para telas menores, como de celulares. */
+  /* --- AJUSTES GERAIS --- */
   .portaCartao {
-    width: 90vw; /* 90% da largura da tela. */
-    height: 75vh; /* 75% da altura da tela. */
-    max-height: 550px; /* Altura máxima para não ficar gigante em telas muito altas. */
-    transform: none; /* Desativa a perspectiva 3D, pois o hover não funciona em touch. */
+    width: 90vw;
+    height: 75vh;
+    max-height: 550px;
+    transform: none;
   }
-  
-  /* Ajustes responsivos para o cartão padrão/original. */
+
+  /* --- CARTÃO PADRÃO (MICHELE) --- */
   .portaCartao:not(.cartao-evania):not(.cartao-camila) .frente {
     justify-content: space-around;
-    padding: 30px 0;
+    padding: 30px 15px;
   }
   .portaCartao:not(.cartao-evania):not(.cartao-camila) .qrcode-img {
-    position: static; /* Tira o QR Code do posicionamento absoluto, colocando-o no fluxo normal. */
+    position: static;
     margin-top: 10px;
-    width: 100px;
-    height: 100px;
+    width: 100px; height: 100px;
   }
   
-  /* Ajustes responsivos para o cartão da Evania, diminuindo fontes e elementos. */
+  /* --- CARTÃO EVANIA --- */
   .cartao-evania .frente h1.info { font-size: 2em; top: 25px; }
   .cartao-evania .frente p.info { font-size: 1.2em; }
   .cartao-evania .frente .contato-frente { font-size: 1em; bottom: 25px; }
   .cartao-evania .logo-frente { width: 60px; top: 15px; left: 15px; }
   .cartao-evania .qrcode-img { width: 70px; height: 70px; bottom: 15px; right: 15px; }
 
-  /* Ajuste responsivo geral para o verso, que se aplica a todos os cartões. */
-  .verso .conteudo-verso { justify-content: space-evenly; }
+  /* --- CARTÃO CAMILA --- */
+  .cartao-camila .frente {
+    justify-content: space-around;
+  }
+  .cartao-camila .frente h1.info { font-size: 2.2em; }
+  .cartao-camila .frente p.info { font-size: 1.3em; }
+  .cartao-camila .qrcode-img { width: 70px; height: 70px; bottom: 10px; right: 10px; }
+
+  /* --- VERSO (GERAL) --- */
+  .verso .conteudo-verso {
+    justify-content: space-evenly;
+  }
+  .verso h3 { font-size: 1.2em; }
+  .verso .tagline { font-size: 0.9em; }
+  .verso .servicos h4 { font-size: 0.9em; }
+  .verso .servicos li { font-size: 0.85em; }
+  .verso .contato { font-size: 1em; padding: 10px; }
 }
