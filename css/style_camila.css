@@ -1,0 +1,196 @@
+/* style_camila.css */
+
+/* =================================================================== */
+/*                     ESTILOS GERAIS (BASE)                           */
+/* =================================================================== */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f0f2f5;
+  margin: 0;
+}
+.portaCartao {
+  width: 500px;
+  height: 300px;
+  perspective: 1500px;
+}
+.cartao {
+  width: 100%;
+  height: 100%;
+  position: relative; 
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+}
+.portaCartao:hover .cartao {
+  transform: rotateY(180deg);
+}
+.lado {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  backface-visibility: hidden;
+  border-radius: 15px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* =================================================================== */
+/*                      ESTILOS DO CARTÃO DA CAMILA (DESKTOP)          */
+/* =================================================================== */
+.frente {
+  background-color: #ffffff;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+h1.info { font-size: 2.6em; color: #0d47a1; margin:0; }
+p.info { font-size: 1.5em; font-style: italic; color: #1565c0; display: flex; align-items: center; gap: 10px; margin:0; }
+p.info .fa-heart { color: #e57373; font-size: 0.8em; }
+.contato-frente { 
+  display: flex; align-items: center;
+  font-weight: 500; font-size: 1.3em;
+  color: #f9fbff;
+  z-index: 3;
+}
+.contato-frente .fa-whatsapp { color: #25D366; margin-right: 10px; font-size: 1.5em; }
+.qrcode-img {
+  position: absolute;
+  bottom: 15px; right: 15px;
+  width: 80px; height: 80px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+}
+.viewBox-faixa {
+  position: absolute; bottom: 0px; left: 0;
+  width: 100%; height: 100px; z-index: 1; 
+}
+.bottom-path { fill: #1565c0; }
+.viewBox-cuidado {
+  position: absolute; bottom: 45px; left: 0;
+  width: 100%; height: 120px; z-index: 2;
+}
+.heartbeat-path {
+  fill: none; stroke: rgb(240, 10, 10);
+  stroke-width: 3; stroke-linejoin: round; stroke-linecap: round;
+}
+
+.verso {
+  background: linear-gradient(135deg, #a5d6a7, #4caf50);
+  color: white;
+  transform: rotateY(180deg);
+  display: flex;
+  padding: 25px;
+  text-align: center;
+}
+.conteudo-verso {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  background: none; padding: 0;
+}
+.verso h3 { margin: 0; font-size: 1.4em; font-weight: 600; }
+.verso .tagline { font-style: italic; font-size: 1em; line-height: 1.5; opacity: 0.9; margin: 0; }
+.verso .servicos h4 { margin: 0 0 8px 0; font-size: 1em; text-transform: uppercase; border-bottom: 1px solid rgba(255, 255, 255, 0.3); padding-bottom: 8px; }
+.verso .servicos ul { list-style: none; padding: 0; margin: 0; font-size: 0.95em; }
+.verso .servicos li { margin-bottom: 5px; }
+.verso .contato { font-size: 1.15em; font-weight: bold; background-color: rgba(255, 255, 255, 0.15); padding: 12px; border-radius: 8px; }
+.verso .contato p { margin: 0; display: flex; align-items: center; justify-content: center; }
+.verso .contato i { margin-right: 10px; }
+
+/* =================================================================== */
+/*               DESIGN RESPONSIVO PARA O CARTÃO DA CAMILA             */
+/* =================================================================== */
+@media (max-width: 768px) {
+  /* --- AJUSTES GERAIS --- */
+  .portaCartao {
+    width: 90vw; 
+    height: 75vh;
+    max-height: 550px; 
+    transform: none;
+  }
+
+  /* --- FRENTE (Layout Responsivo da Camila) --- */
+  .frente {
+    display: flex;
+    flex-direction: column;
+    /* Alinha os itens do topo para o centro. */
+    justify-content: flex-start;
+    align-items: center;
+    
+    /* MUDANÇA 1: Criamos o espaço para os elementos. */
+    padding-top: 40px; /* Espaço no topo para o nome não ficar colado. */
+    padding-bottom: 130px; /* ESPAÇO RESERVADO na base para a faixa e o QR Code. */
+    gap: 25px; /* Espaço entre o nome e a profissão. */
+  }
+
+  /* Textos continuam no fluxo normal. */
+  h1.info {
+    font-size: 2.9em;
+  }
+
+  p.info {
+    font-size: 1.4em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .contato-frente {
+    font-size: 1.2em;
+    color: #333;
+  }
+
+  /* O QR Code volta a ser posicionado de forma absoluta para não conflitar com a faixa. */
+  .qrcode-img {
+    position: absolute;
+    width: 70px; 
+    height: 70px;
+    bottom: 15px; 
+    right: 15px;
+    z-index: 3; /* Garante que fique na frente da faixa e do batimento. */
+  }
+
+  /* --- FAIXA DE FUNDO E BATIMENTO CARDÍACO (VISÍVEIS) --- */
+  
+  /* MUDANÇA 2: As regras de visibilidade são mantidas. */
+  .viewBox-faixa {
+    display: block; /* Garante que seja visível. */
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    width: 100%;
+    height: 120px; /* Altura da faixa. */
+    z-index: 1; 
+  }
+  
+  .viewBox-cuidado {
+    display: block; /* Garante que seja visível. */
+    position: absolute;
+    bottom: 70px; /* Posição ajustada para ficar sobre a faixa. */
+    left: 0;
+    width: 100%;
+    height: 110px;
+    z-index: 2; /* Fica na frente da faixa azul. */
+  }
+  
+  /* --- VERSO (RESPONSIVO) --- */
+  .verso .conteudo-verso {
+    justify-content: space-evenly;
+  }
+  .verso h3 { font-size: 1.2em; }
+  .verso .tagline { font-size: 0.9em; }
+  .verso .servicos h4 { font-size: 0.9em; }
+  .verso .servicos li { font-size: 0.85em; }
+  .verso .contato { font-size: 1em; padding: 10px; }
+}

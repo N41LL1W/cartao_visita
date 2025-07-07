@@ -1,0 +1,140 @@
+/* style_michele.css */
+
+/* =================================================================== */
+/*                     ESTILOS GERAIS (BASE)                           */
+/* =================================================================== */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f0f2f5;
+  margin: 0;
+}
+.portaCartao {
+  width: 500px;
+  height: 300px;
+  perspective: 1500px;
+}
+.cartao {
+  width: 100%;
+  height: 100%;
+  position: relative; 
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+}
+.portaCartao:hover .cartao {
+  transform: rotateY(180deg);
+}
+.lado {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 15px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* =================================================================== */
+/*                  ESTILOS DO CARTÃO DA MICHELE                       */
+/* =================================================================== */
+.frente {
+  background-color: #ffffff;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+.info {
+  z-index: 2;
+  text-align: center;
+}
+h1.info { font-size: 2.6em; color: #2e4f6e; margin: 0; }
+p.info { font-size: 1.5em; font-style: italic; color: #555; margin: 0; }
+.contato-frente {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  font-weight: 500;
+  color: #333;
+  font-size: 1.3em;
+  z-index: 2;
+}
+.contato-frente .fa-whatsapp { color: #25D366; font-size: 1.5em; margin-right: 10px; }
+.viewBox {
+  position: absolute; bottom: 0; left: 0;
+  width: 100%; height: 100px; z-index: 1;
+}
+.viewBox2 {
+  position: absolute; bottom: 50px; left: 0;
+  width: 100%; height: 150px; z-index: 0;
+}
+.path1, .path2 { stroke: none; }
+.path1 { fill: #3d3bbe; }
+.path2 { fill: #6a89cc; opacity: 0.75; }
+.qrcode-img {
+  position: absolute;
+  bottom: 15px; right: 15px;
+  width: 80px; height: 80px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+}
+.verso {
+  background: linear-gradient(135deg, #6a89cc, #3d3bbe);
+  color: white;
+  transform: rotateY(180deg);
+  display: flex;
+  padding: 25px;
+  text-align: center;
+}
+.conteudo-verso {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 100%; width: 100%;
+}
+.verso h3 { margin: 0; font-size: 1.4em; font-weight: 600; }
+.verso .tagline { font-style: italic; font-size: 1em; line-height: 1.5; opacity: 0.9; margin: 0; }
+.verso .servicos h4 { margin: 0 0 8px 0; font-size: 1em; text-transform: uppercase; border-bottom: 1px solid rgba(255, 255, 255, 0.3); padding-bottom: 8px; }
+.verso .servicos ul { list-style: none; padding: 0; margin: 0; font-size: 0.95em; }
+.verso .servicos li { margin-bottom: 5px; }
+.verso .contato { font-size: 1.15em; font-weight: bold; background-color: rgba(255, 255, 255, 0.15); padding: 12px; border-radius: 8px; }
+.verso .contato p { margin: 0; display: flex; align-items: center; justify-content: center; }
+.verso .contato i { margin-right: 10px; }
+
+/* =================================================================== */
+/*                     DESIGN RESPONSIVO                               */
+/* =================================================================== */
+@media (max-width: 768px) {
+  .portaCartao {
+    width: 90vw; height: 75vh;
+    max-height: 550px; transform: none;
+  }
+  .frente {
+    justify-content: space-around;
+    padding: 30px 15px;
+  }
+  .qrcode-img {
+    position: static;
+    margin-top: 10px;
+    width: 100px; height: 100px;
+  }
+  .verso .conteudo-verso {
+    justify-content: space-evenly;
+  }
+  .verso h3 { font-size: 1.2em; }
+  .verso .tagline { font-size: 0.9em; }
+  .verso .servicos h4 { font-size: 0.9em; }
+  .verso .servicos li { font-size: 0.85em; }
+  .verso .contato { font-size: 1em; padding: 10px; }
+}
