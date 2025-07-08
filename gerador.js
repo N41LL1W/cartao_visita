@@ -1,21 +1,40 @@
+// gerador.js (versão completa com galeria, builder e funções corrigidas)
+
 document.addEventListener('DOMContentLoaded', () => {
+    
+    // --- BANCO DE DADOS DE TEMPLATES (EM JAVASCRIPT) ---
+    const todosTemplates = [
+        { id: 'template-frente-01', nome: 'Ondas Clássicas', categoria: 'moderno', thumb: 'https://via.placeholder.com/120x72/6a89cc/fff?text=T1' },
+        { id: 'template-frente-02', nome: 'Faixa Diagonal', categoria: 'moderno', thumb: 'https://via.placeholder.com/120x72/3d3bbe/fff?text=T2' },
+        { id: 'template-frente-03', nome: 'Círculos', categoria: 'minimalista', thumb: 'https://via.placeholder.com/120x72/f4f4f4/333?text=T3' },
+        { id: 'template-frente-04', nome: 'Barra Vertical', categoria: 'corporativo', thumb: 'https://via.placeholder.com/120x72/6a89cc/fff?text=T4' },
+        { id: 'template-frente-05', nome: 'Linha Inferior', categoria: 'minimalista', thumb: 'https://via.placeholder.com/120x72/3d3bbe/fff?text=T5' },
+        { id: 'template-frente-06', nome: 'Template 6', categoria: 'moderno', thumb: 'https://via.placeholder.com/120x72/2d3748/fff?text=T6' },
+        { id: 'template-frente-07', nome: 'Template 7', categoria: 'corporativo', thumb: 'https://via.placeholder.com/120x72/2d3748/fff?text=T7' },
+        { id: 'template-frente-08', nome: 'Template 8', categoria: 'minimalista', thumb: 'https://via.placeholder.com/120x72/2d3748/fff?text=T8' },
+        { id: 'template-frente-09', nome: 'Template 9', categoria: 'moderno', thumb: 'https://via.placeholder.com/120x72/2d3748/fff?text=T9' },
+    ];
+
+    // --- VARIÁVEIS DE ESTADO ---
+    let templatesFiltrados = [...todosTemplates];
+    let paginaAtual = 1;
+    const ITENS_POR_PAGINA = 6;
+    let templateFrenteAtivo = 'template-frente-01';
+    let layoutState = {}; // Para o builder
+
     // --- MAPEAMENTO DE ELEMENTOS ---
     const form = document.getElementById('form-cartao');
-    const btnSalvar = document.getElementById('btn-salvar');
-    const inputCarregar = document.getElementById('carregar-config');
-
     const inputs = {
         nome: document.getElementById('nome'),
         profissao: document.getElementById('profissao'),
         whatsapp: document.getElementById('whatsapp'),
-        qrcode: document.getElementById('qrcode'),
         tagline: document.getElementById('tagline'),
         servicos: document.getElementById('servicos'),
-        
         tipoCorVerso: document.getElementById('tipo-cor-verso'),
         versoCorSolida: document.getElementById('verso-cor-solida'),
         versoCorSolidaHex: document.getElementById('verso-cor-solida-hex'),
         versoGradienteAngulo: document.getElementById('verso-gradiente-angulo'),
+        valorAnguloVerso: document.getElementById('valor-angulo-verso'),
         versoGradienteCor1: document.getElementById('verso-gradiente-cor1'),
         versoGradienteCor1Hex: document.getElementById('verso-gradiente-cor1-hex'),
         versoGradienteCor2: document.getElementById('verso-gradiente-cor2'),
@@ -23,194 +42,259 @@ document.addEventListener('DOMContentLoaded', () => {
         versoUsarCor3: document.getElementById('verso-usar-cor3'),
         versoGradienteCor3: document.getElementById('verso-gradiente-cor3'),
         versoGradienteCor3Hex: document.getElementById('verso-gradiente-cor3-hex'),
-
         frenteCor1: document.getElementById('frente-cor1'),
         frenteCor1Hex: document.getElementById('frente-cor1-hex'),
         frenteCor2: document.getElementById('frente-cor2'),
         frenteCor2Hex: document.getElementById('frente-cor2-hex'),
     };
+    const previa = {
+        frente: document.getElementById('previa-frente'),
+        frenteNome: document.getElementById('previa-frente-nome'),
+        frenteProfissao: document.getElementById('previa-frente-profissao'),
+        frenteWhatsapp: document.getElementById('previa-frente-whatsapp'),
+        verso: document.getElementById('previa-verso'),
+        versoNome: document.getElementById('previa-verso-nome'),
+        versoTagline: document.getElementById('previa-verso-tagline'),
+        versoServicos: document.getElementById('previa-verso-servicos'),
+        versoContato: document.getElementById('previa-verso-contato'),
+    };
+    const modalGaleria = document.getElementById('modal-galeria');
+    const btnAbrirGaleria = document.getElementById('btn-abrir-galeria');
+    const btnFecharGaleria = document.getElementById('btn-fechar-galeria');
+    const galeriaGrid = document.getElementById('galeria-grid-modal');
+    const btnPagAnterior = document.getElementById('paginacao-anterior');
+    const btnPagProxima = document.getElementById('paginacao-proxima');
+    const paginacaoInfo = document.getElementById('paginacao-info');
+    const filtroCategoria = document.getElementById('filtro-categoria');
+    const thumbSelecionadoImg = document.getElementById('thumb-selecionado');
+    const nomeTemplateSelecionado = document.getElementById('nome-template-selecionado');
+    const inputCarregar = document.getElementById('carregar-config');
+    const modalBuilder = document.getElementById('modal-builder');
+    const btnAbrirBuilder = document.getElementById('btn-abrir-builder');
+    const btnFecharBuilder = document.getElementById('btn-fechar-builder');
+    const seletorGrid = document.getElementById('builder-seleciona-grid');
+    const canvas = document.getElementById('builder-canvas');
+    const widgets = document.querySelectorAll('#builder-widgets .widget');
+    const btnGerar = document.getElementById('btn-gerar');
+    const btnSalvar = document.getElementById('btn-salvar');
     
-    const galeriaThumbs = document.querySelectorAll('.template-thumb');
-    const previaFrente = document.getElementById('previa-frente');
-    let templateFrenteAtivo = 'template-frente-01';
-
-    // --- LÓGICA DE UI E PRÉ-VISUALIZAÇÃO ---
-
-    function linkColorInputs(colorInput, hexInput) {
-        colorInput.addEventListener('input', () => {
-            hexInput.value = colorInput.value;
-            hexInput.dispatchEvent(new Event('input', { bubbles: true })); // Dispara evento para prévia
-        });
-        hexInput.addEventListener('input', () => {
-            if (/^#[0-9A-F]{6}$/i.test(hexInput.value)) {
-                 colorInput.value = hexInput.value;
+    // --- FUNÇÕES DE ATUALIZAÇÃO DA UI ---
+    function atualizarPreviaCompleta() {
+        // Atualiza textos
+        const nome = inputs.nome.value || inputs.nome.placeholder;
+        previa.frenteNome.textContent = nome;
+        previa.versoNome.textContent = nome;
+        previa.frenteProfissao.textContent = inputs.profissao.value || inputs.profissao.placeholder;
+        const whatsapp = inputs.whatsapp.value || inputs.whatsapp.placeholder;
+        previa.frenteWhatsapp.textContent = whatsapp;
+        previa.versoContato.textContent = whatsapp;
+        previa.versoTagline.textContent = inputs.tagline.value || inputs.tagline.placeholder;
+        const servicosTexto = inputs.servicos.value || inputs.servicos.placeholder;
+        const servicosArray = servicosTexto.split('\n');
+        previa.versoServicos.innerHTML = '';
+        servicosArray.forEach(servico => {
+            if (servico.trim() !== '') {
+                const li = document.createElement('li');
+                li.textContent = servico;
+                previa.versoServicos.appendChild(li);
             }
         });
+        // Atualiza design do verso
+        if (inputs.tipoCorVerso.value === 'solida') {
+            previa.verso.style.background = inputs.versoCorSolida.value;
+        } else {
+            const angulo = inputs.versoGradienteAngulo.value;
+            inputs.valorAnguloVerso.textContent = angulo;
+            const cores = [inputs.versoGradienteCor1.value, inputs.versoGradienteCor2.value];
+            if (inputs.versoUsarCor3.checked) cores.push(inputs.versoGradienteCor3.value);
+            previa.verso.style.background = `linear-gradient(${angulo}deg, ${cores.join(', ')})`;
+        }
+        // Atualiza design da frente
+        previa.frente.style.setProperty('--cor-frente-1', inputs.frenteCor1.value);
+        previa.frente.style.setProperty('--cor-frente-2', inputs.frenteCor2.value);
     }
-
+    function linkColorInputs(colorInput, hexInput) {
+        colorInput.addEventListener('input', () => hexInput.value = colorInput.value);
+        hexInput.addEventListener('input', () => { if (/^#[0-9A-F]{6}$/i.test(hexInput.value)) colorInput.value = hexInput.value; });
+    }
     function atualizarUIDesignVerso() {
         const tipo = inputs.tipoCorVerso.value;
         document.getElementById('grupo-cor-solida-verso').classList.toggle('ativo', tipo === 'solida');
         document.getElementById('grupo-gradiente-verso').classList.toggle('ativo', tipo === 'gradiente');
-        atualizarPreviaVerso();
     }
-
-    function toggleTerceiraCor() {
-        const desabilitado = !inputs.versoUsarCor3.checked;
-        inputs.versoGradienteCor3.disabled = desabilitado;
-        inputs.versoGradienteCor3Hex.disabled = desabilitado;
-        atualizarPreviaVerso();
-    }
-
-    function atualizarPreviaVerso() {
-        const previa = document.getElementById('previa-verso');
-        if (inputs.tipoCorVerso.value === 'solida') {
-            previa.style.background = inputs.versoCorSolida.value;
-        } else {
-            const angulo = inputs.versoGradienteAngulo.value;
-            document.getElementById('valor-angulo-verso').textContent = angulo;
-            const cores = [inputs.versoGradienteCor1.value, inputs.versoGradienteCor2.value];
-            if (inputs.versoUsarCor3.checked) {
-                cores.push(inputs.versoGradienteCor3.value);
-            }
-            previa.style.background = `linear-gradient(${angulo}deg, ${cores.join(', ')})`;
+    function abrirModal(modal) { modal.classList.remove('escondido'); }
+    function fecharModal(modal) { modal.classList.add('escondido'); }
+    function selecionarTemplate(templateId) {
+        templateFrenteAtivo = templateId;
+        const templateInfo = todosTemplates.find(t => t.id === templateId);
+        if (templateInfo) {
+            thumbSelecionadoImg.src = templateInfo.thumb;
+            nomeTemplateSelecionado.textContent = templateInfo.nome;
         }
-    }
-
-    function atualizarPreviaFrente() {
-        previaFrente.style.setProperty('--cor-frente-1', inputs.frenteCor1.value);
-        previaFrente.style.setProperty('--cor-frente-2', inputs.frenteCor2.value);
+        previa.frente.className = 'lado frente';
+        previa.frente.classList.add(templateId);
+        renderizarGaleria();
+        atualizarPreviaCompleta();
     }
     
-    function selecionarTemplate(templateId) {
-        if (!templateId) return;
-        templateFrenteAtivo = templateId;
-        galeriaThumbs.forEach(thumb => thumb.classList.toggle('ativo', thumb.dataset.templateId === templateId));
-        previaFrente.className = 'previa-box lado frente'; // Reseta
-        previaFrente.classList.add(templateId);
-        atualizarPreviaFrente();
+    // --- FUNÇÕES DA GALERIA ---
+    function renderizarGaleria() {
+        galeriaGrid.innerHTML = '';
+        const totalPaginas = Math.ceil(templatesFiltrados.length / ITENS_POR_PAGINA);
+        paginaAtual = Math.max(1, Math.min(paginaAtual, totalPaginas || 1));
+        const inicio = (paginaAtual - 1) * ITENS_POR_PAGINA;
+        const fim = inicio + ITENS_POR_PAGINA;
+        templatesFiltrados.slice(inicio, fim).forEach(template => {
+            const thumbDiv = document.createElement('div');
+            thumbDiv.className = 'template-thumb';
+            if (template.id === templateFrenteAtivo) thumbDiv.classList.add('ativo');
+            thumbDiv.dataset.templateId = template.id;
+            thumbDiv.title = template.nome;
+            const img = document.createElement('img');
+            img.src = template.thumb;
+            img.alt = template.nome;
+            thumbDiv.appendChild(img);
+            thumbDiv.addEventListener('click', () => {
+                selecionarTemplate(template.id);
+                fecharModal(modalGaleria);
+            });
+            galeriaGrid.appendChild(thumbDiv);
+        });
+        paginacaoInfo.textContent = `Página ${paginaAtual} de ${totalPaginas || 1}`;
+        btnPagAnterior.disabled = (paginaAtual === 1);
+        btnPagProxima.disabled = (paginaAtual === totalPaginas || totalPaginas === 0);
     }
-
-    // --- LÓGICA DE DADOS (GET, SET, SALVAR, CARREGAR) ---
-
+    
+    // --- FUNÇÕES DO CONSTRUTOR DE LAYOUT ---
+    function atualizarGrid() {
+        const valor = seletorGrid.value;
+        canvas.innerHTML = '';
+        const [cols, rows] = valor.split('x').map(Number);
+        canvas.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+        canvas.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+        for (let i = 0; i < cols * rows; i++) {
+            const celula = document.createElement('div');
+            celula.className = 'celula-grid';
+            celula.dataset.celulaId = i;
+            celula.textContent = `Arraste para cá`;
+            celula.addEventListener('dragover', e => { e.preventDefault(); celula.classList.add('drag-over'); });
+            celula.addEventListener('dragleave', () => celula.classList.remove('drag-over'));
+            celula.addEventListener('drop', e => {
+                e.preventDefault();
+                celula.classList.remove('drag-over');
+                const tipoWidget = e.dataTransfer.getData('text/plain');
+                if (!celula.querySelector('.widget-no-cartao')) {
+                    celula.textContent = '';
+                    const widgetElement = document.createElement('div');
+                    widgetElement.className = 'widget-no-cartao';
+                    widgetElement.textContent = `[${tipoWidget}]`;
+                    celula.appendChild(widgetElement);
+                }
+            });
+            canvas.appendChild(celula);
+        }
+    }
+    
+    // --- LÓGICA DE DADOS (GET, SET, SALVAR, GERAR) ---
     function getDadosDoForm() {
         return {
-            nome: inputs.nome.value,
-            profissao: inputs.profissao.value,
-            whatsapp: inputs.whatsapp.value,
-            qrcode: inputs.qrcode.value,
-            tagline: inputs.tagline.value,
+            nome: inputs.nome.value, profissao: inputs.profissao.value, whatsapp: inputs.whatsapp.value, tagline: inputs.tagline.value,
             servicos: inputs.servicos.value.split('\n').filter(s => s.trim() !== ''),
             design: {
                 verso: {
-                    tipo: inputs.tipoCorVerso.value,
-                    solida: inputs.versoCorSolida.value,
-                    gradiente: {
-                        angulo: inputs.versoGradienteAngulo.value,
-                        cor1: inputs.versoGradienteCor1.value,
-                        cor2: inputs.versoGradienteCor2.value,
-                        usarCor3: inputs.versoUsarCor3.checked,
-                        cor3: inputs.versoGradienteCor3.value,
-                    }
+                    tipo: inputs.tipoCorVerso.value, solida: inputs.versoCorSolida.value,
+                    gradiente: { angulo: inputs.versoGradienteAngulo.value, cor1: inputs.versoGradienteCor1.value, cor2: inputs.versoGradienteCor2.value, usarCor3: inputs.versoUsarCor3.checked, cor3: inputs.versoGradienteCor3.value, }
                 },
-                frente: {
-                    template: templateFrenteAtivo,
-                    cor1: inputs.frenteCor1.value,
-                    cor2: inputs.frenteCor2.value,
-                }
+                frente: { template: templateFrenteAtivo, cor1: inputs.frenteCor1.value, cor2: inputs.frenteCor2.value, }
             }
         };
     }
-
     function setDadosNoForm(dados) {
         inputs.nome.value = dados.nome || '';
         inputs.profissao.value = dados.profissao || '';
         inputs.whatsapp.value = dados.whatsapp || '';
-        inputs.qrcode.value = dados.qrcode || '';
         inputs.tagline.value = dados.tagline || '';
         inputs.servicos.value = (dados.servicos || []).join('\n');
-
         if (dados.design) {
-            const dVerso = dados.design.verso || {};
-            inputs.tipoCorVerso.value = dVerso.tipo || 'gradiente';
-            inputs.versoCorSolida.value = inputs.versoCorSolidaHex.value = dVerso.solida || '#3d3bbe';
-            if (dVerso.gradiente) {
-                inputs.versoGradienteAngulo.value = dVerso.gradiente.angulo || '135';
-                inputs.versoGradienteCor1.value = inputs.versoGradienteCor1Hex.value = dVerso.gradiente.cor1 || '#6a89cc';
-                inputs.versoGradienteCor2.value = inputs.versoGradienteCor2Hex.value = dVerso.gradiente.cor2 || '#3d3bbe';
-                inputs.versoUsarCor3.checked = dVerso.gradiente.usarCor3 || false;
-                inputs.versoGradienteCor3.value = inputs.versoGradienteCor3Hex.value = dVerso.gradiente.cor3 || '#2e4f6e';
+            const d = dados.design;
+            if (d.verso) {
+                inputs.tipoCorVerso.value = d.verso.tipo || 'gradiente';
+                inputs.versoCorSolida.value = inputs.versoCorSolidaHex.value = d.verso.solida || '#3d3bbe';
+                if (d.verso.gradiente) {
+                    inputs.versoGradienteAngulo.value = d.verso.gradiente.angulo || '135';
+                    inputs.versoGradienteCor1.value = inputs.versoGradienteCor1Hex.value = d.verso.gradiente.cor1 || '#6a89cc';
+                    inputs.versoGradienteCor2.value = inputs.versoGradienteCor2Hex.value = d.verso.gradiente.cor2 || '#3d3bbe';
+                    inputs.versoUsarCor3.checked = d.verso.gradiente.usarCor3 || false;
+                    inputs.versoGradienteCor3.value = inputs.versoGradienteCor3Hex.value = d.verso.gradiente.cor3 || '#2e4f6e';
+                }
             }
-            
-            const dFrente = dados.design.frente || {};
-            inputs.frenteCor1.value = inputs.frenteCor1Hex.value = dFrente.cor1 || '#3d3bbe';
-            inputs.frenteCor2.value = inputs.frenteCor2Hex.value = dFrente.cor2 || '#6a89cc';
-            
-            selecionarTemplate(dFrente.template || 'template-frente-01');
+            if (d.frente) {
+                inputs.frenteCor1.value = inputs.frenteCor1Hex.value = d.frente.cor1 || '#3d3bbe';
+                inputs.frenteCor2.value = inputs.frenteCor2Hex.value = d.frente.cor2 || '#6a89cc';
+                selecionarTemplate(d.frente.template || 'template-frente-01');
+            }
         }
-        
-        atualizarUIDesignVerso();
-        toggleTerceiraCor();
-        atualizarPreviaFrente();
+        inputs.tipoCorVerso.dispatchEvent(new Event('change'));
+        inputs.versoUsarCor3.dispatchEvent(new Event('change'));
+        atualizarPreviaCompleta();
     }
-
-    // --- EVENTOS PRINCIPAIS ---
-
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
-        const dadosCartao = getDadosDoForm();
-        const dadosComoString = encodeURIComponent(JSON.stringify(dadosCartao));
-        const urlFinal = `cartao.html?data=${dadosComoString}`;
-        window.open(urlFinal, '_blank');
+    
+    // --- EVENT LISTENERS ---
+    form.addEventListener('input', atualizarPreviaCompleta);
+    form.addEventListener('change', atualizarPreviaCompleta);
+    btnAbrirGaleria.addEventListener('click', () => abrirModal(modalGaleria));
+    btnFecharGaleria.addEventListener('click', () => fecharModal(modalGaleria));
+    modalGaleria.addEventListener('click', e => { if (e.target === modalGaleria) fecharModal(modalGaleria); });
+    btnPagAnterior.addEventListener('click', () => { if (paginaAtual > 1) { paginaAtual--; renderizarGaleria(); } });
+    btnPagProxima.addEventListener('click', () => { if (paginaAtual < Math.ceil(templatesFiltrados.length / ITENS_POR_PAGINA)) { paginaAtual++; renderizarGaleria(); } });
+    filtroCategoria.addEventListener('change', () => {
+        const categoria = filtroCategoria.value;
+        templatesFiltrados = (categoria === 'todos') ? [...todosTemplates] : todosTemplates.filter(t => t.categoria === categoria);
+        paginaAtual = 1;
+        renderizarGaleria();
     });
-
-    btnSalvar.addEventListener('click', function() {
-        const dadosCartao = getDadosDoForm();
-        const blob = new Blob([JSON.stringify(dadosCartao, null, 2)], { type: 'application/json' });
-        const urlDownload = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        const nomeBase = dadosCartao.nome.split(' ')[0].toLowerCase() || 'cartao';
-        a.href = urlDownload;
-        a.download = `config_${nomeBase}.json`;
-        a.click();
-        URL.revokeObjectURL(urlDownload);
+    inputs.versoUsarCor3.addEventListener('change', () => {
+        const desabilitado = !inputs.versoUsarCor3.checked;
+        inputs.versoGradienteCor3.disabled = desabilitado;
+        inputs.versoGradienteCor3Hex.disabled = desabilitado;
     });
-
-    inputCarregar.addEventListener('change', function(event) {
-        const arquivo = event.target.files[0];
+    inputCarregar.addEventListener('change', e => {
+        const arquivo = e.target.files[0];
         if (!arquivo) return;
         const leitor = new FileReader();
-        leitor.onload = (e) => {
-            try {
-                setDadosNoForm(JSON.parse(e.target.result));
-                alert('Configuração carregada com sucesso!');
-            } catch (error) {
-                alert('Erro ao carregar o arquivo. Verifique se é válido.');
-            }
+        leitor.onload = evt => {
+            try { setDadosNoForm(JSON.parse(evt.target.result)); alert('Configuração carregada!'); } 
+            catch (error) { alert('Erro ao carregar o arquivo.'); console.error(error); }
         };
         leitor.readAsText(arquivo);
-        inputCarregar.value = '';
+        e.target.value = '';
     });
-
-    // --- INICIALIZAÇÃO E LISTENERS DE UI ---
-    
-    Object.keys(inputs).forEach(key => {
-        if (key.endsWith('Hex')) {
-            const colorKey = key.replace('Hex', '');
-            linkColorInputs(inputs[colorKey], inputs[key]);
-        }
+    btnGerar.addEventListener('click', e => {
+        e.preventDefault();
+        const dados = getDadosDoForm();
+        window.open(`cartao.html?data=${encodeURIComponent(JSON.stringify(dados))}`, '_blank');
+    });
+    btnSalvar.addEventListener('click', () => {
+        const dados = getDadosDoForm();
+        const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `configuracao_cartao.json`;
+        a.click();
+        URL.revokeObjectURL(a.href);
+    });
+    btnAbrirBuilder.addEventListener('click', () => abrirModal(modalBuilder));
+    btnFecharBuilder.addEventListener('click', () => fecharModal(modalBuilder));
+    seletorGrid.addEventListener('change', atualizarGrid);
+    widgets.forEach(widget => {
+        widget.addEventListener('dragstart', e => e.dataTransfer.setData('text/plain', widget.dataset.tipo));
     });
     
-    inputs.tipoCorVerso.addEventListener('change', atualizarUIDesignVerso);
-    inputs.versoUsarCor3.addEventListener('change', toggleTerceiraCor);
+    // --- LINKANDO INPUTS DE COR ---
+    Object.keys(inputs).forEach(key => { if (key.endsWith('Hex')) linkColorInputs(inputs[key.replace('Hex', '')], inputs[key]); });
     
-    [inputs.versoCorSolida, inputs.versoGradienteAngulo, inputs.versoGradienteCor1, inputs.versoGradienteCor2, inputs.versoGradienteCor3].forEach(el => el.addEventListener('input', atualizarPreviaVerso));
-    [inputs.frenteCor1, inputs.frenteCor2].forEach(el => el.addEventListener('input', atualizarPreviaFrente));
-    
-    galeriaThumbs.forEach(thumb => {
-        thumb.addEventListener('click', () => selecionarTemplate(thumb.dataset.templateId));
-    });
-
-    selecionarTemplate(templateFrenteAtivo);
+    // --- INICIALIZAÇÃO ---
     atualizarUIDesignVerso();
+    selecionarTemplate(templateFrenteAtivo);
+    atualizarGrid();
 });

@@ -4,85 +4,93 @@
     <meta charset="UTF-8">
     <title>Criador de Cartão Digital</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="style.css"> <!-- Link para o CSS externo -->
+    <link rel="stylesheet" href="style.css"> <!-- Link para o CSS dos templates -->
     <style>
-        /* Estilos específicos do editor */
-        body { font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; background-color: #f0f2f5; }
-        form { display: flex; flex-direction: column; gap: 15px; }
-        input[type="text"], input[type="file"], select, textarea { padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px; width: 100%; box-sizing: border-box;}
-        button { padding: 12px; color: white; border: none; cursor: pointer; font-size: 16px; border-radius: 5px; }
-        .botoes-acao { display: flex; gap: 10px; margin-top: 20px;}
-        #btn-gerar { background-color: #3d3bbe; }
-        #btn-salvar { background-color: #007bff; }
-        h1, h2, h3, h4 { color: #333; margin-top: 0; }
-        hr { border: 0; border-top: 1px solid #ddd; margin: 25px 0; }
-        
-        .secao-design { border: 1px solid #ccc; padding: 20px; border-radius: 8px; background-color: #fff; margin-top: 20px; }
-        .design-container { display: flex; gap: 20px; align-items: flex-start; }
-        .controles-cor { flex: 3; display: flex; flex-direction: column; gap: 15px; }
-        .previa-container { flex: 1; }
-
-        .grupo-cor { display: none; flex-direction: column; gap: 10px; }
+        /* Estilos do Editor */
+        :root { --cor-primaria: #4a5568; --cor-secundaria: #3d3bbe; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; background-color: #f7fafc; margin: 0; padding: 20px; line-height: 1.6; }
+        .editor-container { display: flex; gap: 30px; max-width: 1300px; margin: auto; align-items: flex-start; }
+        .coluna-controles { flex: 2; min-width: 500px; }
+        .coluna-previa { flex: 1; min-width: 350px; }
+        form { display: flex; flex-direction: column; gap: 20px; }
+        input[type="text"], input[type="file"], select, textarea { padding: 10px; border-radius: 6px; border: 1px solid #cbd5e0; font-size: 16px; width: 100%; box-sizing: border-box; transition: border-color 0.2s; }
+        input[type="text"]:focus, select:focus, textarea:focus { border-color: var(--cor-secundaria); outline: none; box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2); }
+        button { padding: 12px 18px; color: white; border: none; cursor: pointer; font-size: 16px; border-radius: 6px; font-weight: 600; transition: background-color 0.2s; }
+        .botoes-acao { display: flex; gap: 10px; margin-top: 20px; }
+        #btn-gerar { background-color: var(--cor-secundaria); } #btn-gerar:hover { background-color: #312e81; }
+        #btn-salvar { background-color: #38a169; } #btn-salvar:hover { background-color: #2f855a; }
+        #btn-abrir-builder { background-color: #dd6b20; } #btn-abrir-builder:hover { background-color: #c05621; }
+        h1, h2, h3, h4 { color: #2d3748; margin-top: 0; }
+        hr { border: 0; border-top: 1px solid #e2e8f0; margin: 25px 0; }
+        .secao-form { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); }
+        .secao-form h3 { margin-bottom: 20px; border-bottom: 1px solid #edf2f7; padding-bottom: 15px; }
+        .grupo-cor { display: none; flex-direction: column; gap: 15px; margin-top: 10px; }
         .grupo-cor.ativo { display: flex; }
-
         .input-cor-container { display: flex; align-items: center; gap: 10px; }
-        .input-cor-container label { min-width: 40px; font-size: 0.9em; }
-        .input-cor-container input[type="color"] { padding: 0; height: 40px; width: 50px; border: none; background: none; cursor: pointer; }
-        .input-cor-container input[type="text"] { flex: 1; }
-        .input-cor-container input[type="checkbox"] { width: auto; }
+        .input-cor-container label { font-size: 0.9em; color: #4a5568; }
+        .input-cor-container input[type="color"] { padding: 0; height: 40px; width: 50px; border: 1px solid #e2e8f0; border-radius: 4px; background: none; cursor: pointer; }
+        .input-cor-container input[type="checkbox"] { width: auto; height: 20px; }
+        #btn-abrir-galeria { background-color: #4c51bf; width: 100%; } #btn-abrir-galeria:hover { background-color: #434190; }
+        #previa-template-selecionado { display: flex; align-items: center; gap: 15px; margin-top: 15px; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px; background-color: #f7fafc; }
+        #thumb-selecionado { width: 75px; height: 45px; border-radius: 4px; object-fit: cover; border: 1px solid #e2e8f0; }
+        #nome-template-selecionado { font-weight: 600; color: var(--cor-primaria); }
+        
+        /* Estilos Comuns de Modal */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 1; visibility: visible; transition: opacity 0.3s, visibility 0.3s; }
+        .modal-overlay.escondido { opacity: 0; visibility: hidden; }
+        .btn-fechar { background: none; border: none; font-size: 2.5rem; line-height: 1; cursor: pointer; color: #a0aec0; } .btn-fechar:hover { color: #4a5568; }
 
-        .previa-box {
-            width: 100%;
-            height: 120px;
-            border-radius: 8px;
-            border: 2px solid #e0e0e0;
-            transition: all 0.3s ease;
-            color: white;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
-            font-size: 1.1em;
-            font-weight: bold;
-            box-sizing: border-box;
-            padding: 10px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            background-color: #fff;
-        }
-        .previa-box#previa-verso {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+        /* Estilos do Modal da Galeria */
+        .modal-conteudo { background: #fff; padding: 25px; border-radius: 10px; width: 90%; max-width: 800px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); display: flex; flex-direction: column; gap: 20px; }
+        .modal-cabecalho { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 15px; }
+        .modal-filtros { display: flex; align-items: center; gap: 10px; }
+        #galeria-grid-modal { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; min-height: 170px; }
+        #galeria-grid-modal .template-thumb { cursor: pointer; border: 3px solid transparent; border-radius: 8px; transition: all 0.2s ease-in-out; position: relative; }
+        #galeria-grid-modal .template-thumb:hover { border-color: #a3bffa; }
+        #galeria-grid-modal .template-thumb.ativo { border-color: var(--cor-secundaria); box-shadow: 0 0 10px rgba(99, 102, 241, 0.5); }
+        #galeria-grid-modal .template-thumb img { display: block; width: 100%; height: auto; aspect-ratio: 100 / 60; border-radius: 5px; border: 1px solid #e2e8f0; }
+        .modal-paginacao { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #e2e8f0; padding-top: 15px; }
+        .modal-paginacao button { background-color: #e2e8f0; color: #4a5568; } .modal-paginacao button:hover:not(:disabled) { background-color: #cbd5e0; }
+        .modal-paginacao button:disabled { background-color: #f7fafc; color: #a0aec0; cursor: not-allowed; }
+        
+        /* Estilos do Modal do Construtor */
+        .builder-container { display: flex; width: 95%; max-width: 1400px; height: 90vh; background: #f7fafc; border-radius: 10px; overflow: hidden; position: relative; }
+        .builder-painel-ferramentas { flex: 0 0 250px; background: #fff; padding: 20px; border-right: 1px solid #e2e8f0; overflow-y: auto; }
+        .builder-canvas-wrapper { flex-grow: 1; display: flex; justify-content: center; align-items: center; padding: 20px; background-color: #e2e8f0; }
+        .cartao-canvas { width: 500px; height: 300px; background: white; box-shadow: 0 10px 25px rgba(0,0,0,0.2); border-radius: 15px; display: grid; position: relative; overflow: hidden; }
+        .celula-grid { border: 2px dashed #cbd5e0; transition: background-color 0.2s; display: flex; justify-content: center; align-items: center; color: #a0aec0; font-size: 0.9em; padding: 10px; text-align: center; }
+        .celula-grid.drag-over { background-color: #e2e8f0; border-color: var(--cor-secundaria); }
+        #builder-widgets .widget { background: #f7fafc; border: 1px solid #e2e8f0; padding: 10px; border-radius: 6px; margin-bottom: 10px; cursor: grab; }
+        .widget-no-cartao { background: rgba(255,255,255,0.8); border: 1px solid #a0aec0; padding: 15px; border-radius: 6px; text-align: center; cursor: move; color: #2d3748; }
+        .builder-acoes { position: absolute; bottom: 20px; right: 20px; display: flex; gap: 10px; }
 
-        .galeria-templates { margin-top: 20px; }
-        .templates-grid { display: flex; flex-wrap: wrap; gap: 10px; }
-        .template-thumb { cursor: pointer; border: 3px solid transparent; border-radius: 5px; transition: all 0.2s ease-in-out; }
-        .template-thumb:hover { border-color: #007bff; }
-        .template-thumb.ativo { border-color: #3d3bbe; box-shadow: 0 0 10px rgba(61, 59, 190, 0.5); }
-        .template-thumb img { display: block; width: 100px; height: 60px; border-radius: 3px; background-color: #e9e9e9; }
+        /* Estilos da Pré-visualização do Cartão */
+        .previa-wrapper { position: sticky; top: 20px; }
+        .previa-wrapper h2 { text-align: center; margin-bottom: 15px; }
+        .mini-cartao { transform: scale(0.7); transform-origin: top center; margin-bottom: -85px; pointer-events: none; }
     </style>
 </head>
 <body>
-    <h1>Criador de Cartão Digital</h1>
-    <label for="carregar-config">Carregar configuração (.json):</label>
-    <input type="file" id="carregar-config" accept=".json">
-    <hr>
-    
-    <form id="form-cartao">
-        <!-- SEÇÃO DE DADOS GERAIS -->
-        <h3>1. Dados do Cartão</h3>
-        <input type="text" id="nome" placeholder="Nome Completo" required>
-        <input type="text" id="profissao" placeholder="Sua Profissão ou Cargo" required>
-        <input type="text" id="whatsapp" placeholder="Telefone com DDD (ex: 11987654321)" required>
-        <input type="text" id="qrcode" placeholder="URL da imagem do QR Code" value="">
-        <input type="text" id="tagline" placeholder="Sua frase de efeito (verso)">
-        <textarea id="servicos" placeholder="Liste seus serviços, um por linha" rows="4"></textarea>
-
-        <!-- SEÇÃO DE DESIGN DO VERSO -->
-        <div class="secao-design">
-            <h3>2. Design do Verso (Fundo)</h3>
-            <div class="design-container">
-                <div class="controles-cor">
+    <div class="editor-container">
+        <!-- COLUNA DE CONTROLES (FORMULÁRIOS) -->
+        <div class="coluna-controles">
+            <h1>Criador de Cartão Digital</h1>
+            <label for="carregar-config">Carregar configuração (.json):</label>
+            <input type="file" id="carregar-config" accept=".json">
+            <hr>
+            <form id="form-cartao">
+                <div class="secao-form">
+                    <h3>1. Dados do Cartão</h3>
+                    <input type="text" id="nome" placeholder="Seu Nome Completo" required>
+                    <input type="text" id="profissao" placeholder="Sua Profissão" required>
+                    <input type="text" id="whatsapp" placeholder="(XX) XXXXX-XXXX" required>
+                    <input type="text" id="tagline" placeholder="Sua frase de efeito" required>
+                    <textarea id="servicos" placeholder="Serviço 1
+Serviço 2
+Serviço 3" rows="4"></textarea>
+                </div>
+                <div class="secao-form">
+                    <h3>2. Design do Verso</h3>
                     <select id="tipo-cor-verso">
                         <option value="solida">Cor Sólida</option>
                         <option value="gradiente" selected>Gradiente</option>
@@ -98,49 +106,123 @@
                         <div class="input-cor-container"><input type="checkbox" id="verso-usar-cor3"><label for="verso-usar-cor3">Usar Cor 3?</label><input type="color" id="verso-gradiente-cor3" value="#2e4f6e" disabled><input type="text" id="verso-gradiente-cor3-hex" value="#2e4f6e" disabled></div>
                     </div>
                 </div>
-                <div class="previa-container">
-                    <label>Prévia do Verso:</label>
-                    <div id="previa-verso" class="previa-box">Verso</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SEÇÃO DE DESIGN DA FRENTE -->
-        <div class="secao-design">
-            <h3>3. Design da Frente</h3>
-            <div class="design-container">
-                <div class="controles-cor">
-                    <p>Personalize as cores principais do template escolhido abaixo.</p>
+                <div class="secao-form">
+                    <h3>3. Design da Frente</h3>
+                    <p>Personalize as cores principais e escolha um template.</p>
                      <div class="input-cor-container"><label>Cor 1:</label><input type="color" id="frente-cor1" value="#3d3bbe"><input type="text" id="frente-cor1-hex" value="#3d3bbe"></div>
                      <div class="input-cor-container"><label>Cor 2:</label><input type="color" id="frente-cor2" value="#6a89cc"><input type="text" id="frente-cor2-hex" value="#6a89cc"></div>
+                    <div class="galeria-templates">
+                        <h4>Template da Frente</h4>
+                        <button type="button" id="btn-abrir-galeria">Escolher um Template Pré-definido</button>
+                        <div id="previa-template-selecionado">
+                            <img id="thumb-selecionado" src="" alt="Template Selecionado">
+                            <span id="nome-template-selecionado"></span>
+                        </div>
+                        <hr style="margin: 15px 0;">
+                        <button type="button" id="btn-abrir-builder">...ou Crie um Layout Customizado</button>
+                    </div>
                 </div>
-                <div class="previa-container">
-                    <label>Prévia da Frente:</label>
-                    <div id="previa-frente" class="previa-box lado frente">
-                        <!-- Conteúdo de exemplo para a prévia -->
-                        <h1 class="info" style="font-size: 1.1em; margin: 0; color:#333; z-index: 2;">Seu Nome</h1>
-                        <p class="info" style="font-size: 0.7em; margin: 0; color:#555; z-index: 2;">Sua Profissão</p>
+                <div class="botoes-acao">
+                    <button type="submit" id="btn-gerar">Gerar Cartão</button>
+                    <button type="button" id="btn-salvar">Salvar Configuração</button>
+                </div>
+            </form>
+        </div>
+        <!-- COLUNA DE PRÉ-VISUALIZAÇÃO -->
+        <div class="coluna-previa">
+            <div class="previa-wrapper">
+                <h2>Pré-visualização</h2>
+                <div class="mini-cartao">
+                    <div class="portaCartao">
+                        <div class="cartao">
+                            <div id="previa-frente" class="lado frente">
+                                <div class="container-texto">
+                                    <h1 class="info" id="previa-frente-nome"></h1>
+                                    <p class="info" id="previa-frente-profissao"></p>
+                                    <div class="contato-frente info">
+                                        <i class="fab fa-whatsapp"></i>
+                                        <span id="previa-frente-whatsapp"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mini-cartao">
+                    <div class="portaCartao">
+                        <div class="cartao">
+                            <div id="previa-verso" class="lado verso" style="transform: rotateY(0deg);">
+                                <div class="conteudo-verso">
+                                    <h3 id="previa-verso-nome"></h3>
+                                    <p class="tagline" id="previa-verso-tagline"></p>
+                                    <div class="servicos">
+                                        <h4>Serviços Oferecidos</h4>
+                                        <ul id="previa-verso-servicos"></ul>
+                                    </div>
+                                    <div class="contato">
+                                        <p><i class="fas fa-phone-alt"></i> <span id="previa-verso-contato"></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="galeria-templates">
-                <h4>Escolha um template:</h4>
-                <div class="templates-grid">
-                    <div class="template-thumb" data-template-id="template-frente-01" title="Ondas Clássicas"><img src="https://via.placeholder.com/100x60/ccc/fff?text=T1" alt="Template 1"></div>
-                    <div class="template-thumb" data-template-id="template-frente-02" title="Faixa Diagonal"><img src="https://via.placeholder.com/100x60/ccc/fff?text=T2" alt="Template 2"></div>
-                    <div class="template-thumb" data-template-id="template-frente-03" title="Círculos"><img src="https://via.placeholder.com/100x60/ccc/fff?text=T3" alt="Template 3"></div>
-                    <div class="template-thumb" data-template-id="template-frente-04" title="Barra Vertical"><img src="https://via.placeholder.com/100x60/ccc/fff?text=T4" alt="Template 4"></div>
-                    <div class="template-thumb" data-template-id="template-frente-05" title="Linha Inferior"><img src="https://via.placeholder.com/100x60/ccc/fff?text=T5" alt="Template 5"></div>
-                </div>
+        </div>
+    </div>
+    <!-- MODAL DA GALERIA DE TEMPLATES -->
+    <div id="modal-galeria" class="modal-overlay escondido">
+        <div class="modal-conteudo">
+            <div class="modal-cabecalho">
+                <h3>Galeria de Templates</h3>
+                <button id="btn-fechar-galeria" class="btn-fechar">×</button>
+            </div>
+            <div class="modal-filtros">
+                <label for="filtro-categoria">Filtrar por:</label>
+                <select id="filtro-categoria">
+                    <option value="todos">Todos</option>
+                    <option value="moderno">Modernos</option>
+                    <option value="minimalista">Minimalistas</option>
+                    <option value="corporativo">Corporativos</option>
+                </select>
+            </div>
+            <div id="galeria-grid-modal" class="templates-grid"></div>
+            <div class="modal-paginacao">
+                <button id="paginacao-anterior" disabled>« Anterior</button>
+                <span id="paginacao-info">Página 1 de 1</span>
+                <button id="paginacao-proxima" disabled>Próxima »</button>
             </div>
         </div>
-
-        <div class="botoes-acao">
-            <button type="submit" id="btn-gerar">Gerar Cartão</button>
-            <button type="button" id="btn-salvar">Salvar Configuração</button>
+    </div>
+    <!-- MODAL DO CONSTRUTOR DE LAYOUT -->
+    <div id="modal-builder" class="modal-overlay escondido">
+        <div class="builder-container">
+            <div class="builder-painel-ferramentas">
+                <h4>Estrutura do Layout</h4>
+                <select id="builder-seleciona-grid">
+                    <option value="1x1">1 Célula</option>
+                    <option value="2x1">2 Colunas</option>
+                    <option value="1x2">2 Linhas</option>
+                    <option value="2x2">Grid 2x2</option>
+                </select>
+                <hr>
+                <h4>Widgets (Arraste para o cartão)</h4>
+                <div id="builder-widgets">
+                    <div class="widget" draggable="true" data-tipo="nome">Nome</div>
+                    <div class="widget" draggable="true" data-tipo="profissao">Profissão</div>
+                    <div class="widget" draggable="true" data-tipo="whatsapp">WhatsApp</div>
+                    <!-- Adicionar Logo e QR Code quando a função de upload estiver pronta -->
+                </div>
+            </div>
+            <div class="builder-canvas-wrapper">
+                <div id="builder-canvas" class="cartao-canvas"></div>
+            </div>
+            <div class="builder-acoes">
+                <button id="btn-fechar-builder" class="btn-fechar" style="font-size: 1rem; background: #a0aec0;">Fechar</button>
+                <button id="btn-salvar-template-customizado" style="background: #38a169;">Salvar Template</button>
+            </div>
         </div>
-    </form>
-
+    </div>
     <script src="gerador.js"></script>
 </body>
 </html>
