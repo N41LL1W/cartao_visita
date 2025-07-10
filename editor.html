@@ -60,10 +60,13 @@
         .cartao-canvas { width: 500px; height: 300px; background: white; box-shadow: 0 10px 25px rgba(0,0,0,0.2); border-radius: 15px; display: grid; position: relative; overflow: hidden; }
         .celula-grid { border: 2px dashed #cbd5e0; transition: background-color 0.2s; display: flex; justify-content: center; align-items: center; color: #a0aec0; font-size: 0.9em; padding: 10px; text-align: center; }
         .celula-grid.drag-over { background-color: #e2e8f0; border-color: var(--cor-secundaria); }
-        #builder-widgets .widget { background: #f7fafc; border: 1px solid #e2e8f0; padding: 10px; border-radius: 6px; margin-bottom: 10px; cursor: grab; }
-        .widget-no-cartao { background: rgba(255,255,255,0.8); border: 1px solid #a0aec0; padding: 15px; border-radius: 6px; text-align: center; cursor: move; color: #2d3748; }
+        #builder-widgets .widget { background: #f7fafc; border: 1px solid #e2e8f0; padding: 10px; border-radius: 6px; margin-bottom: 10px; cursor: grab; display: flex; align-items: center; gap: 8px; }
+        #builder-widgets .widget i { color: #718096; }
+        .widget-no-cartao { background: rgba(237, 242, 247, 0.8); border: 1px solid #a0aec0; padding: 15px; border-radius: 6px; text-align: center; cursor: move; color: #2d3748; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; }
+        .widget-no-cartao i { font-size: 2em; color: #718096; }
         .builder-acoes { position: absolute; bottom: 20px; right: 20px; display: flex; gap: 10px; }
-
+        .builder-acoes button { font-size: 14px; padding: 10px 15px; }
+        
         /* Estilos da Pré-visualização do Cartão */
         .previa-wrapper { position: sticky; top: 20px; }
         .previa-wrapper h2 { text-align: center; margin-bottom: 15px; }
@@ -72,13 +75,14 @@
 </head>
 <body>
     <div class="editor-container">
-        <!-- COLUNA DE CONTROLES (FORMULÁRIOS) -->
+        <!-- COLUNA DE CONTROLES -->
         <div class="coluna-controles">
             <h1>Criador de Cartão Digital</h1>
             <label for="carregar-config">Carregar configuração (.json):</label>
             <input type="file" id="carregar-config" accept=".json">
             <hr>
             <form id="form-cartao">
+                <!-- Seções de Formulário (Dados, Verso, Frente) -->
                 <div class="secao-form">
                     <h3>1. Dados do Cartão</h3>
                     <input type="text" id="nome" placeholder="Seu Nome Completo" required>
@@ -170,57 +174,37 @@ Serviço 3" rows="4"></textarea>
             </div>
         </div>
     </div>
-    <!-- MODAL DA GALERIA DE TEMPLATES -->
+    <!-- MODAIS (GALERIA E BUILDER) -->
     <div id="modal-galeria" class="modal-overlay escondido">
         <div class="modal-conteudo">
             <div class="modal-cabecalho">
                 <h3>Galeria de Templates</h3>
                 <button id="btn-fechar-galeria" class="btn-fechar">×</button>
             </div>
-            <div class="modal-filtros">
-                <label for="filtro-categoria">Filtrar por:</label>
-                <select id="filtro-categoria">
-                    <option value="todos">Todos</option>
-                    <option value="moderno">Modernos</option>
-                    <option value="minimalista">Minimalistas</option>
-                    <option value="corporativo">Corporativos</option>
-                </select>
-            </div>
+            <div class="modal-filtros"><label for="filtro-categoria">Filtrar por:</label><select id="filtro-categoria"><option value="todos">Todos</option><option value="moderno">Modernos</option><option value="minimalista">Minimalistas</option><option value="corporativo">Corporativos</option></select></div>
             <div id="galeria-grid-modal" class="templates-grid"></div>
-            <div class="modal-paginacao">
-                <button id="paginacao-anterior" disabled>« Anterior</button>
-                <span id="paginacao-info">Página 1 de 1</span>
-                <button id="paginacao-proxima" disabled>Próxima »</button>
-            </div>
+            <div class="modal-paginacao"><button id="paginacao-anterior" disabled>« Anterior</button><span id="paginacao-info">Página 1 de 1</span><button id="paginacao-proxima" disabled>Próxima »</button></div>
         </div>
     </div>
-    <!-- MODAL DO CONSTRUTOR DE LAYOUT -->
     <div id="modal-builder" class="modal-overlay escondido">
         <div class="builder-container">
             <div class="builder-painel-ferramentas">
                 <h4>Estrutura do Layout</h4>
                 <select id="builder-seleciona-grid">
-                    <option value="1x1">1 Célula</option>
-                    <option value="2x1">2 Colunas</option>
-                    <option value="1x2">2 Linhas</option>
-                    <option value="2x2">Grid 2x2</option>
+                    <option value="1x1">1 Célula</option><option value="2x1">2 Colunas</option><option value="1x2">2 Linhas</option><option value="2x2">Grid 2x2</option><option value="2x3">Grid 2x3</option><option value="3x2">Grid 3x2</option><option value="3x3">Grid 3x3</option>
                 </select>
                 <hr>
                 <h4>Widgets (Arraste para o cartão)</h4>
                 <div id="builder-widgets">
-                    <div class="widget" draggable="true" data-tipo="nome">Nome</div>
-                    <div class="widget" draggable="true" data-tipo="profissao">Profissão</div>
-                    <div class="widget" draggable="true" data-tipo="whatsapp">WhatsApp</div>
-                    <!-- Adicionar Logo e QR Code quando a função de upload estiver pronta -->
+                    <div class="widget" draggable="true" data-tipo="nome"><i class="fas fa-font"></i> Nome</div>
+                    <div class="widget" draggable="true" data-tipo="profissao"><i class="fas fa-briefcase"></i> Profissão</div>
+                    <div class="widget" draggable="true" data-tipo="whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</div>
+                    <div class="widget" draggable="true" data-tipo="logo"><i class="fas fa-image"></i> Logo</div>
+                    <div class="widget" draggable="true" data-tipo="qrcode"><i class="fas fa-qrcode"></i> QR Code</div>
                 </div>
             </div>
-            <div class="builder-canvas-wrapper">
-                <div id="builder-canvas" class="cartao-canvas"></div>
-            </div>
-            <div class="builder-acoes">
-                <button id="btn-fechar-builder" class="btn-fechar" style="font-size: 1rem; background: #a0aec0;">Fechar</button>
-                <button id="btn-salvar-template-customizado" style="background: #38a169;">Salvar Template</button>
-            </div>
+            <div class="builder-canvas-wrapper"><div id="builder-canvas" class="cartao-canvas"></div></div>
+            <div class="builder-acoes"><button id="btn-fechar-builder" class="btn-fechar" style="font-size: 1rem; background: #a0aec0;">Fechar</button><button id="btn-salvar-template-customizado" style="background: #38a169;">Salvar Template</button></div>
         </div>
     </div>
     <script src="gerador.js"></script>
