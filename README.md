@@ -1,54 +1,19 @@
-# Gerador de Cartões de Visita Digitais
+### Ferramentas de Criação de Templates (`template_builder.html`)
 
-Este é um projeto para a criação de cartões de visita digitais interativos e personalizáveis. O sistema é composto por um editor web que permite ao usuário inserir suas informações, customizar o design em tempo real e gerar um cartão final, tudo de forma visual e intuitiva.
+O projeto agora inclui uma página dedicada para a criação e customização de novos templates de layout, que podem ser salvos como arquivos `.json`. As principais funcionalidades são:
 
-## Funcionalidades Atuais
-
-*   **Editor Web (`editor.html`):** Uma interface única para controlar todos os aspectos do cartão.
-*   **Customização de Conteúdo:** Campos para nome, profissão, WhatsApp, QR Code, tagline e lista de serviços.
-*   **Design Avançado do Verso:**
-    *   Opção de cor sólida.
-    *   Opção de gradiente com até 3 cores.
-    *   Controle de ângulo (0-360°) para o gradiente.
-*   **Design Avançado da Frente:**
-    *   Galeria com 5 templates de design pré-definidos (Ondas, Faixa Diagonal, Círculos, etc.).
-    *   Seletores de cor para customizar os elementos de cada template.
-*   **Pré-visualização em Tempo Real:** Todas as alterações de design e cor são refletidas instantaneamente em caixas de pré-visualização no editor.
-*   **Geração de Cartão:** O cartão final é gerado em uma nova aba, com a animação de virar e com todos os dados e estilos aplicados.
-*   **Persistência de Dados (Local):**
-    *   **Salvar Configuração:** Gera e baixa um arquivo `.json` com todas as informações e configurações de design do cartão.
-    *   **Carregar Configuração:** Permite ao usuário carregar um arquivo `.json` salvo anteriormente para continuar a edição.
-
-## Tecnologias Utilizadas
-
-O projeto é construído com tecnologias 100% Front-end, o que significa que não requer um servidor ou banco de dados para funcionar em seu estado atual.
-
-*   **HTML5**
-*   **CSS3** (incluindo Flexbox, Variáveis CSS e Animações)
-*   **JavaScript (ES6+)**
-
-## Estrutura do Projeto
-
-```
-/
-├── editor.html         # O painel de criação e edição do cartão.
-├── gerador.js          # A lógica do editor (eventos, pré-visualização, salvar/carregar).
-│
-├── cartao.html         # O template do cartão final que será preenchido.
-├── script-cartao.js    # Script que lê os dados da URL e monta o cartão final.
-├── style.css           # Folha de estilo principal para o cartão e seus templates.
-│
-├── img/                  # Pasta para imagens (como QR codes).
-└── README.md             # Este arquivo.
-```
-
-## Como Executar
-
-Como este é um projeto puramente front-end, basta abrir o arquivo `editor.html` em qualquer navegador moderno (Chrome, Firefox, Edge, etc.).
-
-## Próximos Passos (Roadmap)
-
-- [ ] Expandir a galeria com mais templates para a frente do cartão (meta: 20+).
-- [ ] Implementar um back-end e um banco de dados (ex: NeonDB) para salvar os cartões online.
-- [ ] Criar um sistema de contas de usuário para que cada um possa gerenciar seus cartões salvos.
-- [ ] Gerar URLs amigáveis para os cartões (ex: `meusite.com/nome-do-cliente`).
+*   **Editor de Grid Dinâmico:**
+    *   Adição e remoção de colunas e linhas em tempo real.
+    *   Controle total sobre o dimensionamento de cada trilha do grid, suportando unidades flexíveis (`fr`) e fixas (`px`).
+*   **Design de Fundo Avançado:**
+    *   Suporte para fundos de **Cor Sólida**, **Gradiente** ou **Imagem**.
+    *   Controle de opacidade (canal alfa) para cores e imagens.
+*   **Sobreposição de Cor (Color Overlay):**
+    *   Opção de ativar uma camada de cor semi-transparente sobre o fundo principal.
+    *   A sobreposição pode ser uma cor sólida ou um gradiente, ambos com controle total de opacidade e cores.
+    *   Permite a criação de efeitos modernos (como o "duotone" do Instagram) e garante a legibilidade do texto sobre qualquer fundo.
+*   **Gradientes Dinâmicos:**
+    *   Capacidade de adicionar e remover cores de um gradiente, indo além do padrão de duas cores.
+*   **Pré-visualização em Tempo Real:** Todas as alterações de layout e design são refletidas instantaneamente em um canvas de pré-visualização.
+*   **Exportação de Template:** Salva a estrutura completa do layout, fundo e sobreposição em um arquivo `.json` bem definido.
+*   **Geração Automática de ID:** O ID do template é gerado automaticamente a partir do nome fornecido, garantindo um formato consistente.
