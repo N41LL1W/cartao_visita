@@ -1,9 +1,10 @@
-// builder.js (versão com sobreposição de cor)
+// builder.js (versão completa com todas as funcionalidades)
 
 document.addEventListener('DOMContentLoaded', () => {
-    // --- ESTADO DO GRID ---
+    // --- ESTADO DO PROJETO ---
     let colSizes = ['1fr'];
     let rowSizes = ['1fr'];
+    let widgetsNoCanvas = []; // Armazena os widgets que estão no canvas [{ tipo: 'nome', celulaId: 0 }]
 
     // --- MAPEAMENTO DE ELEMENTOS ---
     const canvas = document.getElementById('canvas-template');
@@ -31,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const controlesImagem = document.getElementById('controles-fundo-imagem');
     const inputImagemUrl = document.getElementById('fundo-imagem-url');
     const inputImagemOpacidade = document.getElementById('fundo-imagem-opacidade');
-    // Sobreposição (Overlay)
+    // Sobreposição
     const ativarSobreposicaoCheck = document.getElementById('ativar-sobreposicao');
     const controlesSobreposicao = document.getElementById('controles-sobreposicao');
     const sobreposicaoTipoSelect = document.getElementById('sobreposicao-tipo');
@@ -42,9 +43,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputSobreposicaoGradienteAngulo = document.getElementById('sobreposicao-gradiente-angulo');
     const listaCoresSobreposicaoGradiente = document.getElementById('lista-cores-sobreposicao-gradiente');
     const btnAddCorSobreposicaoGradiente = document.getElementById('btn-add-cor-sobreposicao-gradiente');
+    // Widgets e Conteúdo
+    const widgetsArrastaveis = document.querySelectorAll('.widget-arrastavel');
+    const widgetInputs = {
+        nome: document.getElementById('widget-nome'),
+        profissao: document.getElementById('widget-profissao'),
+        contato: document.getElementById('widget-contato'),
+        endereco: document.getElementById('widget-endereco'),
+        logo: document.getElementById('widget-logo'),
+        qrcode: document.getElementById('widget-qrcode'),
+    };
     // Ações
     const btnSalvar = document.getElementById('btn-salvar-template');
-    
+    const btnLimparCanvas = document.getElementById('btn-limpar-canvas');
+    const painelDeWidgets = document.getElementById('lista-widgets-arrastaveis');
+
     // --- FUNÇÕES AUXILIARES ---
     function hexToRgba(hex, alpha = 1) {
         let r = 0, g = 0, b = 0;
@@ -53,69 +66,107 @@ document.addEventListener('DOMContentLoaded', () => {
         return `rgba(${+r}, ${+g}, ${+b}, ${alpha})`;
     }
 
-    // --- FUNÇÕES DE ATUALIZAÇÃO DA UI ---
+    // --- FUNÇÃO CENTRAL DE RENDERIZAÇÃO ---
     function updateCanvas() {
-        const [cols, rows] = [colSizes.length, rowSizes.length];
-        if (canvas.children.length !== cols * rows) {
-            canvas.innerHTML = '';
-            canvas.style.gridTemplateColumns = colSizes.join(' ');
-            canvas.style.gridTemplateRows = rowSizes.join(' ');
-            for (let i = 0; i < cols * rows; i++) {
-                const celula = document.createElement('div');
-                celula.className = 'celula-grid-template';
-                celula.textContent = i + 1;
-                canvas.appendChild(celula);
-            }
-        } else {
-            canvas.style.gridTemplateColumns = colSizes.join(' ');
-            canvas.style.gridTemplateRows = rowSizes.join(' ');
+        // 1. Limpa o canvas e desenha o Grid
+        canvas.innerHTML = '';
+        canvas.style.gridTemplateColumns = colSizes.join(' ');
+        canvas.style.gridTemplateRows = rowSizes.join(' ');
+        const totalCells = colSizes.length * rowSizes.length;
+        for (let i = 0; i < totalCells; i++) {
+            const celula = document.createElement('div');
+            celula.className = 'celula-grid-template';
+            celula.dataset.celulaId = i;
+            celula.addEventListener('dragover', e => { e.preventDefault(); celula.classList.add('drag-over'); });
+            celula.addEventListener('dragleave', () => celula.classList.remove('drag-over'));
+            celula.addEventListener('drop', e => { e.preventDefault(); celula.classList.remove('drag-over'); const tipoWidget = e.dataTransfer.getData('text/plain'); adicionarWidgetAoCanvas(tipoWidget, i); });
+            canvas.appendChild(celula);
         }
 
-        // Constrói a string de background com múltiplas camadas
+        // 2. Renderiza os widgets que já estão no estado `widgetsNoCanvas` com o conteúdo atual
+        widgetsNoCanvas.forEach(widget => {
+            const celula = canvas.querySelector(`[data-celula-id='${widget.celulaId}']`);
+            if (celula) {
+                const tipo = widget.tipo;
+                const widgetElement = document.createElement('div');
+                widgetElement.className = `widget-no-canvas widget-tipo-${tipo}`;
+                widgetElement.draggable = true;
+                widgetElement.dataset.widgetTipo = tipo;
+                widgetElement.addEventListener('dragstart', e => {
+                    e.dataTransfer.setData('text/plain', tipo);
+                    setTimeout(() => e.target.style.opacity = '0.5', 0);
+                });
+                widgetElement.addEventListener('dragend', e => {
+                    e.target.style.opacity = '1'; // Restaura a opacidade ao final do arrasto
+                });
+                const inputOrigem = widgetInputs[tipo];
+                const conteudo = inputOrigem.value || inputOrigem.placeholder;
+                if (tipo === 'logo' || tipo === 'qrcode') {
+                    const img = document.createElement('img');
+                    img.src = conteudo || 'https://via.placeholder.com/150/f0f2f5/a0aec0?text=IMAGEM';
+                    img.alt = tipo;
+                    widgetElement.appendChild(img);
+                } else {
+                    widgetElement.textContent = conteudo;
+                }
+                celula.innerHTML = '';
+                celula.appendChild(widgetElement);
+            }
+        });
+
+        // 3. Atualiza o Fundo e a Sobreposição
         let backgroundLayers = [];
-        // Camada 1: Sobreposição (se ativa)
         if (ativarSobreposicaoCheck.checked) {
             const tipo = sobreposicaoTipoSelect.value;
             if (tipo === 'cor') {
                 backgroundLayers.push(hexToRgba(inputSobreposicaoCor.value, inputSobreposicaoOpacidade.value));
-            } else { // gradiente
-                const coresItens = listaCoresSobreposicaoGradiente.querySelectorAll('.cor-gradiente-item');
-                const coresArray = Array.from(coresItens).map(item => hexToRgba(item.querySelector('input[type="color"]').value, item.querySelector('input[type="range"]').value));
+            } else {
+                const coresArray = Array.from(listaCoresSobreposicaoGradiente.querySelectorAll('.cor-gradiente-item')).map(item => hexToRgba(item.querySelector('input[type="color"]').value, item.querySelector('input[type="range"]').value));
                 backgroundLayers.push(`linear-gradient(${inputSobreposicaoGradienteAngulo.value}deg, ${coresArray.join(', ')})`);
             }
         }
-        // Camada 2: Fundo Principal
         const tipoFundo = tipoFundoSelect.value;
-        canvas.style.opacity = 1; // Reseta a opacidade, pois ela só se aplica a imagens
+        canvas.style.opacity = 1;
         switch (tipoFundo) {
-            case 'cor': backgroundLayers.push(hexToRgba(inputCor.value, inputCorOpacidade.value)); break;
+            case 'cor':
+                backgroundLayers.push(hexToRgba(inputCor.value, inputCorOpacidade.value));
+                break;
             case 'gradiente':
-                const coresItens = listaCoresGradiente.querySelectorAll('.cor-gradiente-item');
-                const coresArray = Array.from(coresItens).map(item => hexToRgba(item.querySelector('input[type="color"]').value, item.querySelector('input[type="range"]').value));
+                const coresArray = Array.from(listaCoresGradiente.querySelectorAll('.cor-gradiente-item')).map(item => hexToRgba(item.querySelector('input[type="color"]').value, item.querySelector('input[type="range"]').value));
                 backgroundLayers.push(`linear-gradient(${inputGradienteAngulo.value}deg, ${coresArray.join(', ')})`);
                 break;
             case 'imagem':
                 backgroundLayers.push(`url('${inputImagemUrl.value || ''}') no-repeat center center / cover`);
-                canvas.style.opacity = inputImagemOpacidade.value; // Opacidade ainda se aplica ao elemento inteiro
+                canvas.style.opacity = inputImagemOpacidade.value;
                 break;
         }
         canvas.style.background = backgroundLayers.join(', ');
     }
-    
+
     function renderGridControls() {
         colunaSizesContainer.innerHTML = '';
-        colSizes.forEach((size, i) => { const input = document.createElement('input'); input.type = 'text'; input.value = size; input.addEventListener('input', e => { colSizes[i] = e.target.value; updateCanvas(); }); colunaSizesContainer.appendChild(input); });
+        colSizes.forEach((size, i) => {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = size;
+            input.addEventListener('input', e => { colSizes[i] = e.target.value; updateCanvas(); });
+            colunaSizesContainer.appendChild(input);
+        });
         linhaSizesContainer.innerHTML = '';
-        rowSizes.forEach((size, i) => { const input = document.createElement('input'); input.type = 'text'; input.value = size; input.addEventListener('input', e => { rowSizes[i] = e.target.value; updateCanvas(); }); linhaSizesContainer.appendChild(input); });
+        rowSizes.forEach((size, i) => {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = size;
+            input.addEventListener('input', e => { rowSizes[i] = e.target.value; updateCanvas(); });
+            linhaSizesContainer.appendChild(input);
+        });
     }
-    
+
     function atualizarVisibilidadeControles() {
-        // Fundo
         const tipoFundo = tipoFundoSelect.value;
         controlesCor.classList.toggle('ativo', tipoFundo === 'cor');
         controlesGradiente.classList.toggle('ativo', tipoFundo === 'gradiente');
         controlesImagem.classList.toggle('ativo', tipoFundo === 'imagem');
-        // Sobreposição
         const sobreposicaoAtiva = ativarSobreposicaoCheck.checked;
         controlesSobreposicao.classList.toggle('ativo', sobreposicaoAtiva);
         if (sobreposicaoAtiva) {
@@ -128,24 +179,53 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         updateCanvas();
     }
-    
+
     function criarControleCorGradiente(lista, cor = '#000000', opacidade = 1.0, minCores = 2) {
-        const item = document.createElement('div'); item.className = 'cor-gradiente-item';
-        const inputCor = document.createElement('input'); inputCor.type = 'color'; inputCor.value = cor;
-        const inputOpacidade = document.createElement('input'); inputOpacidade.type = 'range'; inputOpacidade.min = 0; inputOpacidade.max = 1; inputOpacidade.step = 0.01; inputOpacidade.value = opacidade;
-        const btnRemover = document.createElement('button'); btnRemover.type = 'button'; btnRemover.className = 'btn-remover-cor'; btnRemover.innerHTML = '×';
-        btnRemover.onclick = () => { if (lista.querySelectorAll('.cor-gradiente-item').length > minCores) { item.remove(); updateCanvas(); } else { alert(`O gradiente precisa de pelo menos ${minCores} cores.`); } };
-        item.append(inputCor, inputOpacidade, btnRemover); lista.appendChild(item);
+        const item = document.createElement('div');
+        item.className = 'cor-gradiente-item';
+        const inputCor = document.createElement('input');
+        inputCor.type = 'color';
+        inputCor.value = cor;
+        const inputOpacidade = document.createElement('input');
+        inputOpacidade.type = 'range';
+        inputOpacidade.min = 0;
+        inputOpacidade.max = 1;
+        inputOpacidade.step = 0.01;
+        inputOpacidade.value = opacidade;
+        const btnRemover = document.createElement('button');
+        btnRemover.type = 'button';
+        btnRemover.className = 'btn-remover-cor';
+        btnRemover.innerHTML = '×';
+        btnRemover.onclick = () => {
+            if (lista.querySelectorAll('.cor-gradiente-item').length > minCores) {
+                item.remove();
+                updateCanvas();
+            } else {
+                alert(`O gradiente precisa de pelo menos ${minCores} cores.`);
+            }
+        };
+        item.append(inputCor, inputOpacidade, btnRemover);
+        lista.appendChild(item);
     }
     
+    // --- LÓGICA DO CONSTRUTOR ---
+    function adicionarWidgetAoCanvas(tipo, celulaId) {
+        widgetsNoCanvas = widgetsNoCanvas.filter(w => w.tipo !== tipo);
+        widgetsNoCanvas.push({ tipo: tipo, celulaId: parseInt(celulaId, 10) });
+        updateCanvas();
+    }
+
+    function removerWidgetDoCanvas(tipo) {
+        widgetsNoCanvas = widgetsNoCanvas.filter(w => w.tipo !== tipo);
+        updateCanvas();
+    }
+    
+    // --- FUNÇÃO PARA SALVAR O TEMPLATE ---
     function gerarJSONdoTemplate() {
         let fundoConfig = { tipo: tipoFundoSelect.value };
         switch (fundoConfig.tipo) {
             case 'cor': fundoConfig.cor = inputCor.value; fundoConfig.opacidade = inputCorOpacidade.value; break;
-            case 'gradiente':
-                fundoConfig.angulo = inputGradienteAngulo.value;
-                fundoConfig.cores = Array.from(listaCoresGradiente.querySelectorAll('.cor-gradiente-item')).map(item => ({ cor: item.querySelector('input[type="color"]').value, opacidade: item.querySelector('input[type="range"]').value }));
-                break;
+            case 'gradiente': fundoConfig.angulo = inputGradienteAngulo.value; fundoConfig.cores = Array.from(listaCoresGradiente.querySelectorAll('.cor-gradiente-item')).map(item => ({ cor: item.querySelector('input[type="color"]').value, opacidade: item.querySelector('input[type="range"]').value })); break;
             case 'imagem': fundoConfig.url = inputImagemUrl.value; fundoConfig.opacidade = inputImagemOpacidade.value; break;
         }
         let sobreposicaoConfig = { ativa: ativarSobreposicaoCheck.checked };
@@ -159,11 +239,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 sobreposicaoConfig.cores = Array.from(listaCoresSobreposicaoGradiente.querySelectorAll('.cor-gradiente-item')).map(item => ({ cor: item.querySelector('input[type="color"]').value, opacidade: item.querySelector('input[type="range"]').value }));
             }
         }
+        let conteudoPadrao = {};
+        for (const [key, input] of Object.entries(widgetInputs)) {
+            if (input.value) conteudoPadrao[key] = input.value;
+        }
         return {
-            id: templateIdInput.value, nome: templateNomeInput.value, categoria: templateCategoriaSelect.value,
+            id: templateIdInput.value,
+            nome: templateNomeInput.value,
+            categoria: templateCategoriaSelect.value,
             estruturaGrid: { colunas: colSizes, linhas: rowSizes },
             fundo: fundoConfig,
             sobreposicao: sobreposicaoConfig,
+            widgets: widgetsNoCanvas,
+            conteudoPadrao: conteudoPadrao,
         };
     }
     
@@ -176,11 +264,17 @@ document.addEventListener('DOMContentLoaded', () => {
     btnAddCorSobreposicaoGradiente.addEventListener('click', () => criarControleCorGradiente(listaCoresSobreposicaoGradiente, '#000000', 0.5));
     btnSalvar.addEventListener('click', () => {
         const dados = gerarJSONdoTemplate();
-        if(!dados.id || !dados.nome){ alert("Por favor, preencha o ID e o Nome do Template antes de salvar."); return; }
+        if (!dados.id || !dados.nome) {
+            alert("Por favor, preencha o Nome do Template para gerar o ID antes de salvar.");
+            return;
+        }
         const nomeArquivo = `${dados.id}.json`;
         const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
-        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = nomeArquivo;
-        a.click(); URL.revokeObjectURL(a.href);
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = nomeArquivo;
+        a.click();
+        URL.revokeObjectURL(a.href);
     });
     btnAddColuna.addEventListener('click', () => { if (colSizes.length < 6) { colSizes.push('1fr'); renderGridControls(); updateCanvas(); } });
     btnRemoveColuna.addEventListener('click', () => { if (colSizes.length > 1) { colSizes.pop(); renderGridControls(); updateCanvas(); } });
@@ -191,7 +285,29 @@ document.addEventListener('DOMContentLoaded', () => {
         templateNomeInput.value = nomeValido;
         templateIdInput.value = (nomeValido.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '') || 'template') + '_001';
     });
-    
+    widgetsArrastaveis.forEach(widget => {
+        widget.addEventListener('dragstart', e => { e.dataTransfer.setData('text/plain', e.target.dataset.widgetTipo); });
+    });
+    btnLimparCanvas.addEventListener('click', () => {
+        if (confirm('Tem certeza que deseja remover todos os widgets do cartão?')) {
+            widgetsNoCanvas = [];
+            updateCanvas();
+        }
+    });
+    painelDeWidgets.addEventListener('dragover', e => {
+        e.preventDefault();
+        painelDeWidgets.classList.add('drag-over');
+    });
+    painelDeWidgets.addEventListener('dragleave', () => {
+        painelDeWidgets.classList.remove('drag-over');
+    });
+    painelDeWidgets.addEventListener('drop', e => {
+        e.preventDefault();
+        painelDeWidgets.classList.remove('drag-over');
+        const tipoWidget = e.dataTransfer.getData('text/plain');
+        removerWidgetDoCanvas(tipoWidget);
+    });
+
     // --- INICIALIZAÇÃO ---
     criarControleCorGradiente(listaCoresGradiente, '#6a89cc', 1.0);
     criarControleCorGradiente(listaCoresGradiente, '#3d3bbe', 1.0);
