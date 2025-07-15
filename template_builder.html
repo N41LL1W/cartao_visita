@@ -6,22 +6,22 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <style>
-        :root { --cor-primaria: #4a5568; --cor-secundaria: #3d3bbe; --cor-perigo: #e53e3e; }
+        /* Estilos específicos para o Builder de Templates */
+        :root { --cor-primaria: #4a5568; --cor-secundaria: #4c51bf; --cor-perigo: #e53e3e; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; background-color: #f7fafc; margin: 0; padding: 20px; }
         .builder-container { display: flex; gap: 30px; max-width: 1400px; margin: auto; align-items: flex-start; }
-        .painel-controles { flex: 1; min-width: 450px; }
-        .area-canvas { flex: 2; display: flex; justify-content: center; align-items: flex-start; padding-top: 50px; position: sticky; top: 20px; }
-        .secao { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .painel-controles { flex: 2; min-width: 600px; }
+        .area-canvas { flex: 1; display: flex; justify-content: center; align-items: flex-start; padding-top: 50px; position: sticky; top: 20px; }
         h1, h2, h3 { color: #2d3748; }
+        h3 { font-size: 1.5em; color: #2d3748; margin-bottom: 25px; }
         select, input[type="text"], input[type="color"], input[type="range"] { width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #cbd5e0; box-sizing: border-box; }
-        input#template-id[readonly] { background-color: #f7fafc; color: #718096; cursor: not-allowed; }
         input[type="color"] { height: 40px; padding: 4px; }
-        .grupo-controle { margin-top: 15px; }
-        .grupo-controle label, .grupo-controle-grid label { display: block; margin-bottom: 5px; font-weight: 600; color: #4a5568; }
+        .grupo-controle { margin-bottom: 20px; }
+        .grupo-controle label, .grupo-controle-grid label { display: block; margin-bottom: 5px; font-weight: 600; color: #4a5568; font-size: 0.9em; }
         .grupo-dinamico { display: none; border-left: 3px solid #e2e8f0; padding-left: 15px; margin-top: 15px; }
         .grupo-dinamico.ativo { display: block; }
-        button { cursor: pointer; border: none; border-radius: 6px; }
-        button#btn-salvar-template { background-color: #38a169; color: white; width: 100%; padding: 12px; font-size: 16px; font-weight: 600; transition: background-color 0.2s; }
+        button { cursor: pointer; border: none; border-radius: 6px; font-size: 16px; transition: background-color 0.2s; font-weight: 600; }
+        button#btn-salvar-template { background-color: #38a169; color: white; width: 100%; padding: 12px; margin-top: 20px; }
         button#btn-salvar-template:hover { background-color: #2f855a; }
         hr { border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0; }
         #canvas-template { width: 500px; height: 300px; background: #e2e8f0; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: grid; transition: all 0.3s ease; position: relative; overflow: hidden; }
@@ -30,7 +30,7 @@
         .grupo-controle-composto { display: flex; gap: 20px; align-items: flex-end; }
         .item-controle { flex: 1; }
         .item-controle label { font-size: 0.8em; }
-        .btn-secundario { background-color: #e2e8f0; color: #4a5568; width: 100%; padding: 8px; margin-top: 15px; font-size: 14px; border: 1px solid #cbd5e0; border-radius: 6px; }
+        .btn-secundario { background-color: #e2e8f0; color: #4a5568; width: 100%; padding: 8px; margin-top: 15px; font-size: 14px; border: 1px solid #cbd5e0; }
         .btn-secundario:hover { background-color: #cbd5e0; }
         .cor-gradiente-item { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
         .cor-gradiente-item input[type="color"] { flex-shrink: 0; }
@@ -42,73 +42,103 @@
         .sizes-container { display: flex; gap: 10px; margin-top: 10px; }
         .sizes-container input { text-align: center; }
         .ativador-secao { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-        .ativador-secao input[type="checkbox"] { width: auto; }
+        .ativador-secao h3 { margin: 0; }
+        .ativador-secao input[type="checkbox"] { width: auto; height: 18px; }
         #controles-sobreposicao { border: none; padding-left: 0; }
         .link-ferramenta { font-size: 0.8em; margin-left: 10px; color: var(--cor-secundaria); text-decoration: none; }
         .widget-arrastavel { background: #f7fafc; border: 1px solid #e2e8f0; padding: 10px; border-radius: 6px; margin-bottom: 10px; cursor: grab; display: flex; align-items: center; gap: 8px; }
         .widget-arrastavel:active { cursor: grabbing; background-color: #edf2f7; }
         #lista-widgets-arrastaveis.drag-over { background-color: #fff5f5; border: 2px dashed var(--cor-perigo); }
-        .widget-no-canvas { width: 100%; height: 100%; border: none; padding: 0; border-radius: 0; text-align: center; color: #2d3748; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; font-size: 1.2em; font-weight: 500; z-index: 10; cursor: move; box-sizing: border-box; background: none; }
-        .widget-no-canvas.widget-tipo-logo, .widget-no-canvas.widget-tipo-qrcode { padding: 5px; }
-        .widget-no-canvas img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
+        .widget-no-canvas { width: 100%; height: 100%; border: none; padding: 5px; border-radius: 0; text-align: center; color: #2d3748; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; font-size: 1em; z-index: 10; cursor: move; box-sizing: border-box; background: rgba(255,255,255,0.8); }
+        .widget-no-canvas.widget-tipo-logo img, .widget-no-canvas.widget-tipo-qrcode img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
+
+        /* Estilos do Layout de Dashboard */
+        .dashboard-layout { display: flex; gap: 25px; background-color: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .dashboard-menu { flex: 0 0 200px; border-right: 1px solid #e2e8f0; padding-right: 25px; }
+        .dashboard-menu ul { list-style: none; padding: 0; margin: 0; }
+        .dashboard-menu li a { display: flex; align-items: center; gap: 12px; padding: 12px 15px; text-decoration: none; color: var(--cor-primaria); border-radius: 6px; font-weight: 500; transition: background-color 0.2s, color 0.2s; margin-bottom: 5px; }
+        .dashboard-menu li a:hover { background-color: #f7fafc; }
+        .dashboard-menu li a.ativo { background-color: var(--cor-secundaria); color: white; }
+        .dashboard-menu li a i { width: 20px; text-align: center; }
+        .dashboard-conteudo { flex-grow: 1; }
+        .dashboard-conteudo .secao { padding: 0; box-shadow: none; border: none; margin: 0; }
+        .escondido { display: none !important; }
     </style>
 </head>
 <body>
     <div class="builder-container">
+        <!-- PAINEL DE CONTROLES (ESQUERDA) -->
         <div class="painel-controles">
             <h1>Construtor de Templates</h1>
-            <div class="secao">
-                <h3>1. Informações do Template</h3>
-                <div class="grupo-controle"><label for="template-nome">Nome do Template (máx. 30 caracteres)</label><input type="text" id="template-nome" placeholder="Ex: Gradiente com Barra" maxlength="30"></div>
-                <div class="grupo-controle"><label for="template-id">ID do Template (gerado automaticamente)</label><input type="text" id="template-id" placeholder="id_sera_gerado_aqui" readonly></div>
-                <div class="grupo-controle"><label for="template-categoria">Categoria</label><select id="template-categoria"><option value="moderno">Moderno</option><option value="minimalista">Minimalista</option><option value="corporativo">Corporativo</option></select></div>
-            </div>
-            <div class="secao">
-                <h3>2. Estrutura do Layout (Grid)</h3>
-                <div class="grupo-controle-grid"><label>Colunas</label><div class="botoes-grid"><button type="button" id="btn-add-coluna" class="btn-grid-acao">+</button><button type="button" id="btn-remove-coluna" class="btn-grid-acao">-</button></div></div>
-                <div id="coluna-sizes-container" class="sizes-container"></div><hr>
-                <div class="grupo-controle-grid"><label>Linhas</label><div class="botoes-grid"><button type="button" id="btn-add-linha" class="btn-grid-acao">+</button><button type="button" id="btn-remove-linha" class="btn-grid-acao">-</button></div></div>
-                <div id="linha-sizes-container" class="sizes-container"></div>
-            </div>
-            <div class="secao">
-                <h3>3. Design do Fundo</h3>
-                <div class="grupo-controle"><label for="template-tipo-fundo">Tipo de Fundo</label><select id="template-tipo-fundo"><option value="cor">Cor Sólida</option><option value="gradiente" selected>Gradiente</option><option value="imagem">Imagem</option></select></div>
-                <div id="controles-fundo-cor" class="grupo-dinamico"><div class="grupo-controle-composto"><div class="item-controle"><label for="fundo-cor">Cor</label><input type="color" id="fundo-cor" value="#ffffff"></div><div class="item-controle"><label for="fundo-cor-opacidade">Opacidade</label><input type="range" id="fundo-cor-opacidade" min="0" max="1" value="1" step="0.01"></div></div></div>
-                <div id="controles-fundo-gradiente" class="grupo-dinamico"><div class="grupo-controle"><label for="fundo-gradiente-angulo">Ângulo</label><input type="range" id="fundo-gradiente-angulo" min="0" max="360" value="135"></div><hr style="margin: 15px 0;"><div id="lista-cores-gradiente"></div><button type="button" id="btn-add-cor-gradiente" class="btn-secundario">+ Adicionar Cor</button></div>
-                <div id="controles-fundo-imagem" class="grupo-dinamico"><div class="grupo-controle"><label for="fundo-imagem-url">URL da Imagem</label><input type="text" id="fundo-imagem-url" placeholder="https://exemplo.com/imagem.jpg"></div><div class="grupo-controle"><label for="fundo-imagem-opacidade">Opacidade da Imagem</label><input type="range" id="fundo-imagem-opacidade" min="0" max="1" value="1" step="0.01"></div></div>
-            </div>
-            <div class="secao">
-                <div class="ativador-secao"><input type="checkbox" id="ativar-sobreposicao"><label for="ativar-sobreposicao"><h3>4. Sobreposição de Cor (Overlay)</h3></label></div>
-                <div id="controles-sobreposicao" class="grupo-dinamico">
-                    <div class="grupo-controle"><label for="sobreposicao-tipo">Tipo</label><select id="sobreposicao-tipo"><option value="cor">Cor Sólida</option><option value="gradiente" selected>Gradiente</option></select></div>
-                    <div id="controles-sobreposicao-cor" class="grupo-dinamico"><div class="grupo-controle-composto"><div class="item-controle"><label for="sobreposicao-cor-valor">Cor</label><input type="color" id="sobreposicao-cor-valor" value="#000000"></div><div class="item-controle"><label for="sobreposicao-cor-opacidade">Opacidade</label><input type="range" id="sobreposicao-cor-opacidade" min="0" max="1" value="0.3" step="0.01"></div></div></div>
-                    <div id="controles-sobreposicao-gradiente" class="grupo-dinamico"><div class="grupo-controle"><label for="sobreposicao-gradiente-angulo">Ângulo</label><input type="range" id="sobreposicao-gradiente-angulo" min="0" max="360" value="135"></div><hr style="margin: 15px 0;"><div id="lista-cores-sobreposicao-gradiente"></div><button type="button" id="btn-add-cor-sobreposicao-gradiente" class="btn-secundario">+ Adicionar Cor</button></div>
+            <div class="dashboard-layout">
+                <!-- MENU LATERAL -->
+                <nav class="dashboard-menu">
+                    <ul>
+                        <li><a href="#" class="menu-link ativo" data-secao="secao-info"><i class="fas fa-info-circle"></i> Informações</a></li>
+                        <li><a href="#" class="menu-link" data-secao="secao-grid"><i class="fas fa-th-large"></i> Grid</a></li>
+                        <li><a href="#" class="menu-link" data-secao="secao-fundo"><i class="fas fa-palette"></i> Fundo</a></li>
+                        <li><a href="#" class="menu-link" data-secao="secao-sobreposicao"><i class="fas fa-layer-group"></i> Sobreposição</a></li>
+                        <li><a href="#" class="menu-link" data-secao="secao-conteudo"><i class="fas fa-pencil-alt"></i> Conteúdo</a></li>
+                        <li><a href="#" class="menu-link" data-secao="secao-posicionar"><i class="fas fa-arrows-alt"></i> Posicionar</a></li>
+                    </ul>
+                </nav>
+                <!-- CONTEÚDO DOS CONTROLES -->
+                <div class="dashboard-conteudo">
+                    <div id="secao-info" class="secao">
+                        <h3>1. Informações do Template</h3>
+                        <div class="grupo-controle"><label for="template-nome">Nome (máx. 30)</label><input type="text" id="template-nome" placeholder="Ex: Gradiente Moderno" maxlength="30"></div>
+                        <div class="grupo-controle"><label for="template-id">ID (auto)</label><input type="text" id="template-id" placeholder="id_sera_gerado_aqui" readonly></div>
+                        <div class="grupo-controle"><label for="template-categoria">Categoria</label><select id="template-categoria"><option value="moderno">Moderno</option><option value="minimalista">Minimalista</option><option value="corporativo">Corporativo</option></select></div>
+                    </div>
+                    <div id="secao-grid" class="secao escondido">
+                        <h3>2. Estrutura do Layout (Grid)</h3>
+                        <div class="grupo-controle-grid"><label>Colunas</label><div class="botoes-grid"><button type="button" id="btn-add-coluna" class="btn-grid-acao">+</button><button type="button" id="btn-remove-coluna" class="btn-grid-acao">-</button></div></div>
+                        <div id="coluna-sizes-container" class="sizes-container"></div><hr>
+                        <div class="grupo-controle-grid"><label>Linhas</label><div class="botoes-grid"><button type="button" id="btn-add-linha" class="btn-grid-acao">+</button><button type="button" id="btn-remove-linha" class="btn-grid-acao">-</button></div></div>
+                        <div id="linha-sizes-container" class="sizes-container"></div>
+                    </div>
+                    <div id="secao-fundo" class="secao escondido">
+                        <h3>3. Design do Fundo</h3>
+                        <div class="grupo-controle"><label for="template-tipo-fundo">Tipo de Fundo</label><select id="template-tipo-fundo"><option value="cor">Cor Sólida</option><option value="gradiente" selected>Gradiente</option><option value="imagem">Imagem</option></select></div>
+                        <div id="controles-fundo-cor" class="grupo-dinamico"><div class="grupo-controle-composto"><div class="item-controle"><label for="fundo-cor">Cor</label><input type="color" id="fundo-cor" value="#ffffff"></div><div class="item-controle"><label for="fundo-cor-opacidade">Opacidade</label><input type="range" id="fundo-cor-opacidade" min="0" max="1" value="1" step="0.01"></div></div></div>
+                        <div id="controles-fundo-gradiente" class="grupo-dinamico"><div class="grupo-controle"><label for="fundo-gradiente-angulo">Ângulo</label><input type="range" id="fundo-gradiente-angulo" min="0" max="360" value="135"></div><hr style="margin: 15px 0;"><div id="lista-cores-gradiente"></div><button type="button" id="btn-add-cor-gradiente" class="btn-secundario">+ Adicionar Cor</button></div>
+                        <div id="controles-fundo-imagem" class="grupo-dinamico"><div class="grupo-controle"><label for="fundo-imagem-url">URL da Imagem</label><input type="text" id="fundo-imagem-url" placeholder="https://exemplo.com/imagem.jpg"></div><div class="grupo-controle"><label for="fundo-imagem-opacidade">Opacidade da Imagem</label><input type="range" id="fundo-imagem-opacidade" min="0" max="1" value="1" step="0.01"></div></div>
+                    </div>
+                    <div id="secao-sobreposicao" class="secao escondido">
+                         <div class="ativador-secao"><input type="checkbox" id="ativar-sobreposicao"><label for="ativar-sobreposicao"><h3>4. Sobreposição de Cor</h3></label></div>
+                         <div id="controles-sobreposicao" class="grupo-dinamico">
+                            <div class="grupo-controle"><label for="sobreposicao-tipo">Tipo</label><select id="sobreposicao-tipo"><option value="cor">Cor Sólida</option><option value="gradiente" selected>Gradiente</option></select></div>
+                            <div id="controles-sobreposicao-cor" class="grupo-dinamico"><div class="grupo-controle-composto"><div class="item-controle"><label for="sobreposicao-cor-valor">Cor</label><input type="color" id="sobreposicao-cor-valor" value="#000000"></div><div class="item-controle"><label for="sobreposicao-cor-opacidade">Opacidade</label><input type="range" id="sobreposicao-cor-opacidade" min="0" max="1" value="0.3" step="0.01"></div></div></div>
+                            <div id="controles-sobreposicao-gradiente" class="grupo-dinamico"><div class="grupo-controle"><label for="sobreposicao-gradiente-angulo">Ângulo</label><input type="range" id="sobreposicao-gradiente-angulo" min="0" max="360" value="135"></div><hr style="margin: 15px 0;"><div id="lista-cores-sobreposicao-gradiente"></div><button type="button" id="btn-add-cor-sobreposicao-gradiente" class="btn-secundario">+ Adicionar Cor</button></div>
+                         </div>
+                    </div>
+                    <div id="secao-conteudo" class="secao escondido">
+                        <h3>5. Conteúdo Padrão</h3>
+                        <div class="grupo-controle"><label for="widget-nome">NOME</label><input type="text" id="widget-nome" placeholder="Ex: João da Silva"></div>
+                        <div class="grupo-controle"><label for="widget-profissao">PROFISSÃO</label><input type="text" id="widget-profissao" placeholder="Ex: Designer Gráfico"></div>
+                        <div class="grupo-controle"><label for="widget-contato">CONTATO</label><input type="text" id="widget-contato" placeholder="Ex: (11) 99999-8888"></div>
+                        <div class="grupo-controle"><label for="widget-endereco">ENDEREÇO</label><input type="text" id="widget-endereco" placeholder="Ex: Rua das Flores, 123"></div>
+                        <div class="grupo-controle"><label for="widget-logo">LOGO (URL)</label><input type="text" id="widget-logo" placeholder="https://.../logo.png"><a href="https://www.canva.com/create/logos/" target="_blank" class="link-ferramenta">Criar logo</a></div>
+                        <div class="grupo-controle"><label for="widget-qrcode">QR CODE (URL)</label><input type="text" id="widget-qrcode" placeholder="https://.../qrcode.png"><a href="https://www.the-qrcode-generator.com/pt/" target="_blank" class="link-ferramenta">Criar QR Code</a></div>
+                    </div>
+                    <div id="secao-posicionar" class="secao escondido">
+                        <h3>6. Posicionar Elementos</h3>
+                        <p>Arraste para o cartão. Para remover, arraste de volta para esta caixa.</p>
+                        <div id="lista-widgets-arrastaveis">
+                            <div class="widget-arrastavel" draggable="true" data-widget-tipo="nome"><i class="fas fa-font"></i> Nome</div>
+                            <div class="widget-arrastavel" draggable="true" data-widget-tipo="profissao"><i class="fas fa-briefcase"></i> Profissão</div>
+                            <div class="widget-arrastavel" draggable="true" data-widget-tipo="contato"><i class="fas fa-phone"></i> Contato</div>
+                            <div class="widget-arrastavel" draggable="true" data-widget-tipo="endereco"><i class="fas fa-map-marker-alt"></i> Endereço</div>
+                            <div class="widget-arrastavel" draggable="true" data-widget-tipo="logo"><i class="fas fa-image"></i> Logo</div>
+                            <div class="widget-arrastavel" draggable="true" data-widget-tipo="qrcode"><i class="fas fa-qrcode"></i> QR Code</div>
+                        </div>
+                        <button type="button" id="btn-limpar-canvas" class="btn-secundario" style="border-color: var(--cor-perigo); color: var(--cor-perigo);"><i class="fas fa-trash-alt"></i> Limpar Widgets</button>
+                    </div>
                 </div>
-            </div>
-            <div class="secao">
-                <h3>5. Conteúdo Padrão (Widgets)</h3>
-                <div class="grupo-controle"><label for="widget-nome">NOME</label><input type="text" id="widget-nome" placeholder="Ex: João da Silva"></div>
-                <div class="grupo-controle"><label for="widget-profissao">PROFISSÃO</label><input type="text" id="widget-profissao" placeholder="Ex: Designer Gráfico"></div>
-                <div class="grupo-controle"><label for="widget-contato">CONTATO</label><input type="text" id="widget-contato" placeholder="Ex: (11) 99999-8888"></div>
-                <div class="grupo-controle"><label for="widget-endereco">ENDEREÇO</label><input type="text" id="widget-endereco" placeholder="Ex: Rua das Flores, 123"></div>
-                <div class="grupo-controle"><label for="widget-logo">LOGO (URL)</label><input type="text" id="widget-logo" placeholder="https://.../logo.png"><a href="https://www.canva.com/create/logos/" target="_blank" class="link-ferramenta">Criar logo</a></div>
-                <div class="grupo-controle"><label for="widget-qrcode">QR CODE (URL)</label><input type="text" id="widget-qrcode" placeholder="https://.../qrcode.png"><a href="https://www.the-qrcode-generator.com/pt/" target="_blank" class="link-ferramenta">Criar QR Code</a></div>
-            </div>
-            <div class="secao">
-                <h3>6. Posicionar Elementos</h3>
-                <p>Arraste para o cartão. Para remover, arraste de volta para esta caixa.</p>
-                <div id="lista-widgets-arrastaveis">
-                    <div class="widget-arrastavel" draggable="true" data-widget-tipo="nome"><i class="fas fa-font"></i> Nome</div>
-                    <div class="widget-arrastavel" draggable="true" data-widget-tipo="profissao"><i class="fas fa-briefcase"></i> Profissão</div>
-                    <div class="widget-arrastavel" draggable="true" data-widget-tipo="contato"><i class="fas fa-phone"></i> Contato</div>
-                    <div class="widget-arrastavel" draggable="true" data-widget-tipo="endereco"><i class="fas fa-map-marker-alt"></i> Endereço</div>
-                    <div class="widget-arrastavel" draggable="true" data-widget-tipo="logo"><i class="fas fa-image"></i> Logo</div>
-                    <div class="widget-arrastavel" draggable="true" data-widget-tipo="qrcode"><i class="fas fa-qrcode"></i> QR Code</div>
-                </div>
-                <button type="button" id="btn-limpar-canvas" class="btn-secundario" style="border-color: var(--cor-perigo); color: var(--cor-perigo);"><i class="fas fa-trash-alt"></i> Limpar Todos os Widgets</button>
             </div>
             <button id="btn-salvar-template">Salvar Template como .json</button>
         </div>
+        <!-- ÁREA DE PRÉ-VISUALIZAÇÃO (DIREITA) -->
         <div class="area-canvas">
             <div id="canvas-template"></div>
         </div>
