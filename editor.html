@@ -4,141 +4,56 @@
     <meta charset="UTF-8">
     <title>Criador de Cartão Digital</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="style.css"> <!-- Link para o CSS dos templates -->
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="editor-style.css">
 </head>
 <body>
     <div class="editor-container">
-        <!-- COLUNA DE CONTROLES -->
         <div class="coluna-controles">
             <h1>Criador de Cartão Digital</h1>
-            <label for="carregar-config">Carregar configuração (.json):</label>
-            <input type="file" id="carregar-config" accept=".json">
+            <p>Preencha os dados e escolha um design para o seu cartão.</p>
             <hr>
             <form id="form-cartao">
-                <!-- Seções de Formulário (Dados, Verso, Frente) -->
                 <div class="secao-form">
                     <h3>1. Dados do Cartão</h3>
-                    <input type="text" id="nome" placeholder="Seu Nome Completo" required>
-                    <input type="text" id="profissao" placeholder="Sua Profissão" required>
-                    <input type="text" id="whatsapp" placeholder="(XX) XXXXX-XXXX" required>
-                    <input type="text" id="tagline" placeholder="Sua frase de efeito" required>
-                    <textarea id="servicos" placeholder="Serviço 1
-Serviço 2
-Serviço 3" rows="4"></textarea>
+                    <div class="grupo-controle"><label>Nome Completo</label><input type="text" id="nome" placeholder="Seu Nome Completo" required></div>
+                    <div class="grupo-controle"><label>Profissão / Cargo</label><input type="text" id="profissao" placeholder="Sua Profissão" required></div>
+                    <div class="grupo-controle"><label>WhatsApp</label><input type="text" id="whatsapp" placeholder="(XX) XXXXX-XXXX" required></div>
+                    <div class="grupo-controle"><label>Frase de Efeito (Verso)</label><input type="text" id="tagline" placeholder="Sua frase de efeito"></div>
+                    <div class="grupo-controle"><label>Serviços (um por linha)</label><textarea id="servicos" placeholder="Serviço 1
+Serviço 2" rows="3"></textarea></div>
+                    <div class="grupo-controle"><label>Endereço</label><input type="text" id="endereco" placeholder="Seu Endereço"></div>
+                    <div class="grupo-controle"><label>URL da sua Logo</label><input type="text" id="logo" placeholder="https://.../logo.png"></div>
+                    <div class="grupo-controle"><label>URL do seu QR Code</label><input type="text" id="qrcode" placeholder="https://.../qrcode.png"></div>
                 </div>
                 <div class="secao-form">
-                    <h3>2. Design do Verso</h3>
-                    <select id="tipo-cor-verso">
-                        <option value="solida">Cor Sólida</option>
-                        <option value="gradiente" selected>Gradiente</option>
-                    </select>
-                    <div id="grupo-cor-solida-verso" class="grupo-cor">
-                        <div class="input-cor-container"><input type="color" id="verso-cor-solida" value="#3d3bbe"><input type="text" id="verso-cor-solida-hex" value="#3d3bbe"></div>
+                    <h3>2. Design do Cartão</h3>
+                    <div class="upload-template">
+                        <label for="upload-template-json">Carregar um Design Customizado (.json)</label>
+                        <input type="file" id="upload-template-json" accept=".json">
                     </div>
-                    <div id="grupo-gradiente-verso" class="grupo-cor ativo">
-                        <label>Ângulo: <span id="valor-angulo-verso">135</span>°</label>
-                        <input type="range" id="verso-gradiente-angulo" min="0" max="360" value="135">
-                        <div class="input-cor-container"><label>Cor 1:</label><input type="color" id="verso-gradiente-cor1" value="#6a89cc"><input type="text" id="verso-gradiente-cor1-hex" value="#6a89cc"></div>
-                        <div class="input-cor-container"><label>Cor 2:</label><input type="color" id="verso-gradiente-cor2" value="#3d3bbe"><input type="text" id="verso-gradiente-cor2-hex" value="#3d3bbe"></div>
-                        <div class="input-cor-container"><input type="checkbox" id="verso-usar-cor3"><label for="verso-usar-cor3">Usar Cor 3?</label><input type="color" id="verso-gradiente-cor3" value="#2e4f6e" disabled><input type="text" id="verso-gradiente-cor3-hex" value="#2e4f6e" disabled></div>
-                    </div>
-                </div>
-                <div class="secao-form">
-                    <h3>3. Design da Frente</h3>
-                    <p>Personalize as cores principais e escolha um template.</p>
-                     <div class="input-cor-container"><label>Cor 1:</label><input type="color" id="frente-cor1" value="#3d3bbe"><input type="text" id="frente-cor1-hex" value="#3d3bbe"></div>
-                     <div class="input-cor-container"><label>Cor 2:</label><input type="color" id="frente-cor2" value="#6a89cc"><input type="text" id="frente-cor2-hex" value="#6a89cc"></div>
-                    <div class="galeria-templates">
-                        <h4>Template da Frente</h4>
-                        <button type="button" id="btn-abrir-galeria">Escolher um Template Pré-definido</button>
-                        <div id="previa-template-selecionado">
-                            <img id="thumb-selecionado" src="" alt="Template Selecionado">
-                            <span id="nome-template-selecionado"></span>
-                        </div>
-                        <hr style="margin: 15px 0;">
-                        <button type="button" id="btn-abrir-builder">...ou Crie um Layout Customizado</button>
+                    <hr>
+                    <h4>Ou escolha um template pré-definido:</h4>
+                    <div id="galeria-predefinidos" class="templates-grid">
+                        <!-- Templates pré-definidos serão inseridos aqui -->
                     </div>
                 </div>
                 <div class="botoes-acao">
                     <button type="submit" id="btn-gerar">Gerar Cartão</button>
-                    <button type="button" id="btn-salvar">Salvar Configuração</button>
                 </div>
             </form>
         </div>
-        <!-- COLUNA DE PRÉ-VISUALIZAÇÃO -->
         <div class="coluna-previa">
             <div class="previa-wrapper">
                 <h2>Pré-visualização</h2>
                 <div class="mini-cartao">
                     <div class="portaCartao">
                         <div class="cartao">
-                            <div id="previa-frente" class="lado frente">
-                                <div class="container-texto">
-                                    <h1 class="info" id="previa-frente-nome"></h1>
-                                    <p class="info" id="previa-frente-profissao"></p>
-                                    <div class="contato-frente info">
-                                        <i class="fab fa-whatsapp"></i>
-                                        <span id="previa-frente-whatsapp"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="mini-cartao">
-                    <div class="portaCartao">
-                        <div class="cartao">
-                            <div id="previa-verso" class="lado verso" style="transform: rotateY(0deg);">
-                                <div class="conteudo-verso">
-                                    <h3 id="previa-verso-nome"></h3>
-                                    <p class="tagline" id="previa-verso-tagline"></p>
-                                    <div class="servicos">
-                                        <h4>Serviços Oferecidos</h4>
-                                        <ul id="previa-verso-servicos"></ul>
-                                    </div>
-                                    <div class="contato">
-                                        <p><i class="fas fa-phone-alt"></i> <span id="previa-verso-contato"></span></p>
-                                    </div>
-                                </div>
-                            </div>
+                            <div id="previa-frente" class="lado frente"></div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <!-- MODAIS (GALERIA E BUILDER) -->
-    <div id="modal-galeria" class="modal-overlay escondido">
-        <div class="modal-conteudo">
-            <div class="modal-cabecalho">
-                <h3>Galeria de Templates</h3>
-                <button id="btn-fechar-galeria" class="btn-fechar">×</button>
-            </div>
-            <div class="modal-filtros"><label for="filtro-categoria">Filtrar por:</label><select id="filtro-categoria"><option value="todos">Todos</option><option value="moderno">Modernos</option><option value="minimalista">Minimalistas</option><option value="corporativo">Corporativos</option></select></div>
-            <div id="galeria-grid-modal" class="templates-grid"></div>
-            <div class="modal-paginacao"><button id="paginacao-anterior" disabled>« Anterior</button><span id="paginacao-info">Página 1 de 1</span><button id="paginacao-proxima" disabled>Próxima »</button></div>
-        </div>
-    </div>
-    <div id="modal-builder" class="modal-overlay escondido">
-        <div class="builder-container">
-            <div class="builder-painel-ferramentas">
-                <h4>Estrutura do Layout</h4>
-                <select id="builder-seleciona-grid">
-                    <option value="1x1">1 Célula</option><option value="2x1">2 Colunas</option><option value="1x2">2 Linhas</option><option value="2x2">Grid 2x2</option><option value="2x3">Grid 2x3</option><option value="3x2">Grid 3x2</option><option value="3x3">Grid 3x3</option>
-                </select>
-                <hr>
-                <h4>Widgets (Arraste para o cartão)</h4>
-                <div id="builder-widgets">
-                    <div class="widget" draggable="true" data-tipo="nome"><i class="fas fa-font"></i> Nome</div>
-                    <div class="widget" draggable="true" data-tipo="profissao"><i class="fas fa-briefcase"></i> Profissão</div>
-                    <div class="widget" draggable="true" data-tipo="whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</div>
-                    <div class="widget" draggable="true" data-tipo="logo"><i class="fas fa-image"></i> Logo</div>
-                    <div class="widget" draggable="true" data-tipo="qrcode"><i class="fas fa-qrcode"></i> QR Code</div>
-                </div>
-            </div>
-            <div class="builder-canvas-wrapper"><div id="builder-canvas" class="cartao-canvas"></div></div>
-            <div class="builder-acoes"><button id="btn-fechar-builder" class="btn-fechar" style="font-size: 1rem; background: #a0aec0;">Fechar</button><button id="btn-salvar-template-customizado" style="background: #38a169;">Salvar Template</button></div>
         </div>
     </div>
     <script src="gerador.js"></script>

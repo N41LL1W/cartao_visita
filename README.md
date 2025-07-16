@@ -1,25 +1,27 @@
-## Funcionalidades Atuais
-
-O sistema é dividido em duas ferramentas principais: o **Editor de Cartões** e o **Construtor de Templates**.
-
-### Editor de Cartões (`editor.html`)
-
-*   **Interface Intuitiva:** Um painel de controle com pré-visualização ao vivo do cartão (frente e verso).
-*   **Preenchimento de Dados:** Campos para todas as informações do usuário (nome, profissão, contato, etc.).
-*   **Seleção de Templates:**
-    *   Uma galeria com templates de design pré-definidos para a frente do cartão, com paginação e filtros.
-    *   **Carregamento de Template Customizado:** Permite carregar um arquivo `.json` (criado no Construtor) para usar um layout totalmente personalizado.
-*   **Customização de Design:** Controles avançados para cores, gradientes e opacidade do fundo e dos elementos do template.
-*   **Exportação:**
-    *   **Salvar Configuração:** Gera um arquivo `.json` com todos os dados do usuário e as configurações de design escolhidas.
-    *   **Gerar Cartão:** Abre o cartão final em uma nova aba, pronto para ser compartilhado.
-
 ### Construtor de Templates (`template_builder.html`)
 
-Uma ferramenta poderosa para criar e exportar novos layouts de cartão.
+O projeto inclui uma aplicação dedicada para a criação e customização de novos templates de layout, que podem ser salvos e carregados como arquivos `.json`. A interface, em formato de dashboard com menu lateral, permite um fluxo de trabalho organizado e escalável.
 
-*   **Editor de Grid Dinâmico:** Adição, remoção e dimensionamento de colunas e linhas em tempo real.
-*   **Posicionamento de Widgets:** Sistema de "Arrastar e Soltar" para posicionar elementos (Nome, Logo, etc.) nas células do grid. Permite mover, remover e limpar os widgets do canvas.
-*   **Design de Fundo e Sobreposição:** Controle total sobre o fundo (cor, gradiente, imagem) e uma camada de sobreposição opcional para criar efeitos visuais e garantir legibilidade.
-*   **Pré-visualização Dinâmica:** Todas as alterações são refletidas instantaneamente no canvas de pré-visualização.
-*   **Exportação de Template:** Salva a estrutura completa do layout (grid, fundo, widgets, conteúdo padrão) em um arquivo `.json` otimizado para ser usado no Editor de Cartões.
+**Funcionalidades Principais:**
+
+*   **Interface Organizada:** Um menu lateral permite navegar facilmente entre as seções de edição: Informações, Grid, Fundo, Sobreposição, Conteúdo e Posicionamento.
+*   **Editor de Grid Dinâmico:**
+    *   Adição e remoção de colunas e linhas em tempo real.
+    *   Controle total sobre o dimensionamento de cada trilha do grid (`fr`, `px`, etc.).
+*   **Design de Fundo Avançado:**
+    *   Suporte para fundos de **Cor Sólida**, **Gradiente** ou **Imagem**.
+    *   Controle de opacidade (canal alfa) para cores e imagens.
+*   **Sobreposição de Cor (Color Overlay):**
+    *   Opção de ativar uma camada de cor semi-transparente sobre o fundo principal.
+    *   A sobreposição pode ser uma cor sólida ou um gradiente, com controle total de cores e opacidade.
+*   **Gradientes Dinâmicos:**
+    *   Capacidade de adicionar e remover cores de um gradiente (com mais de 2 cores), tanto para o fundo quanto para a sobreposição.
+*   **Posicionamento de Widgets Interativo:**
+    *   Sistema de **Arrastar e Soltar (Drag & Drop)** para posicionar elementos (Nome, Logo, etc.) nas células do grid.
+    *   Capacidade de **mover** um widget já posicionado e **remover** arrastando-o de volta ao painel.
+    *   Botão para **limpar** todos os widgets do canvas.
+*   **Pré-visualização 100% Dinâmica:** Todas as alterações de layout, design e conteúdo padrão são refletidas instantaneamente no canvas de pré-visualização.
+*   **Salvar e Carregar Templates:**
+    *   Exporta a estrutura completa do template em um arquivo `.json`.
+    *   Permite carregar um `.json` de template salvo anteriormente para continuar a edição.
+*   **Geração Automática de ID:** O ID do template é gerado automaticamente a partir do nome fornecido, garantindo um formato consistente.

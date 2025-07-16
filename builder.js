@@ -1,4 +1,4 @@
-// builder.js (versão com layout de dashboard)
+// builder.js (versão final com carregar/salvar template)
 
 document.addEventListener('DOMContentLoaded', () => {
     // --- ESTADO DO PROJETO ---
@@ -19,47 +19,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnRemoveLinha = document.getElementById('btn-remove-linha');
     const linhaSizesContainer = document.getElementById('linha-sizes-container');
     const tipoFundoSelect = document.getElementById('template-tipo-fundo');
-    const controlesCor = document.getElementById('controles-fundo-cor');
     const inputCor = document.getElementById('fundo-cor');
     const inputCorOpacidade = document.getElementById('fundo-cor-opacidade');
-    const controlesGradiente = document.getElementById('controles-fundo-gradiente');
     const inputGradienteAngulo = document.getElementById('fundo-gradiente-angulo');
     const listaCoresGradiente = document.getElementById('lista-cores-gradiente');
     const btnAddCorGradiente = document.getElementById('btn-add-cor-gradiente');
-    const controlesImagem = document.getElementById('controles-fundo-imagem');
     const inputImagemUrl = document.getElementById('fundo-imagem-url');
     const inputImagemOpacidade = document.getElementById('fundo-imagem-opacidade');
     const ativarSobreposicaoCheck = document.getElementById('ativar-sobreposicao');
-    const controlesSobreposicao = document.getElementById('controles-sobreposicao');
     const sobreposicaoTipoSelect = document.getElementById('sobreposicao-tipo');
-    const controlesSobreposicaoCor = document.getElementById('controles-sobreposicao-cor');
     const inputSobreposicaoCor = document.getElementById('sobreposicao-cor-valor');
     const inputSobreposicaoOpacidade = document.getElementById('sobreposicao-cor-opacidade');
-    const controlesSobreposicaoGradiente = document.getElementById('controles-sobreposicao-gradiente');
     const inputSobreposicaoGradienteAngulo = document.getElementById('sobreposicao-gradiente-angulo');
     const listaCoresSobreposicaoGradiente = document.getElementById('lista-cores-sobreposicao-gradiente');
     const btnAddCorSobreposicaoGradiente = document.getElementById('btn-add-cor-sobreposicao-gradiente');
     const widgetsArrastaveis = document.querySelectorAll('.widget-arrastavel');
-    const widgetInputs = {
-        nome: document.getElementById('widget-nome'),
-        profissao: document.getElementById('widget-profissao'),
-        contato: document.getElementById('widget-contato'),
-        endereco: document.getElementById('widget-endereco'),
-        logo: document.getElementById('widget-logo'),
-        qrcode: document.getElementById('widget-qrcode'),
-    };
+    const widgetInputs = { nome: document.getElementById('widget-nome'), profissao: document.getElementById('widget-profissao'), contato: document.getElementById('widget-contato'), endereco: document.getElementById('widget-endereco'), logo: document.getElementById('widget-logo'), qrcode: document.getElementById('widget-qrcode') };
     const btnSalvar = document.getElementById('btn-salvar-template');
     const btnLimparCanvas = document.getElementById('btn-limpar-canvas');
     const painelDeWidgets = document.getElementById('lista-widgets-arrastaveis');
     const menuLinks = document.querySelectorAll('.dashboard-menu .menu-link');
     const secoesConteudo = document.querySelectorAll('.dashboard-conteudo .secao');
+    const inputCarregarTemplate = document.getElementById('carregar-template-json');
 
     // --- FUNÇÕES AUXILIARES ---
     function hexToRgba(hex, alpha = 1) { let r=0,g=0,b=0;if(hex.length==4){r="0x"+hex[1]+hex[1];g="0x"+hex[2]+hex[2];b="0x"+hex[3]+hex[3];}else if(hex.length==7){r="0x"+hex[1]+hex[2];g="0x"+hex[3]+hex[4];b="0x"+hex[5]+hex[6];} return `rgba(${+r},${+g},${+b},${alpha})`; }
     
     // --- FUNÇÃO CENTRAL DE RENDERIZAÇÃO ---
     function updateCanvas() {
-        // 1. Desenha o Grid e adiciona listeners de drop
         canvas.innerHTML = '';
         canvas.style.gridTemplateColumns = colSizes.join(' ');
         canvas.style.gridTemplateRows = rowSizes.join(' ');
@@ -73,7 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
             celula.addEventListener('drop', e => { e.preventDefault(); celula.classList.remove('drag-over'); const tipoWidget = e.dataTransfer.getData('text/plain'); adicionarWidgetAoCanvas(tipoWidget, i); });
             canvas.appendChild(celula);
         }
-        // 2. Renderiza os widgets que já estão no estado `widgetsNoCanvas` com o conteúdo atual
         widgetsNoCanvas.forEach(widget => {
             const celula = canvas.querySelector(`[data-celula-id='${widget.celulaId}']`);
             if (celula) {
@@ -91,14 +77,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     img.src = conteudo || 'https://via.placeholder.com/150/f0f2f5/a0aec0?text=IMAGEM';
                     img.alt = tipo;
                     widgetElement.appendChild(img);
-                } else {
-                    widgetElement.textContent = conteudo;
-                }
-                celula.innerHTML = '';
-                celula.appendChild(widgetElement);
+                } else { widgetElement.textContent = conteudo; }
+                celula.innerHTML = ''; celula.appendChild(widgetElement);
             }
         });
-        // 3. Atualiza o Fundo e a Sobreposição
         let backgroundLayers = [];
         if (ativarSobreposicaoCheck.checked) {
             const tipo = sobreposicaoTipoSelect.value;
@@ -125,20 +107,20 @@ document.addEventListener('DOMContentLoaded', () => {
         updateCanvas();
     }
     
-    // --- DEMAIS FUNÇÕES ---
+    // --- DEMAIS FUNÇÕES DE UI ---
     function renderGridControls() {
         colunaSizesContainer.innerHTML = ''; colSizes.forEach((size, i) => { const input = document.createElement('input'); input.type = 'text'; input.value = size; input.addEventListener('input', e => { colSizes[i] = e.target.value; updateCanvas(); }); colunaSizesContainer.appendChild(input); });
         linhaSizesContainer.innerHTML = ''; rowSizes.forEach((size, i) => { const input = document.createElement('input'); input.type = 'text'; input.value = size; input.addEventListener('input', e => { rowSizes[i] = e.target.value; updateCanvas(); }); linhaSizesContainer.appendChild(input); });
     }
     function atualizarVisibilidadeControles() {
         const tipoFundo = tipoFundoSelect.value;
-        controlesCor.classList.toggle('ativo', tipoFundo === 'cor');
-        controlesGradiente.classList.toggle('ativo', tipoFundo === 'gradiente');
-        controlesImagem.classList.toggle('ativo', tipoFundo === 'imagem');
+        document.getElementById('controles-fundo-cor').classList.toggle('ativo', tipoFundo === 'cor');
+        document.getElementById('controles-fundo-gradiente').classList.toggle('ativo', tipoFundo === 'gradiente');
+        document.getElementById('controles-fundo-imagem').classList.toggle('ativo', tipoFundo === 'imagem');
         const sobreposicaoAtiva = ativarSobreposicaoCheck.checked;
-        controlesSobreposicao.classList.toggle('ativo', sobreposicaoAtiva);
-        if (sobreposicaoAtiva) { const tipoSobreposicao = sobreposicaoTipoSelect.value; controlesSobreposicaoCor.classList.toggle('ativo', tipoSobreposicao === 'cor'); controlesSobreposicaoGradiente.classList.toggle('ativo', tipoSobreposicao === 'gradiente');
-        } else { controlesSobreposicaoCor.classList.remove('ativo'); controlesSobreposicaoGradiente.classList.remove('ativo'); }
+        document.getElementById('controles-sobreposicao').classList.toggle('ativo', sobreposicaoAtiva);
+        if (sobreposicaoAtiva) { const tipoSobreposicao = sobreposicaoTipoSelect.value; document.getElementById('controles-sobreposicao-cor').classList.toggle('ativo', tipoSobreposicao === 'cor'); document.getElementById('controles-sobreposicao-gradiente').classList.toggle('ativo', tipoSobreposicao === 'gradiente');
+        } else { document.getElementById('controles-sobreposicao-cor').classList.remove('ativo'); document.getElementById('controles-sobreposicao-gradiente').classList.remove('ativo'); }
         updateCanvas();
     }
     function criarControleCorGradiente(lista, cor, opacidade, minCores) {
@@ -149,6 +131,8 @@ document.addEventListener('DOMContentLoaded', () => {
         btnRemover.onclick = () => { if (lista.querySelectorAll('.cor-gradiente-item').length > minCores) { item.remove(); updateCanvas(); } else { alert(`O gradiente precisa de pelo menos ${minCores} cores.`); } };
         item.append(inputCor, inputOpacidade, btnRemover); lista.appendChild(item);
     }
+
+    // --- FUNÇÕES DE GERAÇÃO E CARREGAMENTO DE JSON ---
     function gerarJSONdoTemplate() {
         let fundoConfig = { tipo: tipoFundoSelect.value }; 
         switch (fundoConfig.tipo) {case 'cor': fundoConfig.cor = inputCor.value; fundoConfig.opacidade = inputCorOpacidade.value; break; case 'gradiente': fundoConfig.angulo = inputGradienteAngulo.value; fundoConfig.cores = Array.from(listaCoresGradiente.querySelectorAll('.cor-gradiente-item')).map(item => ({ cor: item.querySelector('input[type="color"]').value, opacidade: item.querySelector('input[type="range"]').value })); break; case 'imagem': fundoConfig.url = inputImagemUrl.value; fundoConfig.opacidade = inputImagemOpacidade.value; break; }
@@ -159,6 +143,43 @@ document.addEventListener('DOMContentLoaded', () => {
         return {id:templateIdInput.value,nome:templateNomeInput.value,categoria:templateCategoriaSelect.value,estruturaGrid:{colunas:colSizes,linhas:rowSizes},fundo:fundoConfig,sobreposicao:sobreposicaoConfig,widgets:widgetsNoCanvas,conteudoPadrao:conteudoPadrao};
     }
     
+    function carregarTemplate(templateData) {
+        templateNomeInput.value = templateData.nome || '';
+        templateIdInput.value = templateData.id || '';
+        templateCategoriaSelect.value = templateData.categoria || 'moderno';
+        colSizes = templateData.estruturaGrid.colunas || ['1fr'];
+        rowSizes = templateData.estruturaGrid.linhas || ['1fr'];
+        widgetsNoCanvas = templateData.widgets || [];
+        renderGridControls();
+
+        const fundo = templateData.fundo;
+        if (fundo) {
+            tipoFundoSelect.value = fundo.tipo;
+            if (fundo.tipo === 'cor') { inputCor.value = fundo.cor; inputCorOpacidade.value = fundo.opacidade; } 
+            else if (fundo.tipo === 'gradiente') {
+                inputGradienteAngulo.value = fundo.angulo;
+                listaCoresGradiente.innerHTML = '';
+                fundo.cores.forEach(c => criarControleCorGradiente(listaCoresGradiente, c.cor, c.opacidade));
+            } else if (fundo.tipo === 'imagem') { inputImagemUrl.value = fundo.url; inputImagemOpacidade.value = fundo.opacidade; }
+        }
+        
+        const sobreposicao = templateData.sobreposicao;
+        if (sobreposicao && sobreposicao.ativa) {
+            ativarSobreposicaoCheck.checked = true;
+            sobreposicaoTipoSelect.value = sobreposicao.tipo;
+            if (sobreposicao.tipo === 'cor') { inputSobreposicaoCor.value = sobreposicao.cor; inputSobreposicaoOpacidade.value = sobreposicao.opacidade; } 
+            else if (sobreposicao.tipo === 'gradiente') {
+                inputSobreposicaoGradienteAngulo.value = sobreposicao.angulo;
+                listaCoresSobreposicaoGradiente.innerHTML = '';
+                sobreposicao.cores.forEach(c => criarControleCorGradiente(listaCoresSobreposicaoGradiente, c.cor, c.opacidade));
+            }
+        } else { ativarSobreposicaoCheck.checked = false; }
+        if (templateData.conteudoPadrao) { for (const [key, value] of Object.entries(templateData.conteudoPadrao)) { if (widgetInputs[key]) { widgetInputs[key].value = value; } } }
+        
+        atualizarVisibilidadeControles();
+        alert('Template carregado com sucesso!');
+    }
+
     // --- EVENT LISTENERS ---
     painelControles.addEventListener('input', updateCanvas);
     tipoFundoSelect.addEventListener('change', atualizarVisibilidadeControles);
@@ -171,23 +192,14 @@ document.addEventListener('DOMContentLoaded', () => {
     btnRemoveColuna.addEventListener('click', () => { if (colSizes.length > 1) { colSizes.pop(); renderGridControls(); updateCanvas(); } });
     btnAddLinha.addEventListener('click', () => { if (rowSizes.length < 6) { rowSizes.push('1fr'); renderGridControls(); updateCanvas(); } });
     btnRemoveLinha.addEventListener('click', () => { if (rowSizes.length > 1) { rowSizes.pop(); renderGridControls(); updateCanvas(); } });
-    templateNomeInput.addEventListener('input', () => { const v = templateNomeInput.value.replace(/[^a-zA-Z0-9\s]/g,''); templateNomeInput.value = v; templateIdInput.value = (v.toLowerCase().replace(/\s+/g,'_').replace(/[^a-z0-9_]/g,'')||'template')+'_001'; });
+    templateNomeInput.addEventListener('input', () => { const v=templateNomeInput.value.replace(/[^a-zA-Z0-9\s]/g,''); templateNomeInput.value=v; templateIdInput.value=(v.toLowerCase().replace(/\s+/g,'_').replace(/[^a-z0-9_]/g,'')||'template')+'_001'; });
     widgetsArrastaveis.forEach(widget => { widget.addEventListener('dragstart', e => { e.dataTransfer.setData('text/plain', e.target.dataset.widgetTipo); }); });
     btnLimparCanvas.addEventListener('click', () => { if (confirm('Tem certeza?')) { widgetsNoCanvas = []; updateCanvas(); } });
     painelDeWidgets.addEventListener('dragover', e => { e.preventDefault(); painelDeWidgets.classList.add('drag-over'); });
     painelDeWidgets.addEventListener('dragleave', () => painelDeWidgets.classList.remove('drag-over'));
     painelDeWidgets.addEventListener('drop', e => { e.preventDefault(); painelDeWidgets.classList.remove('drag-over'); const tipoWidget = e.dataTransfer.getData('text/plain'); removerWidgetDoCanvas(tipoWidget); });
-    menuLinks.forEach(link => {
-        link.addEventListener('click', (event) => {
-            event.preventDefault();
-            menuLinks.forEach(l => l.classList.remove('ativo'));
-            link.classList.add('ativo');
-            secoesConteudo.forEach(secao => secao.classList.add('escondido'));
-            const idSecao = link.dataset.secao;
-            const secaoAtiva = document.getElementById(idSecao);
-            if (secaoAtiva) { secaoAtiva.classList.remove('escondido'); }
-        });
-    });
+    menuLinks.forEach(link => { link.addEventListener('click', (event) => { event.preventDefault(); menuLinks.forEach(l => l.classList.remove('ativo')); link.classList.add('ativo'); secoesConteudo.forEach(secao => secao.classList.add('escondido')); document.getElementById(link.dataset.secao)?.classList.remove('escondido'); }); });
+    inputCarregarTemplate.addEventListener('change', e => { const file = e.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = evt => { try { carregarTemplate(JSON.parse(evt.target.result)); } catch(err){ alert('Arquivo de design inválido.'); console.error(err); } }; reader.readAsText(file); e.target.value = ''; });
 
     // --- INICIALIZAÇÃO ---
     criarControleCorGradiente(listaCoresGradiente, '#6a89cc', 1.0);
@@ -196,4 +208,5 @@ document.addEventListener('DOMContentLoaded', () => {
     criarControleCorGradiente(listaCoresSobreposicaoGradiente, '#000000', 0.6);
     renderGridControls();
     atualizarVisibilidadeControles();
+    menuLinks[0].click(); // Abre a primeira aba do menu por padrão
 });
