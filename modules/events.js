@@ -1,58 +1,74 @@
-// modules/events.js
-import { state } from './state.js';
+// modules/events.js (VERSÃO CORRIGIDA)
 
-let app; // Referência local
-
-// Funções de handler para os eventos
-export function handleDragStart(event) {
-    event.dataTransfer.setData('text/plain', event.target.dataset.widgetId);
-    setTimeout(() => event.target.style.opacity = '0.5', 0);
-}
-export function handleDragOver(event) {
-    event.preventDefault();
-    event.currentTarget.classList.add('drag-over');
-}
-export function handleDragLeave(event) {
-    event.currentTarget.classList.remove('drag-over');
-}
-export function handleDropOnCanvas(event) {
-    event.preventDefault();
-    event.currentTarget.classList.remove('drag-over');
-    const widgetId = event.dataTransfer.getData('text/plain');
-    const celulaId = parseInt(event.currentTarget.dataset.celulaId, 10);
-    app.methods.adicionarWidgetAoCanvas(widgetId, celulaId);
-}
-// (Adicione aqui outras funções de evento: remover, limpar, etc.)
-
-function setupDashboardNavigation() {
-    const { menuLinks, secoesConteudo } = app.elements;
-    menuLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            menuLinks.forEach(l => l.classList.remove('ativo'));
+export function initEventListeners(App) {
+    // Desestrutura o objeto App para ter acesso fácil ao que precisamos
+    const { elements, actions } = App;
+    
+    // Navegação do Dashboard
+    elements.menuLinks.forEach(link => {
+        link.addEventListener('click', (event) => {
+            event.preventDefault();
+            elements.menuLinks.forEach(l => l.classList.remove('ativo'));
             link.classList.add('ativo');
-            secoesConteudo.forEach(s => s.classList.add('escondido'));
+            elements.secoesConteudo.forEach(secao => secao.classList.add('escondido'));
             document.getElementById(link.dataset.secao)?.classList.remove('escondido');
         });
     });
-}
 
-export function init(appObject) {
-    app = appObject;
+    // Listener geral para atualizações de UI em tempo real
+    elements.painelControles.addEventListener('input', actions.renderizarTudo);
+
+    // Listeners específicos para mudanças que afetam a visibilidade dos controles
+    elements.tipoFundoSelect.addEventListener('change', App.render.visibilidadeControles);
+    elements.ativarSobreposicaoCheck.addEventListener('change', App.render.visibilidadeControles);
+    elements.sobreposicaoTipoSelect.addEventListener('change', App.render.visibilidadeControles);
+
+    // Grid
+    elements.btnAddColuna.addEventListener('click', actions.adicionarColuna);
+    elements.btnRemoveColuna.addEventListener('click', actions.removerColuna);
+    elements.btnAddLinha.addEventListener('click', actions.adicionarLinha);
+    elements.btnRemoveLinha.addEventListener('click', actions.removerLinha);
+
+    // Gradientes
+    elements.btnAddCorGradiente.addEventListener('click', () => actions.criarControleCorGradiente(elements.listaCoresGradiente, '#ffffff', 1.0));
+    elements.btnAddCorSobreposicaoGradiente.addEventListener('click', () => actions.criarControleCorGradiente(elements.listaCoresSobreposicaoGradiente, '#000000', 0.5));
     
-    // Anexa as funções de handler ao objeto app para que o ui.js possa usá-las
-    app.events.handleDragStart = handleDragStart;
-    app.events.handleDragOver = handleDragOver;
-    app.events.handleDragLeave = handleDragLeave;
-    app.events.handleDropOnCanvas = handleDropOnCanvas;
+    // Widgets e Elementos
+    elements.btnAddElemento.addEventListener('click', () => elements.menuAddElemento.classList.toggle('escondido'));
+    document.addEventListener('click', e => {
+        if (!elements.btnAddElemento.contains(e.target) && !elements.menuAddElemento.contains(e.target)) {
+            elements.menuAddElemento.classList.add('escondido');
+        }
+    });
+    elements.menuAddElemento.addEventListener('click', e => {
+        e.preventDefault();
+        const link = e.target.closest('a');
+        if(link) {
+            actions.adicionarNovoWidget(link.dataset.widgetTipo);
+            elements.menuAddElemento.classList.add('escondido');
+        }
+    });
+    elements.btnLimparCanvas.addEventListener('click', actions.limparWidgetsDoCanvas);
 
-    // Configura todos os listeners da página
-    const { painelControles, btnAddColuna, btnSalvar } = app.elements;
-    painelControles.addEventListener('input', app.methods.updateCanvas);
-    btnAddColuna.addEventListener('click', app.methods.adicionarColuna);
-    btnSalvar.addEventListener('click', app.methods.salvarTemplate);
-    setupDashboardNavigation();
+    // Drag & Drop para remover (Lixeira)
+    // A linha abaixo era a causa do erro. `painelDeWidgetsArrastaveis` agora existe dentro de `elements`.
+    elements.painelDeWidgetsArrastaveis.addEventListener('dragover', e => { e.preventDefault(); e.currentTarget.classList.add('drag-over'); });
+    elements.painelDeWidgetsArrastaveis.addEventListener('dragleave', e => { e.currentTarget.classList.remove('drag-over'); });
+    elements.painelDeWidgetsArrastaveis.addEventListener('drop', e => {
+        e.preventDefault();
+        e.currentTarget.classList.remove('drag-over');
+        const widgetId = e.dataTransfer.getData('text/plain');
+        actions.removerWidgetDoCanvas(widgetId);
+    });
 
-    // Ativa a primeira aba
-    app.elements.menuLinks[0].click();
+    // Nome e ID do Template
+    elements.templateNomeInput.addEventListener('input', () => {
+        const nomeValido = elements.templateNomeInput.value.replace(/[^a-zA-Z0-9\s]/g,'');
+        elements.templateNomeInput.value = nomeValido;
+        elements.templateIdInput.value = (nomeValido.toLowerCase().replace(/\s+/g,'_').replace(/[^a-z0-9_]/g,'') || 'template') + '_001';
+    });
+    
+    // Ações Finais de Salvar e Carregar
+    elements.btnSalvar.addEventListener('click', actions.salvarTemplate);
+    elements.inputCarregarTemplate.addEventListener('change', actions.lerArquivoDeTemplate);
 }
