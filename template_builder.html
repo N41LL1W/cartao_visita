@@ -31,9 +31,22 @@
                 <div class="dashboard-conteudo">
                     <div id="secao-info" class="secao">
                         <h3>Informações do Template</h3>
-                        <div class="grupo-controle"><label for="template-nome">Nome (máx. 30)</label><input type="text" id="template-nome" placeholder="Ex: Gradiente Moderno" maxlength="30"></div>
-                        <div class="grupo-controle"><label for="template-id">ID (auto)</label><input type="text" id="template-id" placeholder="id_sera_gerado_aqui" readonly></div>
-                        <div class="grupo-controle"><label for="template-categoria">Categoria</label><select id="template-categoria"><option value="moderno">Moderno</option><option value="minimalista">Minimalista</option><option value="corporativo">Corporativo</option></select></div>
+                        <div class="grupo-controle">
+                            <label for="template-nome">Nome do Template <span id="contador-caracteres">(0/30)</span></label>
+                            <input type="text" id="template-nome" placeholder="Ex: Gradiente Moderno" maxlength="30">
+                        </div>
+                        <div class="grupo-controle">
+                            <label for="template-categoria">Categoria</label>
+                            <select id="template-categoria">
+                                <option value="moderno">Moderno</option>
+                                <option value="minimalista">Minimalista</option>
+                                <option value="corporativo">Corporativo</option>
+                            </select>
+                        </div>
+                        <div class="grupo-controle">
+                            <label for="template-id">ID do Template (gerado automaticamente)</label>
+                            <input type="text" id="template-id" placeholder="id_sera_gerado_aqui" readonly>
+                        </div>
                     </div>
                     <div id="secao-grid" class="secao escondido">
                         <h3>Estrutura do Layout (Grid)</h3>
@@ -46,20 +59,20 @@
                         <h3>Design do Fundo</h3>
                         <div class="grupo-controle"><label for="template-tipo-fundo">Tipo</label><select id="template-tipo-fundo"><option value="cor">Cor Sólida</option><option value="gradiente" selected>Gradiente</option><option value="imagem">Imagem</option></select></div>
                         <div id="controles-fundo-cor" class="grupo-dinamico"><div class="grupo-controle-composto"><div class="item-controle"><label>Cor</label><input type="color" id="fundo-cor" value="#ffffff"></div><div class="item-controle"><label>Opacidade</label><input type="range" id="fundo-cor-opacidade" min="0" max="1" value="1" step="0.01"></div></div></div>
-                        <div id="controles-fundo-gradiente" class="grupo-dinamico"><div class="grupo-controle"><label>Ângulo</label><input type="range" id="fundo-gradiente-angulo" min="0" max="360" value="135"></div><hr style="margin: 15px 0;"><div id="lista-cores-gradiente"></div><button type="button" id="btn-add-cor-gradiente" class="btn-secundario">+ Adicionar Cor</button></div>
-                        <div id="controles-fundo-imagem" class="grupo-dinamico"><div class="grupo-controle"><label>URL</label><input type="text" id="fundo-imagem-url" placeholder="https://exemplo.com/imagem.jpg"></div><div class="grupo-controle"><label>Opacidade</label><input type="range" id="fundo-imagem-opacidade" min="0" max="1" value="1" step="0.01"></div></div>
+                        <div id="controles-fundo-gradiente" class="grupo-dinamico"><div class="grupo-controle"><label>Ângulo</label><input type="range" id="fundo-gradiente-angulo" min="0" max="360" value="135"></div><hr><div id="lista-cores-gradiente"></div><button type="button" id="btn-add-cor-gradiente" class="btn-secundario">+ Adicionar Cor</button></div>
+                        <div id="controles-fundo-imagem" class="grupo-dinamico"><div class="grupo-controle"><label>URL</label><input type="text" id="fundo-imagem-url" placeholder="https://..."></div><div class="grupo-controle"><label>Opacidade</label><input type="range" id="fundo-imagem-opacidade" min="0" max="1" value="1" step="0.01"></div></div>
                     </div>
                     <div id="secao-sobreposicao" class="secao escondido">
                          <div class="ativador-secao"><input type="checkbox" id="ativar-sobreposicao"><label for="ativar-sobreposicao"><h3>Sobreposição de Cor</h3></label></div>
                          <div id="controles-sobreposicao" class="grupo-dinamico">
                             <div class="grupo-controle"><label>Tipo</label><select id="sobreposicao-tipo"><option value="cor">Cor Sólida</option><option value="gradiente" selected>Gradiente</option></select></div>
                             <div id="controles-sobreposicao-cor" class="grupo-dinamico"><div class="grupo-controle-composto"><div class="item-controle"><label>Cor</label><input type="color" id="sobreposicao-cor-valor" value="#000000"></div><div class="item-controle"><label>Opacidade</label><input type="range" id="sobreposicao-cor-opacidade" min="0" max="1" value="0.3" step="0.01"></div></div></div>
-                            <div id="controles-sobreposicao-gradiente" class="grupo-dinamico"><div class="grupo-controle"><label>Ângulo</label><input type="range" id="sobreposicao-gradiente-angulo" min="0" max="360" value="135"></div><hr style="margin: 15px 0;"><div id="lista-cores-sobreposicao-gradiente"></div><button type="button" id="btn-add-cor-sobreposicao-gradiente" class="btn-secundario">+ Adicionar Cor</button></div>
+                            <div id="controles-sobreposicao-gradiente" class="grupo-dinamico"><div class="grupo-controle"><label>Ângulo</label><input type="range" id="sobreposicao-gradiente-angulo" min="0" max="360" value="135"></div><hr><div id="lista-cores-sobreposicao-gradiente"></div><button type="button" id="btn-add-cor-sobreposicao-gradiente" class="btn-secundario">+ Adicionar Cor</button></div>
                          </div>
                     </div>
                     <div id="secao-elementos" class="secao escondido">
                         <h3>Elementos do Cartão</h3>
-                        <p>Adicione e configure os componentes do seu cartão. Depois, arraste o cabeçalho do componente para o canvas para posicionar.</p>
+                        <p>Adicione e configure os componentes. Depois, arraste o cabeçalho para o canvas para posicionar.</p>
                         <div id="lista-elementos-config">
                             <!-- Os blocos de configuração de cada widget aparecerão aqui -->
                         </div>
@@ -85,11 +98,8 @@
                 <button id="btn-salvar-template">Salvar Template como .json</button>
             </div>
         </div>
-        <!-- ÁREA DE PRÉ-VISUALIZAÇÃO (DIREITA) -->
-        <div class="area-canvas">
-            <div id="canvas-template"></div>
-        </div>
+        <div class="area-canvas"><div id="canvas-template"></div></div>
     </div>
-    <script src="main.js" type="module"></script>
+    <script src="builder.js"></script>
 </body>
 </html>
