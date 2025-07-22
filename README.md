@@ -17,3 +17,12 @@ O projeto inclui uma aplicação dedicada para a criação e customização de n
 *   **Design de Fundo e Sobreposição Avançados:** Suporte completo para cores sólidas, gradientes com múltiplas cores e controle de opacidade.
 *   **Pré-visualização 100% Dinâmica:** Todas as alterações são refletidas instantaneamente no canvas.
 *   **Salvar e Carregar Templates:** Exporta e importa a estrutura completa do template em formato `.json`.
+## Próximos Passos (Roadmap)
+
+- [x] **Finalizar a Refatoração do Construtor de Templates:**
+    - [x] Garantir que a arquitetura unificada (`builder.js`) funcione de forma estável.
+    - [x] Implementar um sistema de widgets dinâmicos, onde elementos podem ser adicionados, configurados e estilizados individualmente.
+    - [x] Corrigir a interatividade do Drag & Drop para posicionar e remover widgets no canvas.
+- [ ] Implementar um back-end e um banco de dados (ex: NeonDB) para salvar os cartões online.
+- [ ] Criar um sistema de contas de usuário.
+- [ ] Gerar URLs amigáveis para os cartões.
