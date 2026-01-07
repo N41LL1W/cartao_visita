@@ -9,9 +9,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxyge
 .painel-cabecalho p { margin: 5px 0 0; color: #718096; }
 .secao { padding: 0; margin: 0; }
 h3 { font-size: 1.2em; color: #2d3748; padding-bottom: 10px; border-bottom: 1px solid #e2e8f0; margin-bottom: 20px; }
-select, input[type="text"], input[type="color"], input[type="range"], textarea { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e0; box-sizing: border-box; font-size: 1rem; margin-top: 5px; }
+select, input[type="text"], input[type="color"], input[type="range"], input[type="number"], textarea { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e0; box-sizing: border-box; font-size: 1rem; margin-top: 5px; }
 input#template-id[readonly] { background-color: #f7fafc; color: #718096; cursor: not-allowed; }
-input[type="color"] { height: 40px; padding: 4px; }
+input[type="color"] { height: 40px; padding: 4px; min-width: 50px; }
 .grupo-controle { margin-bottom: 20px; }
 .grupo-controle:last-child { margin-bottom: 0; }
 .grupo-controle label { display: block; margin-bottom: 5px; font-weight: 600; color: #4a5568; font-size: 0.9em; }
@@ -39,7 +39,8 @@ hr { border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0; }
 .ativador-secao { display: flex; align-items: center; gap: 10px; cursor: pointer; }
 .ativador-secao h3 { margin: 0; font-size: 1.2em; }
 .ativador-secao input[type="checkbox"] { width: auto; height: 18px; }
-.widget-no-canvas { width: 100%; height: 100%; border: none; padding: 5px; border-radius: 0; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; font-size: 1em; z-index: 10; cursor: move; box-sizing: border-box; background: transparent; }
+.link-ferramenta { font-size: 0.8em; margin-left: 10px; color: var(--cor-secundaria); text-decoration: none; }
+.widget-no-canvas { width: 100%; height: 100%; padding: 5px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; font-size: 1em; z-index: 10; box-sizing: border-box; background: transparent; }
 .widget-no-canvas img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
 .dashboard-layout { display: flex; gap: 25px; padding: 20px; }
 .dashboard-menu { flex: 0 0 200px; border-right: 1px solid #e2e8f0; padding-right: 25px; }
@@ -64,8 +65,9 @@ hr { border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0; }
 .bloco-corpo .grupo-controle { margin-bottom: 0; }
 .bloco-corpo .full-width { grid-column: 1 / -1; }
 .btn-remover-widget { background-color: transparent; color: var(--cor-perigo); padding: 0; font-size: 1.2em; }
-.estilo-botoes { display: flex; gap: 5px; }
-.estilo-botoes button { flex: 1; background: #e2e8f0; color: #4a5568; padding: 5px; font-size: 1em; }
+.estilo-botoes-grupo { display: flex; gap: 10px; align-items: flex-end; }
+.estilo-botoes { display: flex; border: 1px solid #cbd5e0; border-radius: 6px; overflow: hidden; }
+.estilo-botoes button { flex: 1; background: #f7fafc; color: #4a5568; padding: 8px; font-size: 0.9em; border-radius: 0; border-right: 1px solid #cbd5e0; }
+.estilo-botoes button:last-child { border-right: none; }
 .estilo-botoes button.ativo { background: var(--cor-secundaria); color: white; }
-.zona-de-remocao { border: 2px dashed #cbd5e0; border-radius: 8px; padding: 20px; text-align: center; color: #a0aec0; transition: all 0.2s; margin-top: 20px;}
-.zona-de-remocao.drag-over { background-color: #fff5f5; border-color: var(--cor-perigo); color: var(--cor-perigo);}
+#secao-elementos.drag-over-lixeira { background-color: #fff5f5; border: 2px dashed var(--cor-perigo);}

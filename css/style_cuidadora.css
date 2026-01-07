@@ -1,0 +1,282 @@
+/* =================================================================== */
+/* CONFIGURAÇÕES GERAIS */
+/* =================================================================== */
+
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #eef2f3;
+    margin: 0;
+}
+
+.portaCartao {
+    width: 450px;
+    height: 280px;
+    perspective: 1500px;
+}
+
+.cartao {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+    cursor: pointer;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+}
+
+.portaCartao:hover .cartao {
+    transform: rotateY(180deg);
+}
+
+.lado {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 20px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* =================================================================== */
+/* FRENTE DO CARTÃO */
+/* =================================================================== */
+
+.frente {
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px;
+    text-align: center;
+    position: relative; /* Importante para o posicionamento dos elementos */
+}
+
+/* Ícone do topo na nova cor tema */
+.decoracao-topo {
+    color: #0097a7; /* NOVA COR TEMA (Teal/Ciano Profissional) */
+    font-size: 2em;
+    margin-bottom: 10px;
+    opacity: 0.9;
+}
+
+h1.info {
+    font-size: 1.8em;
+    color: #2c3e50;
+    margin: 0;
+    font-weight: 700;
+    z-index: 5; /* Garante que o texto fique sobre a linha se necessário */
+}
+
+/* Cargo na nova cor tema */
+.info-cargo {
+    font-size: 1.2em;
+    color: #0097a7; /* NOVA COR TEMA */
+    margin: 5px 0 0 0;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    z-index: 5;
+}
+
+.contato-frente {
+    display: flex;
+    align-items: center;
+    /* Ajuste de posição para ficar dentro da faixa colorida */
+    position: absolute;
+    bottom: 25px; 
+    left: 30px;
+    font-weight: 600;
+    color: #ffffff; /* Texto branco para contraste na faixa */
+    font-size: 1.1em;
+    z-index: 10; /* Z-index alto para ficar na frente de tudo */
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.contato-frente .fa-whatsapp {
+    color: #ffffff;
+    margin-right: 8px;
+    font-size: 1.3em;
+}
+
+.qrcode-img {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 70px;
+    height: 70px;
+    border: 3px solid #ffffff;
+    border-radius: 10px;
+    z-index: 10; /* Z-index alto */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* --- ÁREA DOS SVGs (O EFEITO DE CORTE) --- */
+
+/* 1. A Faixa Colorida Sólida */
+.viewBox-faixa {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px; /* Altura fixa para a faixa inferior */
+    z-index: 1;
+}
+
+/* A cor da faixa */
+.path-faixa {
+    fill: #0097a7; /* NOVA COR TEMA */
+}
+    
+/* 2. O Container do Batimento Cardíaco */
+.viewBox-cuidado {
+    position: absolute;
+    /* O posicionamento exato para alinhar a linha base do desenho com o topo da faixa de 100px */
+    bottom: 20px; 
+    left: 0;
+    width: 100%;
+    height: 160px; /* Altura suficiente para os picos do batimento não cortarem */
+    z-index: 2; /* Fica na frente da faixa */
+    pointer-events: none; /* Permite clicar através dele se necessário */
+}
+
+/* 3. A Linha do Batimento em si (Vermelha e Fina) */
+.heartbeat-path {
+    fill: none; /* Sem preenchimento, apenas a linha */
+    stroke: #d32f2f; /* COR VERMELHA SANGUE/HOSPITALAR */
+    stroke-width: 2.5px; /* LINHA FINA */
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.1)); /* Sombra suave para destacar o "corte" */
+}
+
+
+/* =================================================================== */
+/* VERSO DO CARTÃO */
+/* =================================================================== */
+
+.verso {
+    /* Gradiente usando a nova paleta de cores */
+    background: linear-gradient(135deg, #0097a7, #00796b);
+    color: white;
+    transform: rotateY(180deg);
+    padding: 25px;
+}
+
+.conteudo-verso {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.cabecalho-verso {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.cabecalho-verso i { font-size: 1.6em; }
+
+.verso h3 {
+    margin: 0;
+    font-size: 1.4em;
+    font-weight: 700;
+}
+
+.verso .tagline {
+    font-style: italic;
+    font-size: 1em;
+    line-height: 1.4;
+    margin: 15px 0;
+    color: #e0f2f1; /* Branco levemente azulado */
+    font-weight: 500;
+}
+
+.verso .servicos h4 {
+    margin: 0 0 10px 0;
+    font-size: 0.95em;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 5px;
+    text-align: left;
+    letter-spacing: 1px;
+}
+
+.verso .servicos ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+
+.verso .servicos li {
+    font-size: 0.9em;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.verso .servicos i {
+    font-size: 0.9em;
+    color: #80cbc4; /* Um tom mais claro do tema para os checkmarks */
+}
+
+.verso .contato {
+    background-color: rgba(0, 0, 0, 0.15); /* Fundo mais escuro para contraste */
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 1.1em;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.verso .contato p { margin: 0; }
+
+/* =================================================================== */
+/* DESIGN RESPONSIVO */
+/* =================================================================== */
+
+@media (max-width: 500px) {
+    .portaCartao {
+        width: 90vw;
+        height: 480px;
+    }
+
+    .frente { padding: 20px 15px; }
+    .frente h1.info { font-size: 1.6em; margin-top: 10px; }
+    .info-cargo { font-size: 1.1em; margin-bottom: 20px;}
+
+    /* Ajuste do posicionamento no mobile */
+    .viewBox-faixa { height: 90px; }
+    .viewBox-cuidado { bottom: 10px; height: 140px; }
+
+    .contato-frente {
+        bottom: 95px; /* Sobe o contato para sair de cima da faixa no mobile se ficar apertado */
+        left: 50%;
+        transform: translateX(-50%);
+        color: #0097a7; /* Volta a cor para o tema pois estará no fundo branco */
+        width: 100%;
+        justify-content: center;
+    }
+     .contato-frente .fa-whatsapp { color: #25D366; }
+
+    .qrcode-img {
+        bottom: 15px; /* Centraliza o QR code na faixa inferior */
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+    }
+    
+    .verso .tagline { font-size: 0.9em; margin: 10px 0; }
+    .verso .servicos li { font-size: 0.85em; margin-bottom: 5px;}
+}
