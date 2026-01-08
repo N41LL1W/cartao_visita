@@ -56,12 +56,11 @@ body {
     align-items: center;
     padding: 30px 20px;
     text-align: center;
-    position: relative; /* Importante para o posicionamento dos elementos */
+    position: relative;
 }
 
-/* Ícone do topo na nova cor tema */
 .decoracao-topo {
-    color: #0097a7; /* NOVA COR TEMA (Teal/Ciano Profissional) */
+    color: #0097a7;
     font-size: 2em;
     margin-bottom: 10px;
     opacity: 0.9;
@@ -72,13 +71,12 @@ h1.info {
     color: #2c3e50;
     margin: 0;
     font-weight: 700;
-    z-index: 5; /* Garante que o texto fique sobre a linha se necessário */
+    z-index: 5;
 }
 
-/* Cargo na nova cor tema */
 .info-cargo {
     font-size: 1.2em;
-    color: #0097a7; /* NOVA COR TEMA */
+    color: #0097a7;
     margin: 5px 0 0 0;
     font-weight: 600;
     letter-spacing: 0.5px;
@@ -89,14 +87,14 @@ h1.info {
 .contato-frente {
     display: flex;
     align-items: center;
-    /* Ajuste de posição para ficar dentro da faixa colorida */
     position: absolute;
-    bottom: 25px; 
+    /* AJUSTE DESKTOP: Centralizado verticalmente na faixa de 90px */
+    bottom: 35px; 
     left: 30px;
     font-weight: 600;
-    color: #ffffff; /* Texto branco para contraste na faixa */
+    color: #ffffff;
     font-size: 1.1em;
-    z-index: 10; /* Z-index alto para ficar na frente de tudo */
+    z-index: 10;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
 }
 
@@ -108,17 +106,18 @@ h1.info {
 
 .qrcode-img {
     position: absolute;
-    bottom: 20px;
+    /* AJUSTE DESKTOP: Centralizado verticalmente na faixa de 90px */
+    bottom: 12px;
     right: 20px;
     width: 70px;
     height: 70px;
     border: 3px solid #ffffff;
     border-radius: 10px;
-    z-index: 10; /* Z-index alto */
+    z-index: 10;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-/* --- ÁREA DOS SVGs (O EFEITO DE CORTE) --- */
+/* --- ÁREA DOS SVGs (O EFEITO DE CORTE - DESKTOP) --- */
 
 /* 1. A Faixa Colorida Sólida */
 .viewBox-faixa {
@@ -126,35 +125,35 @@ h1.info {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 100px; /* Altura fixa para a faixa inferior */
+    /* AJUSTE DESKTOP: Altura fixa definida para 90px */
+    height: 90px; 
     z-index: 1;
 }
 
-/* A cor da faixa */
 .path-faixa {
-    fill: #0097a7; /* NOVA COR TEMA */
+    fill: #0097a7;
 }
     
 /* 2. O Container do Batimento Cardíaco */
 .viewBox-cuidado {
     position: absolute;
-    /* O posicionamento exato para alinhar a linha base do desenho com o topo da faixa de 100px */
-    bottom: 20px; 
+    /* AJUSTE DESKTOP: O 'bottom' deve ser EXATAMENTE a altura da faixa (90px) para alinhar */
+    bottom: 15px; 
     left: 0;
     width: 100%;
-    height: 160px; /* Altura suficiente para os picos do batimento não cortarem */
-    z-index: 2; /* Fica na frente da faixa */
-    pointer-events: none; /* Permite clicar através dele se necessário */
+    height: 160px;
+    z-index: 2;
+    pointer-events: none;
 }
 
-/* 3. A Linha do Batimento em si (Vermelha e Fina) */
+/* 3. A Linha do Batimento em si */
 .heartbeat-path {
-    fill: none; /* Sem preenchimento, apenas a linha */
-    stroke: #d32f2f; /* COR VERMELHA SANGUE/HOSPITALAR */
-    stroke-width: 2.5px; /* LINHA FINA */
+    fill: none;
+    stroke: #d32f2f;
+    stroke-width: 2.5px;
     stroke-linecap: round;
     stroke-linejoin: round;
-    filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.1)); /* Sombra suave para destacar o "corte" */
+    filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.1));
 }
 
 
@@ -163,11 +162,10 @@ h1.info {
 /* =================================================================== */
 
 .verso {
-    /* Gradiente usando a nova paleta de cores */
     background: linear-gradient(135deg, #0097a7, #00796b);
     color: white;
     transform: rotateY(180deg);
-    padding: 25px;
+    padding: 20px;
 }
 
 .conteudo-verso {
@@ -194,11 +192,13 @@ h1.info {
 
 .verso .tagline {
     font-style: italic;
-    font-size: 1em;
+    font-size: 0.8em;
     line-height: 1.4;
-    margin: 15px 0;
-    color: #e0f2f1; /* Branco levemente azulado */
+    /* AJUSTE VERSO: Reduzido a margem para ganhar espaço */
+    margin: 10px 0; 
+    color: #e0f2f1;
     font-weight: 500;
+    text-align: center;
 }
 
 .verso .servicos h4 {
@@ -219,8 +219,9 @@ h1.info {
 }
 
 .verso .servicos li {
-    font-size: 0.9em;
-    margin-bottom: 8px;
+    font-size: 0.8em;
+    /* AJUSTE VERSO: Reduzido o espaçamento entre itens da lista */
+    margin-bottom: 6px; 
     display: flex;
     align-items: center;
     gap: 10px;
@@ -228,11 +229,11 @@ h1.info {
 
 .verso .servicos i {
     font-size: 0.9em;
-    color: #80cbc4; /* Um tom mais claro do tema para os checkmarks */
+    color: #80cbc4;
 }
 
 .verso .contato {
-    background-color: rgba(0, 0, 0, 0.15); /* Fundo mais escuro para contraste */
+    background-color: rgba(0, 0, 0, 0.15);
     padding: 12px;
     border-radius: 10px;
     font-weight: bold;
@@ -240,43 +241,57 @@ h1.info {
     border: 1px solid rgba(255,255,255,0.2);
 }
 
-.verso .contato p { margin: 0; }
+.verso .contato p { 
+    margin: 0;
+    text-align: center;
+}
 
 /* =================================================================== */
-/* DESIGN RESPONSIVO */
+/* DESIGN RESPONSIVO (CELULAR) */
 /* =================================================================== */
 
 @media (max-width: 500px) {
     .portaCartao {
         width: 90vw;
-        height: 480px;
+        /* AJUSTE VERSO CELULAR: Aumentada a altura total para caber o conteúdo do verso */
+        height: 520px; 
     }
 
     .frente { padding: 20px 15px; }
     .frente h1.info { font-size: 1.6em; margin-top: 10px; }
     .info-cargo { font-size: 1.1em; margin-bottom: 20px;}
 
-    /* Ajuste do posicionamento no mobile */
-    .viewBox-faixa { height: 90px; }
-    .viewBox-cuidado { bottom: 10px; height: 140px; }
+    /* --- AJUSTES DE ALINHAMENTO NO CELULAR --- */
+    
+    /* 1. Aumenta a faixa azul no celular */
+    .viewBox-faixa { height: 120px; } 
+    
+    /* 2. Sobe a linha vermelha para acompanhar a nova altura da faixa */
+    .viewBox-cuidado { bottom: 55px; height: 140px; }
 
+    /* 3. Reposiciona o contato para cima da linha vermelha no celular */
     .contato-frente {
-        bottom: 95px; /* Sobe o contato para sair de cima da faixa no mobile se ficar apertado */
+        bottom: 185px; /* Fica acima da área da faixa */
         left: 50%;
         transform: translateX(-50%);
-        color: #0097a7; /* Volta a cor para o tema pois estará no fundo branco */
+        color: #0097a7; /* Cor do tema (fundo branco) */
         width: 100%;
         justify-content: center;
+        text-shadow: none;
     }
      .contato-frente .fa-whatsapp { color: #25D366; }
 
+     /* 4. Centraliza o QR Code na nova faixa mais alta */
     .qrcode-img {
-        bottom: 15px; /* Centraliza o QR code na faixa inferior */
+        bottom: 15px; /* Ajustado para centralizar na faixa de 120px */
         left: 50%;
         right: auto;
         transform: translateX(-50%);
+        border-style: none;
     }
     
+    /* Ajustes finais de espaçamento no verso para celular */
+    .verso { padding: 20px; }
     .verso .tagline { font-size: 0.9em; margin: 10px 0; }
     .verso .servicos li { font-size: 0.85em; margin-bottom: 5px;}
 }
